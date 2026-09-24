@@ -905,7 +905,6 @@ function KettlebellTracker() {
   const [editingReps, setEditingReps] = useState(null);
   const [repsDraft, setRepsDraft] = useState("");
   const [activeTimer, setActiveTimer] = useState(null);
-  const [updateAvailable, setUpdateAvailable] = useState(false);
 
   // ---------- Auth-State ----------
   const [session, setSession] = useState(null);
@@ -915,17 +914,6 @@ function KettlebellTracker() {
   const [authPassword, setAuthPassword] = useState("");
   const [authError, setAuthError] = useState(null);
   const [authBusy, setAuthBusy] = useState(false);
-
-  useEffect(() => {
-    const onUpdate = () => setUpdateAvailable(true);
-    window.addEventListener("stfd-update-available", onUpdate);
-    return () => window.removeEventListener("stfd-update-available", onUpdate);
-  }, []);
-
-  const applyUpdate = () => {
-    if (window.stfdSkipWaiting) window.stfdSkipWaiting();
-    else window.location.reload();
-  };
 
   const loadProfile = useCallback(async (userId) => {
     if (!supabaseClient) return;
@@ -1120,17 +1108,6 @@ function KettlebellTracker() {
           style={{ height: 52, width: "auto", display: "block" }}
         />
       </div>
-
-      {updateAvailable && (
-        <div style={{ maxWidth: 640, margin: "14px auto 0", padding: "0 20px" }}>
-          <div style={{ borderRadius: 14, background: C.brass, color: C.onBrass, padding: "10px 14px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
-            <span style={{ fontSize: 13, fontWeight: 500 }}>🔄 {t.updateAvailableText}</span>
-            <button onClick={applyUpdate} style={{ borderRadius: 999, background: C.onBrass, color: C.brass, border: "none", padding: "6px 12px", fontSize: 12.5, fontWeight: 600, cursor: "pointer" }}>
-              {t.updateNowBtn}
-            </button>
-          </div>
-        </div>
-      )}
 
       <div style={{ maxWidth: 640, margin: "0 auto", padding: "20px 20px 110px" }}>
 
@@ -1687,30 +1664,7 @@ root.render(<KettlebellTracker />);
 <script>
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("service-worker.js").then((registration) => {
-        if (registration.waiting && navigator.serviceWorker.controller) {
-          window.dispatchEvent(new CustomEvent("stfd-update-available"));
-        }
-        registration.addEventListener("updatefound", () => {
-          const newWorker = registration.installing;
-          if (!newWorker) return;
-          newWorker.addEventListener("statechange", () => {
-            if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
-              window.dispatchEvent(new CustomEvent("stfd-update-available"));
-            }
-          });
-        });
-        window.stfdSkipWaiting = () => {
-          if (registration.waiting) registration.waiting.postMessage("SKIP_WAITING");
-        };
-      }).catch(() => {});
-
-      let refreshed = false;
-      navigator.serviceWorker.addEventListener("controllerchange", () => {
-        if (refreshed) return;
-        refreshed = true;
-        window.location.reload();
-      });
+      navigator.serviceWorker.register("service-worker.js").catch(() => {});
     });
   }
 </script>
