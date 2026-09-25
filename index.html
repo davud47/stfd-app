@@ -1525,13 +1525,13 @@ function KettlebellTracker() {
                 <button
                   onClick={() => setActiveTimer({
                     type: "sets",
-                    title: t.pauseTimerBtn,
+                    title: `${t.session} ${String(activeSession).padStart(2, "0")}`,
                     steps: buildSetsSteps(sessionData.exercises, sessionData.sets),
                     restSeconds: Math.max(15, BLOCK_INFO[sessionData.block].restBetween() + (INTENSITY_LEVELS[moduleState.intensity].restDelta)),
                   })}
-                  style={{ borderRadius: 24, width: "100%", padding: "10px 14px", background: C.panelAlt, border: `1px solid ${C.borderStrong}`, color: C.text, fontSize: 13, fontWeight: 500, cursor: "pointer" }}
+                  style={{ borderRadius: 999, width: "100%", padding: "16px 14px", background: C.brass, border: "none", color: C.onBrass, fontSize: 15, fontWeight: 700, cursor: "pointer" }}
                 >
-                  ⏱ {t.pauseTimerBtn}
+                  ▶ {t.startSession}
                 </button>
               </div>
             )}
@@ -1548,7 +1548,7 @@ function KettlebellTracker() {
                   <div key={ex.key} style={{ borderRadius: 24, background: C.panel, border: `1px solid ${C.border}`, overflow: "hidden" }}>
                     <button
                       onClick={() => setExpandedExercise(isOpen ? null : ex.key)}
-                      style={{ width: "100%", background: "transparent", border: "none", padding: "14px 16px", display: "flex", gap: 12, alignItems: "center", cursor: "pointer", textAlign: "left" }}
+                      style={{ width: "100%", background: "transparent", border: "none", padding: "14px 16px", display: "flex", gap: 12, alignItems: "center", cursor: "pointer", textAlign: "left", color: C.text, font: "inherit" }}
                     >
                       <div style={{ flex: "0 0 auto", width: 26, height: 26, borderRadius: 999, background: C.panelAlt, color: C.textMuted, fontSize: 11.5, fontWeight: 600, display: "flex", alignItems: "center", justifyContent: "center" }}>
                         {String(i + 1).padStart(2, "0")}
