@@ -1127,7 +1127,7 @@ function KettlebellTracker() {
     { id: "library", label: t.navLibrary, icon: "📚" },
   ];
 
-  const isSessionLocked = (s) => s > 1 && !moduleState.sessions[s - 1]?.completed;
+  const isSessionLocked = () => false;
   const goToSession = (s) => { if (!isSessionLocked(s)) { setActiveSession(s); setProgramView("detail"); } };
 
   const nextSessionNum = useMemo(() => {
