@@ -104,6 +104,21 @@ const UNIT_LABELS = {
   en: { reps: " reps", reps_side: " per side", sec: " sec", sec_side: " sec per side", m: " m" },
 };
 
+const SIDE_WORDS = {
+  de: { left: "links", right: "rechts" },
+  en: { left: "left", right: "right" },
+};
+
+// Bei Seiten-Übungen beide Seiten explizit ausschreiben statt nur "pro Seite".
+function formatReps(value, unit, lang) {
+  if (unit === "reps_side" || unit === "sec_side") {
+    const baseUnit = unit === "reps_side" ? UNIT_LABELS[lang].reps : UNIT_LABELS[lang].sec;
+    const w = SIDE_WORDS[lang];
+    return `${value}${baseUnit} ${w.left} · ${value}${baseUnit} ${w.right}`;
+  }
+  return `${value}${UNIT_LABELS[lang][unit]}`;
+}
+
 const UI = {
   de: {
     appTitle: "Straight to Firdaws",
@@ -641,13 +656,13 @@ function getSessionData(module, sessionNum, intensityKey, lang, cycle) {
       const roundTo = e.r || 1;
       const value = Math.max(roundTo, Math.round(raw / roundTo) * roundTo);
       const homeKey = HOME_NOTE_EXERCISES[e.n];
-      return { name: e.n, key: slug(e.n), vkey: videoKey(e.n), cue: CUES[e.n][lang], homeNote: homeKey ? t[homeKey] : null, sideNote: e.u.endsWith("_side") ? t.sideNote : null, reps: `${value}${UNIT_LABELS[lang][e.u]}` };
+      return { name: e.n, key: slug(e.n), vkey: videoKey(e.n), cue: CUES[e.n][lang], homeNote: homeKey ? t[homeKey] : null, sideNote: e.u.endsWith("_side") ? t.sideNote : null, reps: formatReps(value, e.u, lang) };
     });
     let finisher = null;
     if (session.finisher) {
       const f = session.finisher;
       const raw = f.b * intensity.repsMult;
-      finisher = { name: f.n, key: slug(f.n) + "-finisher", vkey: videoKey(f.n), cue: CUES[f.n][lang], minutes: f.minutes, reps: `${Math.max(1, Math.round(raw))}${UNIT_LABELS[lang][f.u]}` };
+      finisher = { name: f.n, key: slug(f.n) + "-finisher", vkey: videoKey(f.n), cue: CUES[f.n][lang], minutes: f.minutes, reps: formatReps(Math.max(1, Math.round(raw)), f.u, lang) };
     }
     return { session, block: session.block, format: "sets", sets, restLabel: t.restBetween(restBetween), exercises, finisher, isFirstSession };
   }
@@ -666,7 +681,7 @@ function getSessionData(module, sessionNum, intensityKey, lang, cycle) {
       const raw = e.b * intensity.repsMult;
       const roundTo = e.r || 1;
       const value = Math.max(roundTo, Math.round(raw / roundTo) * roundTo);
-      return { name: e.n, key: slug(e.n), vkey: videoKey(e.n), cue: CUES[e.n][lang], homeNote: HOME_NOTE_EXERCISES[e.n] ? t[HOME_NOTE_EXERCISES[e.n]] : null, sideNote: e.u.endsWith("_side") ? t.sideNote : null, reps: `${value}${UNIT_LABELS[lang][e.u]}` };
+      return { name: e.n, key: slug(e.n), vkey: videoKey(e.n), cue: CUES[e.n][lang], homeNote: HOME_NOTE_EXERCISES[e.n] ? t[HOME_NOTE_EXERCISES[e.n]] : null, sideNote: e.u.endsWith("_side") ? t.sideNote : null, reps: formatReps(value, e.u, lang) };
     });
     exercises = reorderByRegion(exercises);
     const rounds = Math.max(2, 3 + intensity.setsDelta);
