@@ -1449,7 +1449,6 @@ function KettlebellTracker() {
               </div>
             )}
 
-            <div style={{ fontSize: 13, color: C.textSecondary, marginBottom: 10 }}>{t.exerciseSequence} — {sessionData.exercises.length}</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               {sessionData.exercises.map((ex, i) => (
                 <div key={ex.key} style={{ borderRadius: 18, background: C.panel, border: `1px solid ${C.border}`, padding: "14px 16px", display: "flex", gap: 12 }}>
