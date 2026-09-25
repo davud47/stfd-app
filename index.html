@@ -32,7 +32,7 @@ const { useState, useEffect, useCallback, useMemo } = React;
 const THEMES = {
   dark: {
     bg: "#0A0A0A",
-    panel: "#161616",
+    panel: "#202420",
     panelAlt: "#1E1E1E",
     border: "#2A2A2A",
     borderStrong: "#3A3A3A",
@@ -871,14 +871,14 @@ function SetsTimer({ title, steps, restSeconds, onClose, t, theme }) {
 
         {/* Kopfzeile */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-          <button onClick={onClose} aria-label="close" style={{ width: 40, height: 40, borderRadius: 999, background: C.panel, border: "none", color: C.text, fontSize: 16, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>✕</button>
+          <button onClick={onClose} aria-label="close" style={{ width: 40, height: 40, borderRadius: 999, background: C.panel, boxShadow: C.shadow, border: "none", color: C.text, fontSize: 16, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>✕</button>
           <div style={{ textAlign: "center" }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: C.brass, textTransform: "uppercase", letterSpacing: "0.04em" }}>{title}</div>
             {phase !== "done" && current && (
               <div style={{ fontSize: 12, color: C.textMuted, marginTop: 2 }}>{t.timerSegment(current.exerciseIndex, current.totalExercises)}</div>
             )}
           </div>
-          <button aria-label="menu" style={{ width: 40, height: 40, borderRadius: 999, background: C.panel, border: "none", color: C.text, fontSize: 16, cursor: "default", display: "flex", alignItems: "center", justifyContent: "center" }}>⋯</button>
+          <button aria-label="menu" style={{ width: 40, height: 40, borderRadius: 999, background: C.panel, boxShadow: C.shadow, border: "none", color: C.text, fontSize: 16, cursor: "default", display: "flex", alignItems: "center", justifyContent: "center" }}>⋯</button>
         </div>
 
         {/* Fortschrittsbalken */}
@@ -951,7 +951,7 @@ function SetsTimer({ title, steps, restSeconds, onClose, t, theme }) {
                 <button
                   onClick={() => goToStep(stepIndex + 1)}
                   aria-label="skip"
-                  style={{ borderRadius: 18, width: 54, background: C.panel, border: "none", color: C.text, fontSize: 18, cursor: "pointer" }}
+                  style={{ borderRadius: 18, width: 54, background: C.panel, boxShadow: C.shadow, border: "none", color: C.text, fontSize: 18, cursor: "pointer" }}
                 >
                   ⏭
                 </button>
@@ -1215,7 +1215,7 @@ function KettlebellTracker() {
               })}
             </div>
 
-            <div style={{ borderRadius: 24, background: C.panel, border: `1px solid ${C.border}`, padding: "20px" }}>
+            <div style={{ borderRadius: 24, background: C.panel, boxShadow: C.shadow, border: `1px solid ${C.border}`, padding: "20px" }}>
               <div style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 600, fontSize: 19, marginBottom: 8 }}>🔒 {t.lockedTitle}</div>
 
               {session ? (
@@ -1277,7 +1277,7 @@ function KettlebellTracker() {
                 <button onClick={startNewCycle} style={{ borderRadius: 24, width: "100%", padding: "10px 14px", background: C.brass, border: "none", color: C.onBrass, fontSize: 13, fontWeight: 600, cursor: "pointer" }}>{t.startNewCycle}</button>
               </div>
             ) : (
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 16, borderRadius: 24, background: "#202420", boxShadow: "0px 6px 18px rgba(23, 26, 24, 0.0705882)", padding: "20px", width: "100%", marginBottom: 16, boxSizing: "border-box" }}>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 16, borderRadius: 24, background: C.panel, boxShadow: C.shadow, padding: "20px", width: "100%", marginBottom: 16, boxSizing: "border-box" }}>
                 <div style={{ width: "100%" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}>
                     <div style={{ fontSize: 11.5, color: C.brass, textTransform: "uppercase", letterSpacing: "0.04em" }}>{t.session} {String(nextSessionNum).padStart(2, "0")} · {t.blockNames[nextSessionData.block]}</div>
@@ -1306,7 +1306,7 @@ function KettlebellTracker() {
             )}
 
             <div style={{ marginBottom: 16 }}>
-              <div style={{ borderRadius: 24, background: C.panel, border: `1px solid ${C.border}`, padding: "16px 14px" }}>
+              <div style={{ borderRadius: 24, background: C.panel, boxShadow: C.shadow, border: `1px solid ${C.border}`, padding: "16px 14px" }}>
                 <div style={{ fontFamily: "'Oswald', sans-serif", fontSize: 26, color: C.brass }}>{totalSessionsComplete}/{TOTAL_SESSIONS}</div>
                 <div style={{ fontSize: 12, color: C.textSecondary, marginTop: 2 }}>{t.sessionsDone}</div>
               </div>
@@ -1329,7 +1329,7 @@ function KettlebellTracker() {
               📅 {t.goToPlan}
             </button>
 
-            <div style={{ borderRadius: 24, background: C.panel, border: `1px solid ${C.border}`, borderLeft: `3px solid ${C.brass}`, padding: "14px 16px", marginBottom: 16 }}>
+            <div style={{ borderRadius: 24, background: C.panel, boxShadow: C.shadow, border: `1px solid ${C.border}`, borderLeft: `3px solid ${C.brass}`, padding: "14px 16px", marginBottom: 16 }}>
               <div style={{ fontWeight: 500, fontSize: 14, color: C.brass, marginBottom: 4 }}>{t.weightGuideTitle}</div>
               <div style={{ fontSize: 13, color: C.textSecondary, lineHeight: 1.6 }}>{t.weightGuideText}</div>
             </div>
@@ -1445,7 +1445,7 @@ function KettlebellTracker() {
             <div style={{ fontSize: 12, color: C.brass, textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: 4 }}>{t.session} {String(activeSession).padStart(2, "0")} · {t.blockNames[sessionData.block]}</div>
             <h1 style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 600, fontSize: 24, margin: "0 0 16px" }}>{t.blockNames[sessionData.block]}</h1>
 
-            <div style={{ borderRadius: 24, background: C.panel, border: `1px solid ${C.border}`, padding: "16px 18px", marginBottom: 16 }}>
+            <div style={{ borderRadius: 24, background: C.panel, boxShadow: C.shadow, border: `1px solid ${C.border}`, padding: "16px 18px", marginBottom: 16 }}>
               <div style={{ fontSize: 13.5, color: C.textSecondary, lineHeight: 1.6, marginBottom: 14 }}>{BLOCK_INFO[sessionData.block].note[lang]}</div>
               <div style={{ display: "flex", gap: 18, paddingTop: 14, borderTop: `1px solid ${C.border}` }}>
                 <div>
@@ -1488,7 +1488,7 @@ function KettlebellTracker() {
               {warmupOpen && (
                 <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 8 }}>
                   {WARMUP.map((w) => (
-                    <div key={w.id} style={{ borderRadius: 24, background: C.panel, border: `1px solid ${C.border}`, padding: "10px 12px" }}>
+                    <div key={w.id} style={{ borderRadius: 24, background: C.panel, boxShadow: C.shadow, border: `1px solid ${C.border}`, padding: "10px 12px" }}>
                       <div style={{ fontSize: 13, fontWeight: 500, color: C.text, marginBottom: 2 }}>{w.n[lang]}</div>
                       <div style={{ fontSize: 12.5, color: C.textSecondary, lineHeight: 1.5 }}>{w.d[lang]}</div>
                     </div>
@@ -1545,7 +1545,7 @@ function KettlebellTracker() {
                       : ex.reps)
                   : null;
                 return (
-                  <div key={ex.key} style={{ borderRadius: 24, background: C.panel, border: `1px solid ${C.border}`, overflow: "hidden" }}>
+                  <div key={ex.key} style={{ borderRadius: 24, background: C.panel, boxShadow: C.shadow, border: `1px solid ${C.border}`, overflow: "hidden" }}>
                     <button
                       onClick={() => setExpandedExercise(isOpen ? null : ex.key)}
                       style={{ width: "100%", background: "transparent", border: "none", padding: "14px 16px", display: "flex", gap: 12, alignItems: "center", cursor: "pointer", textAlign: "left", color: C.text, font: "inherit" }}
@@ -1604,7 +1604,7 @@ function KettlebellTracker() {
             {sessionData.finisher && (
               <div style={{ marginTop: 18 }}>
                 <div style={{ fontSize: 13, color: C.textSecondary, marginBottom: 10 }}>{t.finisherTitle}</div>
-                <div style={{ borderRadius: 24, background: C.panel, border: `1px solid ${C.border}`, borderLeft: `3px solid ${C.brass}`, padding: "14px 16px" }}>
+                <div style={{ borderRadius: 24, background: C.panel, boxShadow: C.shadow, border: `1px solid ${C.border}`, borderLeft: `3px solid ${C.brass}`, padding: "14px 16px" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", gap: 10 }}>
                     <div style={{ flex: 1 }}>
                       <div style={{ fontWeight: 500, fontSize: 15, marginBottom: 2 }}>{sessionData.finisher.name}</div>
@@ -1635,7 +1635,7 @@ function KettlebellTracker() {
               {cooldownOpen && (
                 <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 8 }}>
                   {COOLDOWN.map((c) => (
-                    <div key={c.id} style={{ borderRadius: 24, background: C.panel, border: `1px solid ${C.border}`, padding: "10px 12px" }}>
+                    <div key={c.id} style={{ borderRadius: 24, background: C.panel, boxShadow: C.shadow, border: `1px solid ${C.border}`, padding: "10px 12px" }}>
                       <div style={{ fontSize: 13, fontWeight: 500, color: C.text, marginBottom: 2 }}>{c.n[lang]}</div>
                       <div style={{ fontSize: 12.5, color: C.textSecondary, lineHeight: 1.5 }}>{c.d[lang]}</div>
                     </div>
@@ -1657,7 +1657,7 @@ function KettlebellTracker() {
               value={librarySearch}
               onChange={(e) => setLibrarySearch(e.target.value)}
               placeholder={t.searchPlaceholder}
-              style={{ borderRadius: 14, width: "100%", background: C.panel, border: `1px solid ${C.border}`, color: C.text, fontSize: 14, padding: "11px 14px", marginBottom: 12 }}
+              style={{ borderRadius: 14, width: "100%", background: C.panel, boxShadow: C.shadow, border: `1px solid ${C.border}`, color: C.text, fontSize: 14, padding: "11px 14px", marginBottom: 12 }}
             />
 
             <div style={{ display: "flex", gap: 6, marginBottom: 16, flexWrap: "wrap" }}>
@@ -1677,7 +1677,7 @@ function KettlebellTracker() {
                   key={ex.key}
                   className="kb-card"
                   onClick={() => { setLibraryDetailKey(ex.key); setLibraryView("detail"); }}
-                  style={{ borderRadius: 24, textAlign: "left", background: C.panel, border: `1px solid ${C.border}`, padding: 0, cursor: "pointer", overflow: "hidden" }}
+                  style={{ borderRadius: 24, textAlign: "left", background: C.panel, boxShadow: C.shadow, border: `1px solid ${C.border}`, padding: 0, cursor: "pointer", overflow: "hidden" }}
                 >
                   <div style={{ height: 90, background: C.panelAlt, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 26 }}>
                     {REGION_ICON[ex.region] || "🏋"}
@@ -1706,11 +1706,11 @@ function KettlebellTracker() {
             </div>
             <h1 style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 600, fontSize: 24, margin: "0 0 16px" }}>{libraryDetailExercise.name}</h1>
 
-            <div style={{ borderRadius: 24, height: 160, background: C.panel, border: `1px solid ${C.border}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 44, marginBottom: 16 }}>
+            <div style={{ borderRadius: 24, height: 160, background: C.panel, boxShadow: C.shadow, border: `1px solid ${C.border}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 44, marginBottom: 16 }}>
               {REGION_ICON[libraryDetailExercise.region] || "🏋"}
             </div>
 
-            <div style={{ borderRadius: 24, background: C.panel, border: `1px solid ${C.border}`, padding: "16px 18px", marginBottom: 16 }}>
+            <div style={{ borderRadius: 24, background: C.panel, boxShadow: C.shadow, border: `1px solid ${C.border}`, padding: "16px 18px", marginBottom: 16 }}>
               <div style={{ fontSize: 14, color: C.textSecondary, lineHeight: 1.7 }}>{libraryDetailExercise.cue}</div>
               {libraryDetailExercise.homeNote && (
                 <div style={{ fontSize: 12.5, color: C.textMuted, marginTop: 10, fontStyle: "italic" }}>{libraryDetailExercise.homeNote}</div>
