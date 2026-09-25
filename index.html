@@ -693,12 +693,11 @@ function makeEmptySessions() {
 function emptyState() {
   return {
     modules: {
-      beginner: { sessions: makeEmptySessions(), cycle: 1 },
-      advanced: { sessions: makeEmptySessions(), cycle: 1 },
+      beginner: { sessions: makeEmptySessions(), cycle: 1, intensity: "normal" },
+      advanced: { sessions: makeEmptySessions(), cycle: 1, intensity: "normal" },
     },
     activeModule: "beginner",
     videos: {},
-    intensity: "normal",
   };
 }
 
@@ -1008,7 +1007,7 @@ function KettlebellTracker() {
 
   const setIntensity = (level) => {
     const next = JSON.parse(JSON.stringify(state));
-    next.intensity = level;
+    next.modules[next.activeModule].intensity = level;
     persist(next);
   };
 
@@ -1036,7 +1035,7 @@ function KettlebellTracker() {
   const moduleState = state.modules[activeModule];
   const BLOCK_INFO = activeModule === "beginner" ? BLOCK_INFO_BEGINNER : BLOCK_INFO_ADVANCED;
   const advancedLocked = SUPABASE_CONFIGURED && activeModule === "advanced" && (!session || !profile?.module2_unlocked);
-  const sessionData = useMemo(() => getSessionData(activeModule, activeSession, state.intensity, lang, moduleState.cycle), [activeModule, activeSession, state.intensity, lang, moduleState.cycle]);
+  const sessionData = useMemo(() => getSessionData(activeModule, activeSession, moduleState.intensity, lang, moduleState.cycle), [activeModule, activeSession, moduleState.intensity, lang, moduleState.cycle]);
   const sessionState = moduleState.sessions[activeSession];
   const libraryExercises = useMemo(() => getLibraryExercises(lang), [lang]);
 
@@ -1056,17 +1055,17 @@ function KettlebellTracker() {
     for (let s = 1; s <= TOTAL_SESSIONS; s++) if (!moduleState.sessions[s].completed) return s;
     return TOTAL_SESSIONS;
   }, [moduleState]);
-  const nextSessionData = useMemo(() => getSessionData(activeModule, nextSessionNum, state.intensity, lang, moduleState.cycle), [activeModule, nextSessionNum, state.intensity, moduleState.cycle]);
+  const nextSessionData = useMemo(() => getSessionData(activeModule, nextSessionNum, moduleState.intensity, lang, moduleState.cycle), [activeModule, nextSessionNum, moduleState.intensity, moduleState.cycle]);
 
   const sessionPreviews = useMemo(() => {
     const arr = [];
     for (let s = 1; s <= TOTAL_SESSIONS; s++) {
-      const d = getSessionData(activeModule, s, state.intensity, lang, moduleState.cycle);
+      const d = getSessionData(activeModule, s, moduleState.intensity, lang, moduleState.cycle);
       const mins = d.format === "sets" ? Math.round(d.exercises.length * d.sets) : d.totalMinutes;
       arr.push({ num: s, block: d.block, format: d.format, mins });
     }
     return arr;
-  }, [activeModule, state.intensity, moduleState.cycle]);
+  }, [activeModule, moduleState.intensity, moduleState.cycle]);
 
   const filteredLibrary = useMemo(() => {
     return libraryExercises.filter((ex) => {
@@ -1185,29 +1184,6 @@ function KettlebellTracker() {
         {/* ---------- HEUTE (dashboard tab) ---------- */}
         {tab === "dashboard" && !advancedLocked && (
           <div>
-            <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
-              {["beginner", "advanced"].map((m) => {
-                const active = activeModule === m;
-                return (
-                  <button
-                    key={m}
-                    onClick={() => switchModule(m)}
-                    style={{
-                      borderRadius: 14, flex: 1, textAlign: "left", padding: "10px 12px",
-                      background: active ? C.brass : C.panel, border: `1px solid ${active ? C.brass : C.border}`,
-                      cursor: "pointer",
-                    }}
-                  >
-                    <div style={{ fontSize: 13, fontWeight: 600, color: active ? C.onBrass : C.text }}>
-                      {m === "beginner" ? t.moduleBeginnerLabel : t.moduleAdvancedLabel}
-                    </div>
-                    <div style={{ fontSize: 11, color: active ? C.onBrass : C.textMuted, opacity: active ? 0.75 : 1 }}>
-                      {m === "beginner" ? t.moduleBeginnerSub : t.moduleAdvancedSub}
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 4 }}>
               <div style={{ fontSize: 12, color: C.textMuted, textTransform: "uppercase", letterSpacing: "0.04em" }}>{t.cycleLabel(moduleState.cycle || 1)}</div>
             </div>
@@ -1235,7 +1211,7 @@ function KettlebellTracker() {
                     <div style={{ fontSize: 11, color: C.textMuted }}>{t.navLibrary}</div>
                   </div>
                   <div>
-                    <div style={{ fontFamily: "'Oswald', sans-serif", fontSize: 18 }}>{t.intensityLabels[state.intensity]}</div>
+                    <div style={{ fontFamily: "'Oswald', sans-serif", fontSize: 18 }}>{t.intensityLabels[moduleState.intensity]}</div>
                     <div style={{ fontSize: 11, color: C.textMuted }}>{t.intensity}</div>
                   </div>
                 </div>
@@ -1284,7 +1260,7 @@ function KettlebellTracker() {
             <div style={{ fontSize: 13, color: C.textSecondary, marginBottom: 10 }}>{t.intensity}</div>
             <div style={{ display: "flex", gap: 6, marginBottom: 6 }}>
               {Object.keys(INTENSITY_LEVELS).map((key) => {
-                const active = state.intensity === key;
+                const active = moduleState.intensity === key;
                 return (
                   <button key={key} className="kb-tab" onClick={() => setIntensity(key)} style={{ borderRadius: 12, flex: 1, padding: "10px 8px", background: active ? C.brass : C.panel, color: active ? C.onBrass : C.textSecondary, border: `1px solid ${active ? C.brass : C.border}`, fontSize: 13, fontWeight: 500, cursor: "pointer" }}>
                     {t.intensityLabels[key]}
@@ -1294,12 +1270,8 @@ function KettlebellTracker() {
             </div>
             <div style={{ fontSize: 12, color: C.textMuted, lineHeight: 1.5, marginBottom: 24 }}>{t.intensityNote}</div>
 
-            <div style={{ borderRadius: 18, background: C.panel, border: `1px solid ${C.border}`, padding: "16px 18px", fontSize: 12, color: C.textMuted, lineHeight: 1.6 }}>
-              {t.disclaimer}
-            </div>
-
             {!SUPABASE_CONFIGURED && (
-              <div style={{ borderRadius: 18, background: C.panelAlt, border: `1px dashed ${C.borderStrong}`, padding: "12px 16px", fontSize: 11.5, color: C.textMuted, lineHeight: 1.6, marginTop: 12 }}>
+              <div style={{ borderRadius: 18, background: C.panelAlt, border: `1px dashed ${C.borderStrong}`, padding: "12px 16px", fontSize: 11.5, color: C.textMuted, lineHeight: 1.6 }}>
                 {t.notConfiguredNote}
               </div>
             )}
@@ -1407,7 +1379,7 @@ function KettlebellTracker() {
                   <div style={{ fontSize: 11, color: C.textMuted }}>{t.navLibrary}</div>
                 </div>
                 <div>
-                  <div style={{ fontFamily: "'Oswald', sans-serif", fontSize: 18 }}>{t.intensityLabels[state.intensity]}</div>
+                  <div style={{ fontFamily: "'Oswald', sans-serif", fontSize: 18 }}>{t.intensityLabels[moduleState.intensity]}</div>
                   <div style={{ fontSize: 11, color: C.textMuted }}>{t.intensity}</div>
                 </div>
               </div>
@@ -1417,7 +1389,7 @@ function KettlebellTracker() {
                   <span>{sessionData.restLabel}</span>
                 </div>
               )}
-              {sessionData.isFirstSession && sessionData.format === "sets" && state.intensity !== "normal" && (
+              {sessionData.isFirstSession && sessionData.format === "sets" && moduleState.intensity !== "normal" && (
                 <div style={{ fontSize: 12, color: C.brass, lineHeight: 1.5, marginTop: 10, paddingTop: 10, borderTop: `1px solid ${C.border}` }}>{t.weekLockedNote}</div>
               )}
             </div>
@@ -1468,7 +1440,7 @@ function KettlebellTracker() {
                     type: "sets",
                     title: t.pauseTimerBtn,
                     steps: buildSetsSteps(sessionData.exercises, sessionData.sets),
-                    restSeconds: Math.max(15, BLOCK_INFO[sessionData.block].restBetween() + (INTENSITY_LEVELS[state.intensity].restDelta)),
+                    restSeconds: Math.max(15, BLOCK_INFO[sessionData.block].restBetween() + (INTENSITY_LEVELS[moduleState.intensity].restDelta)),
                   })}
                   style={{ borderRadius: 18, width: "100%", padding: "10px 14px", background: C.panelAlt, border: `1px solid ${C.borderStrong}`, color: C.text, fontSize: 13, fontWeight: 500, cursor: "pointer" }}
                 >
