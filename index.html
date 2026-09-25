@@ -32,7 +32,7 @@ const { useState, useEffect, useCallback, useMemo } = React;
 const THEMES = {
   dark: {
     bg: "#0A0A0A",
-    panel: "#161616",
+    panel: "#202420",
     panelAlt: "#1E1E1E",
     border: "#2A2A2A",
     borderStrong: "#3A3A3A",
@@ -189,6 +189,7 @@ const UI = {
     timerDone: "Fertig! 💪",
     timerClose: "Schließen",
     timerSetLabel: (n, total) => `Satz ${n}/${total}`,
+    setProgressLabel: "Satzfortschritt",
     timerReadyLabel: "Los!",
     timerDoneStartRest: "Fertig — Pause starten",
     timerNextUp: "Als Nächstes",
@@ -293,6 +294,7 @@ const UI = {
     timerDone: "Done! 💪",
     timerClose: "Close",
     timerSetLabel: (n, total) => `Set ${n}/${total}`,
+    setProgressLabel: "Set progress",
     timerReadyLabel: "Go!",
     timerDoneStartRest: "Done — start rest",
     timerNextUp: "Up next",
@@ -606,8 +608,10 @@ function buildFinisherSequence(name, minutes) {
 // manuell gestartet, sobald die Wiederholungen erledigt sind.
 function buildSetsSteps(exercises, sets) {
   const steps = [];
-  exercises.forEach((ex) => {
-    for (let s = 1; s <= sets; s++) steps.push({ label: ex.name, setNumber: s, totalSets: sets });
+  exercises.forEach((ex, exIndex) => {
+    for (let s = 1; s <= sets; s++) {
+      steps.push({ label: ex.name, reps: ex.reps, setNumber: s, totalSets: sets, exerciseIndex: exIndex + 1, totalExercises: exercises.length });
+    }
   });
   return steps;
 }
@@ -702,7 +706,7 @@ function emptyState() {
 }
 
 // Kreisförmiger Fortschritts-Timer (SVG-Ring), nach dem Vorbild des Mockups.
-function TimerRing({ remaining, total, color, label, C, size = 240 }) {
+function TimerRing({ remaining, total, color, label, C, size = 240, centerText = null }) {
   const r = (size - 20) / 2;
   const circumference = 2 * Math.PI * r;
   const fraction = total > 0 ? Math.max(0, Math.min(1, remaining / total)) : 0;
@@ -716,8 +720,8 @@ function TimerRing({ remaining, total, color, label, C, size = 240 }) {
         transform={`rotate(-90 ${size / 2} ${size / 2})`}
         style={{ transition: "stroke-dashoffset 0.3s linear" }}
       />
-      <text x="50%" y="46%" textAnchor="middle" dominantBaseline="middle" fill={C.text} fontFamily="'Oswald', sans-serif" fontWeight="600" fontSize="52">
-        {remaining}
+      <text x="50%" y="46%" textAnchor="middle" dominantBaseline="middle" fill={C.text} fontFamily="'Oswald', sans-serif" fontWeight="600" fontSize={centerText ? "44" : "52"}>
+        {centerText !== null ? centerText : remaining}
       </text>
       {label && (
         <text x="50%" y="60%" textAnchor="middle" dominantBaseline="middle" fill={color} fontFamily="Inter, system-ui, sans-serif" fontWeight="600" fontSize="12" letterSpacing="0.08em">
@@ -807,9 +811,10 @@ function SetsTimer({ title, steps, restSeconds, onClose, t, theme }) {
   const [stepIndex, setStepIndex] = useState(0);
   const [phase, setPhase] = useState("work"); // "work" | "resting" | "done"
   const [remaining, setRemaining] = useState(restSeconds);
+  const [running, setRunning] = useState(true);
 
   useEffect(() => {
-    if (phase !== "resting") return;
+    if (phase !== "resting" || !running) return;
     const id = setInterval(() => {
       setRemaining((r) => {
         if (r <= 1) {
@@ -828,62 +833,107 @@ function SetsTimer({ title, steps, restSeconds, onClose, t, theme }) {
       });
     }, 1000);
     return () => clearInterval(id);
-  }, [phase, stepIndex, steps.length, restSeconds]);
+  }, [phase, running, stepIndex, steps.length, restSeconds]);
 
   const current = steps[stepIndex];
-  const upcoming = steps[stepIndex + 1];
+  const goToStep = (i) => { if (i < steps.length) { setStepIndex(i); setPhase("work"); setRunning(true); } else setPhase("done"); };
 
   return (
-    <div style={{ position: "fixed", inset: 0, background: C.overlayBg, zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
-      <div style={{ width: "100%", maxWidth: 420, textAlign: "center" }}>
-        <div style={{ fontSize: 13, color: C.textMuted, marginBottom: 6 }}>{title}</div>
+    <div style={{ position: "fixed", inset: 0, background: C.overlayBg, zIndex: 200, display: "flex", flexDirection: "column", alignItems: "center", padding: "24px 20px", overflowY: "auto" }}>
+      <div style={{ width: "100%", maxWidth: 420 }}>
+
+        {/* Kopfzeile */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+          <button onClick={onClose} aria-label="close" style={{ width: 40, height: 40, borderRadius: 999, background: C.panel, border: "none", color: C.text, fontSize: 16, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>✕</button>
+          <div style={{ textAlign: "center" }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: C.brass, textTransform: "uppercase", letterSpacing: "0.04em" }}>{title}</div>
+            {phase !== "done" && current && (
+              <div style={{ fontSize: 12, color: C.textMuted, marginTop: 2 }}>{t.timerSegment(current.exerciseIndex, current.totalExercises)}</div>
+            )}
+          </div>
+          <button aria-label="menu" style={{ width: 40, height: 40, borderRadius: 999, background: C.panel, border: "none", color: C.text, fontSize: 16, cursor: "default", display: "flex", alignItems: "center", justifyContent: "center" }}>⋯</button>
+        </div>
+
+        {/* Fortschrittsbalken */}
+        <div style={{ height: 4, borderRadius: 999, background: C.panelAlt, overflow: "hidden", marginBottom: 28 }}>
+          <div style={{ height: "100%", width: `${(stepIndex / steps.length) * 100}%`, background: C.brass, transition: "width 0.3s" }} />
+        </div>
+
         {phase !== "done" ? (
           <>
-            <div style={{ fontSize: 12.5, color: phase === "resting" ? C.textSecondary : C.brass, marginBottom: 4 }}>
-              {t.timerSegment(stepIndex + 1, steps.length)}
-            </div>
-            <div style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 600, fontSize: 22, color: C.text, marginBottom: 6 }}>
-              {current.label}
-            </div>
-            <div style={{ fontSize: 13, color: C.textMuted, marginBottom: 18 }}>
-              {t.timerSetLabel(current.setNumber, current.totalSets)}
+            <div style={{ textAlign: "center", marginBottom: 28 }}>
+              <div style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 600, fontSize: 28, color: C.text, marginBottom: 6 }}>{current.label}</div>
+              <div style={{ fontSize: 14, color: C.textMuted }}>
+                {t.timerSetLabel(current.setNumber, current.totalSets)}{current.reps ? ` · ${current.reps}` : ""}
+              </div>
             </div>
 
+            <div style={{ display: "flex", justifyContent: "center", marginBottom: 24 }}>
+              {phase === "work" ? (
+                <TimerRing remaining={1} total={1} color={C.brass} label={t.timerWorkLabel} C={C} centerText="✓" />
+              ) : (
+                <TimerRing remaining={remaining} total={restSeconds} color={C.brass} label={t.timerRestLabel} C={C} />
+              )}
+            </div>
+
+            <div style={{ marginBottom: 10 }}>
+              <div style={{ fontSize: 11.5, color: C.textMuted, textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: 10, display: "flex", justifyContent: "space-between" }}>
+                <span>{t.setProgressLabel}</span>
+                <span style={{ fontWeight: 700, color: C.text }}>{current.setNumber} / {current.totalSets}</span>
+              </div>
+              <div style={{ display: "flex", gap: 6 }}>
+                {Array.from({ length: current.totalSets }, (_, i) => i + 1).map((n) => {
+                  const done = n < current.setNumber;
+                  const isCurrent = n === current.setNumber;
+                  return (
+                    <div key={n} style={{
+                      flex: 1, borderRadius: 12, padding: "10px 0", textAlign: "center", fontSize: 13, fontWeight: 700,
+                      background: done || isCurrent ? (isCurrent ? C.text : C.brass) : C.panel,
+                      color: isCurrent ? C.bg : done ? C.onBrass : C.textMuted,
+                    }}>
+                      {done ? "✓" : n}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </>
+        ) : (
+          <div style={{ textAlign: "center", padding: "40px 0" }}>
+            <div style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 600, fontSize: 28, color: C.brass }}>{t.timerDone}</div>
+          </div>
+        )}
+
+        {phase !== "done" && (
+          <div style={{ display: "flex", gap: 10, marginTop: 24 }}>
             {phase === "work" ? (
-              <>
-                <div style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 600, fontSize: 48, color: C.brass, lineHeight: 1, marginBottom: 24 }}>
-                  {t.timerReadyLabel}
-                </div>
-                <button
-                  onClick={() => { setPhase("resting"); setRemaining(restSeconds); }}
-                  style={{ borderRadius: 14, padding: "14px 32px", background: C.brass, border: "none", color: C.onBrass, fontSize: 16, fontWeight: 600, cursor: "pointer" }}
-                >
-                  ✓ {t.timerDoneStartRest}
-                </button>
-              </>
+              <button
+                onClick={() => { setPhase("resting"); setRemaining(restSeconds); setRunning(true); }}
+                style={{ borderRadius: 999, flex: 1, padding: "16px 14px", background: C.brass, border: "none", color: C.onBrass, fontSize: 15, fontWeight: 700, cursor: "pointer" }}
+              >
+                ✓ {t.timerDoneStartRest}
+              </button>
             ) : (
               <>
-                <div style={{ marginBottom: 10 }}>
-                  <TimerRing remaining={remaining} total={restSeconds} color={C.textSecondary} label={t.timerRestLabel} C={C} />
-                </div>
-                {upcoming && (
-                  <div style={{ fontSize: 12.5, color: C.textMuted, marginBottom: 24 }}>
-                    {t.timerNextUp}: {upcoming.label} — {t.timerSetLabel(upcoming.setNumber, upcoming.totalSets)}
-                  </div>
-                )}
                 <button
-                  onClick={() => { const next = stepIndex + 1; if (next < steps.length) { setStepIndex(next); setPhase("work"); } else { setPhase("done"); } }}
-                  style={{ padding: "10px 20px", background: "transparent", border: `1px solid ${C.borderStrong}`, color: C.text, fontSize: 13, cursor: "pointer" }}
+                  onClick={() => setRunning((r) => !r)}
+                  style={{ borderRadius: 999, flex: 1, padding: "16px 14px", background: C.brass, border: "none", color: C.onBrass, fontSize: 15, fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}
                 >
-                  {t.timerSkipRest}
+                  {running ? "⏸" : "▶"} {running ? t.timerPause : t.timerStart}
+                </button>
+                <button
+                  onClick={() => goToStep(stepIndex + 1)}
+                  aria-label="skip"
+                  style={{ borderRadius: 18, width: 54, background: C.panel, border: "none", color: C.text, fontSize: 18, cursor: "pointer" }}
+                >
+                  ⏭
                 </button>
               </>
             )}
-          </>
-        ) : (
-          <div style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 600, fontSize: 28, color: C.brass, marginBottom: 20 }}>{t.timerDone}</div>
+          </div>
         )}
-        <button onClick={onClose} style={{ marginTop: 28, background: "transparent", border: "none", color: C.textMuted, fontSize: 13, textDecoration: "underline", cursor: "pointer" }}>
+
+        <button onClick={onClose} style={{ display: "block", margin: "20px auto 0", background: "transparent", border: "none", color: C.textMuted, fontSize: 13, textDecoration: "underline", cursor: "pointer" }}>
           {t.timerClose}
         </button>
       </div>
@@ -1135,7 +1185,7 @@ function KettlebellTracker() {
               })}
             </div>
 
-            <div style={{ borderRadius: 18, background: C.panel, border: `1px solid ${C.border}`, padding: "20px" }}>
+            <div style={{ borderRadius: 24, background: C.panel, border: `1px solid ${C.border}`, padding: "20px" }}>
               <div style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 600, fontSize: 19, marginBottom: 8 }}>🔒 {t.lockedTitle}</div>
 
               {session ? (
@@ -1191,10 +1241,10 @@ function KettlebellTracker() {
             </h1>
 
             {totalSessionsComplete === TOTAL_SESSIONS ? (
-              <div style={{ borderRadius: 18, background: C.successBg, border: `1px solid ${C.success}`, padding: "16px 18px", marginBottom: 16 }}>
+              <div style={{ borderRadius: 24, background: C.successBg, border: `1px solid ${C.success}`, padding: "16px 18px", marginBottom: 16 }}>
                 <div style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 500, fontSize: 17, marginBottom: 6 }}>{t.cycleDoneTitle}</div>
                 <div style={{ fontSize: 13, color: C.textSecondary, lineHeight: 1.6, marginBottom: 12 }}>{t.cycleDoneText}</div>
-                <button onClick={startNewCycle} style={{ borderRadius: 18, width: "100%", padding: "10px 14px", background: C.brass, border: "none", color: C.onBrass, fontSize: 13, fontWeight: 600, cursor: "pointer" }}>{t.startNewCycle}</button>
+                <button onClick={startNewCycle} style={{ borderRadius: 24, width: "100%", padding: "10px 14px", background: C.brass, border: "none", color: C.onBrass, fontSize: 13, fontWeight: 600, cursor: "pointer" }}>{t.startNewCycle}</button>
               </div>
             ) : (
               <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 16, borderRadius: 24, background: "#202420", boxShadow: "0px 6px 18px rgba(23, 26, 24, 0.0705882)", padding: "20px", width: "100%", marginBottom: 16, boxSizing: "border-box" }}>
@@ -1226,7 +1276,7 @@ function KettlebellTracker() {
             )}
 
             <div style={{ marginBottom: 16 }}>
-              <div style={{ borderRadius: 18, background: C.panel, border: `1px solid ${C.border}`, padding: "16px 14px" }}>
+              <div style={{ borderRadius: 24, background: C.panel, border: `1px solid ${C.border}`, padding: "16px 14px" }}>
                 <div style={{ fontFamily: "'Oswald', sans-serif", fontSize: 26, color: C.brass }}>{totalSessionsComplete}/{TOTAL_SESSIONS}</div>
                 <div style={{ fontSize: 12, color: C.textSecondary, marginTop: 2 }}>{t.sessionsDone}</div>
               </div>
@@ -1244,18 +1294,18 @@ function KettlebellTracker() {
 
             <button
               onClick={() => { setProgramView("list"); setTab("program"); }}
-              style={{ borderRadius: 18, width: "100%", textAlign: "left", background: "transparent", border: `1px dashed ${C.borderStrong}`, color: C.textSecondary, fontSize: 13, padding: "12px 16px", cursor: "pointer", marginBottom: 16 }}
+              style={{ borderRadius: 24, width: "100%", textAlign: "left", background: "transparent", border: `1px dashed ${C.borderStrong}`, color: C.textSecondary, fontSize: 13, padding: "12px 16px", cursor: "pointer", marginBottom: 16 }}
             >
               📅 {t.goToPlan}
             </button>
 
-            <div style={{ borderRadius: 18, background: C.panel, border: `1px solid ${C.border}`, borderLeft: `3px solid ${C.brass}`, padding: "14px 16px", marginBottom: 16 }}>
+            <div style={{ borderRadius: 24, background: C.panel, border: `1px solid ${C.border}`, borderLeft: `3px solid ${C.brass}`, padding: "14px 16px", marginBottom: 16 }}>
               <div style={{ fontWeight: 500, fontSize: 14, color: C.brass, marginBottom: 4 }}>{t.weightGuideTitle}</div>
               <div style={{ fontSize: 13, color: C.textSecondary, lineHeight: 1.6 }}>{t.weightGuideText}</div>
             </div>
 
             {!SUPABASE_CONFIGURED && (
-              <div style={{ borderRadius: 18, background: C.panelAlt, border: `1px dashed ${C.borderStrong}`, padding: "12px 16px", fontSize: 11.5, color: C.textMuted, lineHeight: 1.6 }}>
+              <div style={{ borderRadius: 24, background: C.panelAlt, border: `1px dashed ${C.borderStrong}`, padding: "12px 16px", fontSize: 11.5, color: C.textMuted, lineHeight: 1.6 }}>
                 {t.notConfiguredNote}
               </div>
             )}
@@ -1327,7 +1377,7 @@ function KettlebellTracker() {
                     disabled={locked}
                     onClick={() => goToSession(p.num)}
                     style={{
-                      borderRadius: 18, textAlign: "left", width: "100%", padding: "14px 16px",
+                      borderRadius: 24, textAlign: "left", width: "100%", padding: "14px 16px",
                       background: active ? C.brass : C.panel,
                       border: `1px solid ${active ? C.brass : C.border}`,
                       opacity: locked ? 0.55 : 1,
@@ -1365,7 +1415,7 @@ function KettlebellTracker() {
             <div style={{ fontSize: 12, color: C.brass, textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: 4 }}>{t.session} {String(activeSession).padStart(2, "0")} · {t.blockNames[sessionData.block]}</div>
             <h1 style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 600, fontSize: 24, margin: "0 0 16px" }}>{t.blockNames[sessionData.block]}</h1>
 
-            <div style={{ borderRadius: 18, background: C.panel, border: `1px solid ${C.border}`, padding: "16px 18px", marginBottom: 16 }}>
+            <div style={{ borderRadius: 24, background: C.panel, border: `1px solid ${C.border}`, padding: "16px 18px", marginBottom: 16 }}>
               <div style={{ fontSize: 13.5, color: C.textSecondary, lineHeight: 1.6, marginBottom: 14 }}>{BLOCK_INFO[sessionData.block].note[lang]}</div>
               <div style={{ display: "flex", gap: 18, paddingTop: 14, borderTop: `1px solid ${C.border}` }}>
                 <div>
@@ -1392,7 +1442,7 @@ function KettlebellTracker() {
               )}
             </div>
 
-            <div style={{ borderRadius: 18, background: C.panelAlt, border: `1px solid ${C.border}`, padding: "12px 16px", marginBottom: 16, fontSize: 12.5, color: C.textSecondary, display: "flex", alignItems: "center", gap: 8 }}>
+            <div style={{ borderRadius: 24, background: C.panelAlt, border: `1px solid ${C.border}`, padding: "12px 16px", marginBottom: 16, fontSize: 12.5, color: C.textSecondary, display: "flex", alignItems: "center", gap: 8 }}>
               🎒 <strong style={{ color: C.text, fontWeight: 500 }}>{t.youNeed}:</strong> {t.needsKettlebell}
             </div>
 
@@ -1400,7 +1450,7 @@ function KettlebellTracker() {
               <div style={{ fontWeight: 500, fontSize: 14, color: C.brass, marginBottom: 8 }}>{t.warmupTitle}</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                 {WARMUP.map((w) => (
-                  <div key={w.id} style={{ borderRadius: 18, background: C.panel, border: `1px solid ${C.border}`, padding: "10px 12px" }}>
+                  <div key={w.id} style={{ borderRadius: 24, background: C.panel, border: `1px solid ${C.border}`, padding: "10px 12px" }}>
                     <div style={{ fontSize: 13, fontWeight: 500, color: C.text, marginBottom: 2 }}>{w.n[lang]}</div>
                     <div style={{ fontSize: 12.5, color: C.textSecondary, lineHeight: 1.5 }}>{w.d[lang]}</div>
                   </div>
@@ -1409,7 +1459,7 @@ function KettlebellTracker() {
             </div>
 
             {(sessionData.format === "circuit" || sessionData.format === "chipper" || sessionData.format === "emom") && (
-              <div style={{ borderRadius: 18, background: C.panelAlt, border: `1px solid ${C.brassSoft}`, padding: "14px 16px", marginBottom: 16 }}>
+              <div style={{ borderRadius: 24, background: C.panelAlt, border: `1px solid ${C.brassSoft}`, padding: "14px 16px", marginBottom: 16 }}>
                 <div style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 500, fontSize: 16, color: C.brass, marginBottom: 4 }}>
                   {sessionData.format === "chipper" ? t.chipperTitle : sessionData.format === "circuit" ? t.circuitTitle : t.emomTitle}
                 </div>
@@ -1424,7 +1474,7 @@ function KettlebellTracker() {
                       setActiveTimer({ title: t.emomTitle, sequence: buildEmomSequence(sessionData.exercises, sessionData.rounds) });
                     }
                   }}
-                  style={{ borderRadius: 18, width: "100%", padding: "10px 14px", background: C.brass, border: "none", color: C.onBrass, fontSize: 13, fontWeight: 600, cursor: "pointer" }}
+                  style={{ borderRadius: 24, width: "100%", padding: "10px 14px", background: C.brass, border: "none", color: C.onBrass, fontSize: 13, fontWeight: 600, cursor: "pointer" }}
                 >
                   ⏱ {sessionData.format === "chipper" ? t.chipperTimerBtn : sessionData.format === "circuit" ? t.circuitTimerBtn : t.emomTimerBtn}
                 </button>
@@ -1440,7 +1490,7 @@ function KettlebellTracker() {
                     steps: buildSetsSteps(sessionData.exercises, sessionData.sets),
                     restSeconds: Math.max(15, BLOCK_INFO[sessionData.block].restBetween() + (INTENSITY_LEVELS[moduleState.intensity].restDelta)),
                   })}
-                  style={{ borderRadius: 18, width: "100%", padding: "10px 14px", background: C.panelAlt, border: `1px solid ${C.borderStrong}`, color: C.text, fontSize: 13, fontWeight: 500, cursor: "pointer" }}
+                  style={{ borderRadius: 24, width: "100%", padding: "10px 14px", background: C.panelAlt, border: `1px solid ${C.borderStrong}`, color: C.text, fontSize: 13, fontWeight: 500, cursor: "pointer" }}
                 >
                   ⏱ {t.pauseTimerBtn}
                 </button>
@@ -1449,7 +1499,7 @@ function KettlebellTracker() {
 
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               {sessionData.exercises.map((ex, i) => (
-                <div key={ex.key} style={{ borderRadius: 18, background: C.panel, border: `1px solid ${C.border}`, padding: "14px 16px", display: "flex", gap: 12 }}>
+                <div key={ex.key} style={{ borderRadius: 24, background: C.panel, border: `1px solid ${C.border}`, padding: "14px 16px", display: "flex", gap: 12 }}>
                   <div style={{ flex: "0 0 auto", width: 26, height: 26, borderRadius: 999, background: C.panelAlt, color: C.textMuted, fontSize: 11.5, fontWeight: 600, display: "flex", alignItems: "center", justifyContent: "center" }}>
                     {String(i + 1).padStart(2, "0")}
                   </div>
@@ -1483,7 +1533,7 @@ function KettlebellTracker() {
             {sessionData.finisher && (
               <div style={{ marginTop: 18 }}>
                 <div style={{ fontSize: 13, color: C.textSecondary, marginBottom: 10 }}>{t.finisherTitle}</div>
-                <div style={{ borderRadius: 18, background: C.panel, border: `1px solid ${C.border}`, borderLeft: `3px solid ${C.brass}`, padding: "14px 16px" }}>
+                <div style={{ borderRadius: 24, background: C.panel, border: `1px solid ${C.border}`, borderLeft: `3px solid ${C.brass}`, padding: "14px 16px" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", gap: 10 }}>
                     <div style={{ flex: 1 }}>
                       <div style={{ fontWeight: 500, fontSize: 15, marginBottom: 2 }}>{sessionData.finisher.name}</div>
@@ -1499,7 +1549,7 @@ function KettlebellTracker() {
               </div>
             )}
 
-            <div style={{ borderRadius: 18, marginTop: 18, display: "flex", alignItems: "center", justifyContent: "space-between", background: C.panelAlt, border: `1px solid ${C.border}`, padding: "12px 16px" }}>
+            <div style={{ borderRadius: 24, marginTop: 18, display: "flex", alignItems: "center", justifyContent: "space-between", background: C.panelAlt, border: `1px solid ${C.border}`, padding: "12px 16px" }}>
               <div style={{ fontSize: 13, color: C.textSecondary }}>{t.session} {activeSession} {sessionState.completed ? "✓" : ""}</div>
               <button onClick={() => toggleCompleted(activeSession)} style={{ padding: "8px 16px", background: sessionState.completed ? C.success : C.brass, border: "none", color: sessionState.completed ? C.onSuccess : C.onBrass, fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
                 {sessionState.completed ? "✓" : "○"}
@@ -1510,7 +1560,7 @@ function KettlebellTracker() {
               <div style={{ fontWeight: 500, fontSize: 14, color: C.brass, marginBottom: 8 }}>{t.cooldownTitle}</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                 {COOLDOWN.map((c) => (
-                  <div key={c.id} style={{ borderRadius: 18, background: C.panel, border: `1px solid ${C.border}`, padding: "10px 12px" }}>
+                  <div key={c.id} style={{ borderRadius: 24, background: C.panel, border: `1px solid ${C.border}`, padding: "10px 12px" }}>
                     <div style={{ fontSize: 13, fontWeight: 500, color: C.text, marginBottom: 2 }}>{c.n[lang]}</div>
                     <div style={{ fontSize: 12.5, color: C.textSecondary, lineHeight: 1.5 }}>{c.d[lang]}</div>
                   </div>
@@ -1551,7 +1601,7 @@ function KettlebellTracker() {
                   key={ex.key}
                   className="kb-card"
                   onClick={() => { setLibraryDetailKey(ex.key); setLibraryView("detail"); }}
-                  style={{ borderRadius: 18, textAlign: "left", background: C.panel, border: `1px solid ${C.border}`, padding: 0, cursor: "pointer", overflow: "hidden" }}
+                  style={{ borderRadius: 24, textAlign: "left", background: C.panel, border: `1px solid ${C.border}`, padding: 0, cursor: "pointer", overflow: "hidden" }}
                 >
                   <div style={{ height: 90, background: C.panelAlt, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 26 }}>
                     {REGION_ICON[ex.region] || "🏋"}
@@ -1580,11 +1630,11 @@ function KettlebellTracker() {
             </div>
             <h1 style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 600, fontSize: 24, margin: "0 0 16px" }}>{libraryDetailExercise.name}</h1>
 
-            <div style={{ borderRadius: 18, height: 160, background: C.panel, border: `1px solid ${C.border}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 44, marginBottom: 16 }}>
+            <div style={{ borderRadius: 24, height: 160, background: C.panel, border: `1px solid ${C.border}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 44, marginBottom: 16 }}>
               {REGION_ICON[libraryDetailExercise.region] || "🏋"}
             </div>
 
-            <div style={{ borderRadius: 18, background: C.panel, border: `1px solid ${C.border}`, padding: "16px 18px", marginBottom: 16 }}>
+            <div style={{ borderRadius: 24, background: C.panel, border: `1px solid ${C.border}`, padding: "16px 18px", marginBottom: 16 }}>
               <div style={{ fontSize: 14, color: C.textSecondary, lineHeight: 1.7 }}>{libraryDetailExercise.cue}</div>
               {libraryDetailExercise.homeNote && (
                 <div style={{ fontSize: 12.5, color: C.textMuted, marginTop: 10, fontStyle: "italic" }}>{libraryDetailExercise.homeNote}</div>
