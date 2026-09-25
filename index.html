@@ -950,6 +950,8 @@ function KettlebellTracker() {
   const [libraryDetailKey, setLibraryDetailKey] = useState(null);
   const [libraryFilter, setLibraryFilter] = useState("all");
   const [librarySearch, setLibrarySearch] = useState("");
+  const [warmupOpen, setWarmupOpen] = useState(false);
+  const [cooldownOpen, setCooldownOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [editingReps, setEditingReps] = useState(null);
   const [repsDraft, setRepsDraft] = useState("");
@@ -1447,15 +1449,20 @@ function KettlebellTracker() {
             </div>
 
             <div style={{ marginBottom: 16 }}>
-              <div style={{ fontWeight: 500, fontSize: 14, color: C.brass, marginBottom: 8 }}>{t.warmupTitle}</div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                {WARMUP.map((w) => (
-                  <div key={w.id} style={{ borderRadius: 24, background: C.panel, border: `1px solid ${C.border}`, padding: "10px 12px" }}>
-                    <div style={{ fontSize: 13, fontWeight: 500, color: C.text, marginBottom: 2 }}>{w.n[lang]}</div>
-                    <div style={{ fontSize: 12.5, color: C.textSecondary, lineHeight: 1.5 }}>{w.d[lang]}</div>
-                  </div>
-                ))}
-              </div>
+              <button onClick={() => setWarmupOpen((o) => !o)} style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", background: "transparent", border: "none", padding: "4px 0", cursor: "pointer" }}>
+                <span style={{ fontWeight: 500, fontSize: 14, color: C.brass }}>{t.warmupTitle}</span>
+                <span style={{ fontSize: 13, color: C.textMuted }}>{warmupOpen ? "▲" : "▼"}</span>
+              </button>
+              {warmupOpen && (
+                <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 8 }}>
+                  {WARMUP.map((w) => (
+                    <div key={w.id} style={{ borderRadius: 24, background: C.panel, border: `1px solid ${C.border}`, padding: "10px 12px" }}>
+                      <div style={{ fontSize: 13, fontWeight: 500, color: C.text, marginBottom: 2 }}>{w.n[lang]}</div>
+                      <div style={{ fontSize: 12.5, color: C.textSecondary, lineHeight: 1.5 }}>{w.d[lang]}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {(sessionData.format === "circuit" || sessionData.format === "chipper" || sessionData.format === "emom") && (
@@ -1557,15 +1564,20 @@ function KettlebellTracker() {
             </div>
 
             <div style={{ marginTop: 18 }}>
-              <div style={{ fontWeight: 500, fontSize: 14, color: C.brass, marginBottom: 8 }}>{t.cooldownTitle}</div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                {COOLDOWN.map((c) => (
-                  <div key={c.id} style={{ borderRadius: 24, background: C.panel, border: `1px solid ${C.border}`, padding: "10px 12px" }}>
-                    <div style={{ fontSize: 13, fontWeight: 500, color: C.text, marginBottom: 2 }}>{c.n[lang]}</div>
-                    <div style={{ fontSize: 12.5, color: C.textSecondary, lineHeight: 1.5 }}>{c.d[lang]}</div>
-                  </div>
-                ))}
-              </div>
+              <button onClick={() => setCooldownOpen((o) => !o)} style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", background: "transparent", border: "none", padding: "4px 0", cursor: "pointer" }}>
+                <span style={{ fontWeight: 500, fontSize: 14, color: C.brass }}>{t.cooldownTitle}</span>
+                <span style={{ fontSize: 13, color: C.textMuted }}>{cooldownOpen ? "▲" : "▼"}</span>
+              </button>
+              {cooldownOpen && (
+                <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 8 }}>
+                  {COOLDOWN.map((c) => (
+                    <div key={c.id} style={{ borderRadius: 24, background: C.panel, border: `1px solid ${C.border}`, padding: "10px 12px" }}>
+                      <div style={{ fontSize: 13, fontWeight: 500, color: C.text, marginBottom: 2 }}>{c.n[lang]}</div>
+                      <div style={{ fontSize: 12.5, color: C.textSecondary, lineHeight: 1.5 }}>{c.d[lang]}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         )}
