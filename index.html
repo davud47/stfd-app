@@ -1252,19 +1252,6 @@ function KettlebellTracker() {
               <div style={{ fontSize: 13, color: C.textSecondary, lineHeight: 1.6 }}>{t.weightGuideText}</div>
             </div>
 
-            <div style={{ fontSize: 13, color: C.textSecondary, marginBottom: 10 }}>{t.intensity}</div>
-            <div style={{ display: "flex", gap: 6, marginBottom: 6 }}>
-              {Object.keys(INTENSITY_LEVELS).map((key) => {
-                const active = moduleState.intensity === key;
-                return (
-                  <button key={key} className="kb-tab" onClick={() => setIntensity(key)} style={{ borderRadius: 12, flex: 1, padding: "10px 8px", background: active ? C.brass : C.panel, color: active ? C.onBrass : C.textSecondary, border: `1px solid ${active ? C.brass : C.border}`, fontSize: 13, fontWeight: 500, cursor: "pointer" }}>
-                    {t.intensityLabels[key]}
-                  </button>
-                );
-              })}
-            </div>
-            <div style={{ fontSize: 12, color: C.textMuted, lineHeight: 1.5, marginBottom: 24 }}>{t.intensityNote}</div>
-
             {!SUPABASE_CONFIGURED && (
               <div style={{ borderRadius: 18, background: C.panelAlt, border: `1px dashed ${C.borderStrong}`, padding: "12px 16px", fontSize: 11.5, color: C.textMuted, lineHeight: 1.6 }}>
                 {t.notConfiguredNote}
@@ -1299,6 +1286,20 @@ function KettlebellTracker() {
                 );
               })}
             </div>
+
+            <div style={{ fontSize: 13, color: C.textSecondary, marginBottom: 10 }}>{t.intensity}</div>
+            <div style={{ display: "flex", gap: 6, marginBottom: 6 }}>
+              {Object.keys(INTENSITY_LEVELS).map((key) => {
+                const active = moduleState.intensity === key;
+                return (
+                  <button key={key} className="kb-tab" onClick={() => setIntensity(key)} style={{ borderRadius: 12, flex: 1, padding: "10px 8px", background: active ? C.brass : C.panel, color: active ? C.onBrass : C.textSecondary, border: `1px solid ${active ? C.brass : C.border}`, fontSize: 13, fontWeight: 500, cursor: "pointer" }}>
+                    {t.intensityLabels[key]}
+                  </button>
+                );
+              })}
+            </div>
+            <div style={{ fontSize: 12, color: C.textMuted, lineHeight: 1.5, marginBottom: 18 }}>{t.intensityNote}</div>
+
             <div style={{ fontSize: 12, color: C.textMuted, textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: 4 }}>{TOTAL_SESSIONS} {t.session.toUpperCase()}S</div>
             <h1 style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 600, fontSize: 22, margin: "0 0 12px", color: C.text }}>{t.planHeader}</h1>
 
