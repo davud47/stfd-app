@@ -1040,7 +1040,6 @@ function KettlebellTracker() {
   const libraryExercises = useMemo(() => getLibraryExercises(lang), [lang]);
 
   const totalSessionsComplete = useMemo(() => Object.values(moduleState.sessions).filter((s) => s.completed).length, [moduleState]);
-  const totalChecks = useMemo(() => Object.values(moduleState.sessions).reduce((sum, s) => sum + Object.values(s.checked || {}).filter(Boolean).length, 0), [moduleState]);
 
   const NAV_ITEMS = [
     { id: "dashboard", label: t.navDashboard, icon: "📊" },
@@ -1224,14 +1223,10 @@ function KettlebellTracker() {
               </div>
             )}
 
-            <div style={{ display: "flex", gap: 10, marginBottom: 16 }}>
-              <div style={{ borderRadius: 18, flex: 1, background: C.panel, border: `1px solid ${C.border}`, padding: "16px 14px" }}>
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ borderRadius: 18, background: C.panel, border: `1px solid ${C.border}`, padding: "16px 14px" }}>
                 <div style={{ fontFamily: "'Oswald', sans-serif", fontSize: 26, color: C.brass }}>{totalSessionsComplete}/{TOTAL_SESSIONS}</div>
                 <div style={{ fontSize: 12, color: C.textSecondary, marginTop: 2 }}>{t.sessionsDone}</div>
-              </div>
-              <div style={{ borderRadius: 18, flex: 1, background: C.panel, border: `1px solid ${C.border}`, padding: "16px 14px" }}>
-                <div style={{ fontFamily: "'Oswald', sans-serif", fontSize: 26, color: C.brass }}>{totalChecks}</div>
-                <div style={{ fontSize: 12, color: C.textSecondary, marginTop: 2 }}>{t.totalCompletions}</div>
               </div>
             </div>
 
