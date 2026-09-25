@@ -177,6 +177,12 @@ const UI = {
     lockedNote: "Erst freigeschaltet, sobald die vorherige Einheit abgeschlossen ist.",
     youNeed: "Du brauchst",
     needsKettlebell: "1 Kettlebell",
+    needsMat: "Matte",
+    needsCarrySpace: "Platz für Carries",
+    setsTimes: (sets, reps) => `${sets} × ${reps}`,
+    perSideShort: "/ Seite",
+    sideLeftLabel: "Seite 1: Links",
+    sideRightLabel: "Seite 2: Rechts",
     exerciseSequence: "Übungsfolge",
     session: "Einheit",
     block: "Block",
@@ -282,6 +288,12 @@ const UI = {
     lockedNote: "Unlocks once the previous session is marked complete.",
     youNeed: "You need",
     needsKettlebell: "1 kettlebell",
+    needsMat: "Mat",
+    needsCarrySpace: "Space to carry",
+    setsTimes: (sets, reps) => `${sets} × ${reps}`,
+    perSideShort: "/ side",
+    sideLeftLabel: "Side 1: Left",
+    sideRightLabel: "Side 2: Right",
     exerciseSequence: "Exercise sequence",
     session: "Session",
     block: "Block",
@@ -656,7 +668,7 @@ function getSessionData(module, sessionNum, intensityKey, lang, cycle) {
       const roundTo = e.r || 1;
       const value = Math.max(roundTo, Math.round(raw / roundTo) * roundTo);
       const homeKey = HOME_NOTE_EXERCISES[e.n];
-      return { name: e.n, key: slug(e.n), vkey: videoKey(e.n), cue: CUES[e.n][lang], homeNote: homeKey ? t[homeKey] : null, sideNote: e.u.endsWith("_side") ? t.sideNote : null, reps: formatReps(value, e.u, lang) };
+      return { name: e.n, key: slug(e.n), vkey: videoKey(e.n), cue: CUES[e.n][lang], homeNote: homeKey ? t[homeKey] : null, sideNote: e.u.endsWith("_side") ? t.sideNote : null, isSide: e.u.endsWith("_side"), repsValue: value, unit: e.u, reps: formatReps(value, e.u, lang) };
     });
     let finisher = null;
     if (session.finisher) {
@@ -681,7 +693,7 @@ function getSessionData(module, sessionNum, intensityKey, lang, cycle) {
       const raw = e.b * intensity.repsMult;
       const roundTo = e.r || 1;
       const value = Math.max(roundTo, Math.round(raw / roundTo) * roundTo);
-      return { name: e.n, key: slug(e.n), vkey: videoKey(e.n), cue: CUES[e.n][lang], homeNote: HOME_NOTE_EXERCISES[e.n] ? t[HOME_NOTE_EXERCISES[e.n]] : null, sideNote: e.u.endsWith("_side") ? t.sideNote : null, reps: formatReps(value, e.u, lang) };
+      return { name: e.n, key: slug(e.n), vkey: videoKey(e.n), cue: CUES[e.n][lang], homeNote: HOME_NOTE_EXERCISES[e.n] ? t[HOME_NOTE_EXERCISES[e.n]] : null, sideNote: e.u.endsWith("_side") ? t.sideNote : null, isSide: e.u.endsWith("_side"), repsValue: value, unit: e.u, reps: formatReps(value, e.u, lang) };
     });
     exercises = reorderByRegion(exercises);
     const rounds = Math.max(2, 3 + intensity.setsDelta);
@@ -967,6 +979,7 @@ function KettlebellTracker() {
   const [librarySearch, setLibrarySearch] = useState("");
   const [warmupOpen, setWarmupOpen] = useState(false);
   const [cooldownOpen, setCooldownOpen] = useState(false);
+  const [expandedExercise, setExpandedExercise] = useState(null);
   const [loading, setLoading] = useState(true);
   const [editingReps, setEditingReps] = useState(null);
   const [repsDraft, setRepsDraft] = useState("");
@@ -1460,7 +1473,11 @@ function KettlebellTracker() {
             </div>
 
             <div style={{ borderRadius: 24, background: C.panelAlt, border: `1px solid ${C.border}`, padding: "12px 16px", marginBottom: 16, fontSize: 12.5, color: C.textSecondary, display: "flex", alignItems: "center", gap: 8 }}>
-              🎒 <strong style={{ color: C.text, fontWeight: 500 }}>{t.youNeed}:</strong> {t.needsKettlebell}
+              🎒 <strong style={{ color: C.text, fontWeight: 500 }}>{t.youNeed}:</strong> {[
+                t.needsKettlebell,
+                sessionData.exercises.some((ex) => ["Plank", "Push-Up", "Russian Twist"].includes(ex.name)) ? t.needsMat : null,
+                sessionData.exercises.some((ex) => ex.name === "Kettlebell Suitcase Carry") ? t.needsCarrySpace : null,
+              ].filter(Boolean).join(" · ")}
             </div>
 
             <div style={{ marginBottom: 16 }}>
@@ -1520,36 +1537,68 @@ function KettlebellTracker() {
             )}
 
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {sessionData.exercises.map((ex, i) => (
-                <div key={ex.key} style={{ borderRadius: 24, background: C.panel, border: `1px solid ${C.border}`, padding: "14px 16px", display: "flex", gap: 12 }}>
-                  <div style={{ flex: "0 0 auto", width: 26, height: 26, borderRadius: 999, background: C.panelAlt, color: C.textMuted, fontSize: 11.5, fontWeight: 600, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    {String(i + 1).padStart(2, "0")}
-                  </div>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: 500, fontSize: 15, marginBottom: 2 }}>{ex.name}</div>
-                    {ex.reps && (
-                      <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6, flexWrap: "wrap" }}>
-                        {editingReps === ex.key ? (
-                          <>
-                            <input type="text" value={repsDraft} onChange={(e) => setRepsDraft(e.target.value)} placeholder={t.customPlaceholder} style={{ background: C.bg, border: `1px solid ${C.borderStrong}`, color: C.text, fontSize: 12.5, padding: "4px 8px", width: 110 }} />
-                            <button onClick={() => saveCustomReps(activeSession, ex.key)} style={{ background: C.brass, border: "none", color: C.onBrass, fontSize: 12, padding: "4px 10px", cursor: "pointer" }}>{t.save}</button>
-                          </>
-                        ) : (
-                          <>
-                            <span style={{ fontSize: 12.5, color: C.brass }}>{(sessionState.custom && sessionState.custom[ex.key]) || ex.reps}</span>
-                            {sessionState.custom && sessionState.custom[ex.key] && <span style={{ fontSize: 10, color: C.textMuted, border: `1px solid ${C.border}`, padding: "1px 6px", borderRadius: 999 }}>{t.customBadge}</span>}
-                            <button onClick={() => { setEditingReps(ex.key); setRepsDraft((sessionState.custom && sessionState.custom[ex.key]) || ex.reps); }} style={{ background: "transparent", border: "none", color: C.textMuted, cursor: "pointer", fontSize: 12, padding: 0 }}>✎</button>
-                            {sessionState.custom && sessionState.custom[ex.key] && <button onClick={() => clearCustomReps(activeSession, ex.key)} style={{ background: "transparent", border: "none", color: C.textMuted, cursor: "pointer", fontSize: 11, textDecoration: "underline", padding: 0 }}>{t.customReset}</button>}
-                          </>
+              {sessionData.exercises.map((ex, i) => {
+                const isOpen = expandedExercise === ex.key;
+                const compactStat = ex.reps
+                  ? (sessionData.format === "sets"
+                      ? t.setsTimes(sessionData.sets, `${(sessionState.custom && sessionState.custom[ex.key]) || ex.repsValue}${ex.isSide ? ` ${t.perSideShort}` : (UNIT_LABELS[lang][ex.unit] || "")}`)
+                      : ex.reps)
+                  : null;
+                return (
+                  <div key={ex.key} style={{ borderRadius: 24, background: C.panel, border: `1px solid ${C.border}`, overflow: "hidden" }}>
+                    <button
+                      onClick={() => setExpandedExercise(isOpen ? null : ex.key)}
+                      style={{ width: "100%", background: "transparent", border: "none", padding: "14px 16px", display: "flex", gap: 12, alignItems: "center", cursor: "pointer", textAlign: "left" }}
+                    >
+                      <div style={{ flex: "0 0 auto", width: 26, height: 26, borderRadius: 999, background: C.panelAlt, color: C.textMuted, fontSize: 11.5, fontWeight: 600, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        {String(i + 1).padStart(2, "0")}
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontWeight: 500, fontSize: 15, marginBottom: 2 }}>{ex.name}</div>
+                        {compactStat && <div style={{ fontSize: 12.5, color: C.textMuted }}>{compactStat}</div>}
+                      </div>
+                      <div style={{ fontSize: 16, color: C.textMuted }}>{isOpen ? "⌄" : "›"}</div>
+                    </button>
+
+                    {isOpen && (
+                      <div style={{ padding: "0 16px 16px" }}>
+                        {ex.reps && (
+                          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 10, flexWrap: "wrap" }}>
+                            {editingReps === ex.key ? (
+                              <>
+                                <input type="text" value={repsDraft} onChange={(e) => setRepsDraft(e.target.value)} placeholder={t.customPlaceholder} style={{ background: C.bg, border: `1px solid ${C.borderStrong}`, color: C.text, fontSize: 12.5, padding: "4px 8px", width: 110 }} />
+                                <button onClick={() => saveCustomReps(activeSession, ex.key)} style={{ background: C.brass, border: "none", color: C.onBrass, fontSize: 12, padding: "4px 10px", cursor: "pointer" }}>{t.save}</button>
+                              </>
+                            ) : (
+                              <>
+                                <button onClick={() => { setEditingReps(ex.key); setRepsDraft((sessionState.custom && sessionState.custom[ex.key]) || ex.reps); }} style={{ background: "transparent", border: "none", color: C.textMuted, cursor: "pointer", fontSize: 12, padding: 0 }}>✎ {t.customBadge}</button>
+                                {sessionState.custom && sessionState.custom[ex.key] && <button onClick={() => clearCustomReps(activeSession, ex.key)} style={{ background: "transparent", border: "none", color: C.textMuted, cursor: "pointer", fontSize: 11, textDecoration: "underline", padding: 0 }}>{t.customReset}</button>}
+                              </>
+                            )}
+                          </div>
                         )}
+
+                        {ex.isSide && (
+                          <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
+                            <div style={{ flex: 1, borderRadius: 14, background: C.panelAlt, padding: "8px 10px" }}>
+                              <div style={{ fontSize: 10.5, color: C.textMuted, textTransform: "uppercase", letterSpacing: "0.03em" }}>{t.sideLeftLabel}</div>
+                              <div style={{ fontSize: 14, fontWeight: 600, color: C.text }}>{(sessionState.custom && sessionState.custom[ex.key]) || `${ex.repsValue}${UNIT_LABELS[lang][ex.unit.replace("_side", "")]}`}</div>
+                            </div>
+                            <div style={{ flex: 1, borderRadius: 14, background: C.panelAlt, padding: "8px 10px" }}>
+                              <div style={{ fontSize: 10.5, color: C.textMuted, textTransform: "uppercase", letterSpacing: "0.03em" }}>{t.sideRightLabel}</div>
+                              <div style={{ fontSize: 14, fontWeight: 600, color: C.text }}>{(sessionState.custom && sessionState.custom[ex.key]) || `${ex.repsValue}${UNIT_LABELS[lang][ex.unit.replace("_side", "")]}`}</div>
+                            </div>
+                          </div>
+                        )}
+
+                        <div style={{ fontSize: 13, color: C.textSecondary, lineHeight: 1.5 }}>{ex.cue}</div>
+                        {ex.sideNote && <div style={{ fontSize: 12, color: C.brass, marginTop: 8 }}>↔ {ex.sideNote}</div>}
+                        {ex.homeNote && <div style={{ fontSize: 12, color: C.textMuted, marginTop: 4, fontStyle: "italic" }}>{ex.homeNote}</div>}
                       </div>
                     )}
-                    <div style={{ fontSize: 13, color: C.textSecondary, lineHeight: 1.5 }}>{ex.cue}</div>
-                    {ex.sideNote && <div style={{ fontSize: 12, color: C.brass, marginTop: 4 }}>↔ {ex.sideNote}</div>}
-                    {ex.homeNote && <div style={{ fontSize: 12, color: C.textMuted, marginTop: 4, fontStyle: "italic" }}>{ex.homeNote}</div>}
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {sessionData.finisher && (
