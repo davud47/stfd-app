@@ -184,6 +184,10 @@ const UI = {
     sideLeftLabel: "Seite 1: Links",
     sideRightLabel: "Seite 2: Rechts",
     exerciseSequence: "Übungsfolge",
+    detailStepsTitle: "So geht's",
+    detailMistakesTitle: "Häufige Fehler",
+    detailMusclesTitle: "Beanspruchte Muskeln",
+    detailBenefitsTitle: "Vorteile",
     session: "Einheit",
     block: "Block",
     restBetween: (s) => `${s} Sek. zwischen den Übungen`,
@@ -295,6 +299,10 @@ const UI = {
     sideLeftLabel: "Side 1: Left",
     sideRightLabel: "Side 2: Right",
     exerciseSequence: "Exercise sequence",
+    detailStepsTitle: "How to do it",
+    detailMistakesTitle: "Common mistakes",
+    detailMusclesTitle: "Muscles worked",
+    detailBenefitsTitle: "Benefits",
     session: "Session",
     block: "Block",
     restBetween: (s) => `${s} sec between exercises`,
@@ -389,6 +397,98 @@ const CUES = {
 };
 
 const HOME_NOTE_EXERCISES = { "Kettlebell Hip Thrust": "homeNote", "Kettlebell One-Arm Press": "homeNoteChair" };
+
+// Vertiefte Übungsinfos (Ablauf, häufige Fehler, Muskeln, Vorteile) — eigenständig
+// formuliert auf Basis von Recherche bei kettlebellsworkouts.com (Greg Brookes),
+// nicht wortwörtlich übernommen. Wird schrittweise für weitere Übungen ergänzt.
+const EXERCISE_DETAILS = {
+  "Kettlebell Swing": {
+    steps: {
+      de: [
+        "Kettlebell etwa 15–30 cm vor den Füßen aufstellen, Arme und Kettlebell bilden ein Dreieck.",
+        "In die Hüfte hinein beugen, Kettlebell wie einen Hike-Pass nach hinten zwischen die Beine ziehen.",
+        "Hüfte explosiv nach vorne strecken — der Schwung entsteht aus dieser Streckung, nicht aus den Armen.",
+        "Kettlebell schwebt bis auf Brusthöhe, Schultern bleiben entspannt statt hochgezogen.",
+        "Kettlebell zurückfallen lassen, erst danach wieder in die Hüfte hinein beugen.",
+        "Als durchgehenden Rhythmus wiederholen — nicht als zwei getrennte Bewegungen.",
+      ],
+      en: [
+        "Set the kettlebell about 15–30 cm in front of your feet, arms and bell forming a triangle.",
+        "Hinge at the hips, pulling the kettlebell back between the legs like a hike pass.",
+        "Drive the hips forward explosively — the swing comes from this extension, not the arms.",
+        "The kettlebell floats up to chest height, shoulders stay relaxed rather than shrugged.",
+        "Let the kettlebell fall back before hinging again.",
+        "Repeat as one continuous rhythm, not two separate movements.",
+      ],
+    },
+    mistakes: {
+      de: [
+        "Am oberen Punkt nach hinten lehnen, statt aufrecht zu bleiben.",
+        "Mit Schultern/Armen anheben statt aus der Hüfte.",
+        "Rücken rundet sich, während die Kettlebell zwischen die Beine wandert.",
+        "Kettlebell schwingt über Brusthöhe hinaus.",
+      ],
+      en: [
+        "Leaning backward at the top instead of staying tall.",
+        "Lifting with the shoulders/arms instead of the hips.",
+        "Rounding the back as the kettlebell travels between the legs.",
+        "Swinging the kettlebell above chest height.",
+      ],
+    },
+    muscles: {
+      de: ["Gesäßmuskulatur", "Hintere Oberschenkel", "Rückenstrecker", "Rumpf", "Breiter Rückenmuskel", "Unterarme/Griff"],
+      en: ["Glutes", "Hamstrings", "Erector spinae", "Core", "Lats", "Forearms/grip"],
+    },
+    benefits: {
+      de: ["Baut explosive Hüftkraft auf", "Trainiert die komplette hintere Kette", "Sehr effektiv für Kondition", "Stärkt Rumpfstabilität", "Braucht wenig Platz und nur ein Gerät"],
+      en: ["Builds explosive hip power", "Trains the entire posterior chain", "Very effective for conditioning", "Strengthens core stability", "Needs little space and one tool"],
+    },
+  },
+  "Kettlebell Clean": {
+    steps: {
+      de: [
+        "Wie beim Swing in die Hüfte hinein beugen, Kettlebell mit einer Hand greifen und nach hinten ziehen.",
+        "Aus der Hüftstreckung heraus die Kettlebell nach oben führen, Ellbogen bleibt nah am Körper.",
+        "Während die Kettlebell steigt, die Hand rechtzeitig um den Griff herumführen — nicht erst ganz oben.",
+        "Kettlebell landet weich in der Rack-Position, liegt am Unterarm und Oberarm an.",
+        "Handgelenk bleibt neutral, Ellbogen nah am Rumpf, Oberkörper aufrecht.",
+        "Zum Ablegen: Ellbogen leicht vom Körper lösen, Handgelenk zurückdrehen lassen, mit der Hüfte abfangen.",
+      ],
+      en: [
+        "Hinge at the hips as in the swing, grip with one hand and pull the kettlebell back.",
+        "Drive from the hip extension to bring the kettlebell up, elbow stays close to the body.",
+        "As the kettlebell rises, guide your hand around the handle in time — not only once it's already up.",
+        "The kettlebell lands softly in the rack position, resting against forearm and upper arm.",
+        "Wrist stays neutral, elbow close to the torso, upper body upright.",
+        "To lower it: release the elbow slightly from the body, let the wrist rotate back, catch it with the hips.",
+      ],
+    },
+    mistakes: {
+      de: [
+        "Kettlebell wird in großem Bogen nach vorne geworfen statt eng am Körper geführt.",
+        "Mit dem Arm hochgezogen statt aus der Hüfte.",
+        "Hand wird zu spät um den Griff geführt — Kettlebell schlägt aufs Handgelenk.",
+        "Zu fester Griff verhindert die nötige Handdrehung.",
+        "Handgelenk knickt nach hinten ab.",
+      ],
+      en: [
+        "The kettlebell is cast forward in a wide arc instead of staying close to the body.",
+        "Pulled up with the arm instead of the hips.",
+        "Hand enters the handle too late — the kettlebell bangs the wrist.",
+        "Gripping too tightly prevents the needed hand rotation.",
+        "Wrist bends backward.",
+      ],
+    },
+    muscles: {
+      de: ["Gesäßmuskulatur", "Hintere Oberschenkel", "Rumpf", "Oberer Rücken/breiter Rückenmuskel", "Schultern", "Unterarme/Griff"],
+      en: ["Glutes", "Hamstrings", "Core", "Upper back/lats", "Shoulders", "Forearms/grip"],
+    },
+    benefits: {
+      de: ["Effiziente Art, die Kettlebell für Press/Squat-Kombinationen in Position zu bringen", "Trainiert dieselbe Hüftstreckung wie der Swing, mit zusätzlicher Koordination", "Verbessert Griffkraft und Handgelenksstabilität", "Grundlage für viele weiterführende Kombi-Bewegungen"],
+      en: ["Efficient way to get the kettlebell into position for press/squat combos", "Trains the same hip extension as the swing, with added coordination", "Improves grip strength and wrist stability", "Foundation for many further combination movements"],
+    },
+  },
+};
 
 const BODY_REGION = {
   "Kettlebell Goblet Squat": "lower", "Kettlebell Sumo Deadlift": "lower", "Kettlebell Romanian Deadlift": "lower",
@@ -711,6 +811,12 @@ function getLibraryExercises(lang) {
   return Object.keys(CUES).map((n) => ({
     name: n, key: slug(n), vkey: videoKey(n), cue: CUES[n][lang], region: BODY_REGION[n] || "upper",
     homeNote: HOME_NOTE_EXERCISES[n] ? UI[lang][HOME_NOTE_EXERCISES[n]] : null,
+    details: EXERCISE_DETAILS[n] ? {
+      steps: EXERCISE_DETAILS[n].steps[lang],
+      mistakes: EXERCISE_DETAILS[n].mistakes[lang],
+      muscles: EXERCISE_DETAILS[n].muscles[lang],
+      benefits: EXERCISE_DETAILS[n].benefits[lang],
+    } : null,
   }));
 }
 
@@ -1716,6 +1822,44 @@ function KettlebellTracker() {
                 <div style={{ fontSize: 12.5, color: C.textMuted, marginTop: 10, fontStyle: "italic" }}>{libraryDetailExercise.homeNote}</div>
               )}
             </div>
+
+            {libraryDetailExercise.details && (
+              <>
+                <div style={{ borderRadius: 24, background: C.panel, boxShadow: C.shadow, border: `1px solid ${C.border}`, padding: "16px 18px", marginBottom: 16 }}>
+                  <div style={{ fontWeight: 600, fontSize: 14, color: C.brass, marginBottom: 10 }}>{t.detailStepsTitle}</div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                    {libraryDetailExercise.details.steps.map((s, i) => (
+                      <div key={i} style={{ display: "flex", gap: 10 }}>
+                        <div style={{ flex: "0 0 auto", width: 22, height: 22, borderRadius: 999, background: C.panelAlt, color: C.brass, fontSize: 11, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>{i + 1}</div>
+                        <div style={{ fontSize: 13, color: C.textSecondary, lineHeight: 1.5 }}>{s}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div style={{ borderRadius: 24, background: C.panel, boxShadow: C.shadow, border: `1px solid ${C.border}`, padding: "16px 18px", marginBottom: 16 }}>
+                  <div style={{ fontWeight: 600, fontSize: 14, color: C.brass, marginBottom: 10 }}>{t.detailMistakesTitle}</div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    {libraryDetailExercise.details.mistakes.map((m, i) => (
+                      <div key={i} style={{ fontSize: 13, color: C.textSecondary, lineHeight: 1.5, display: "flex", gap: 8 }}>
+                        <span>⚠</span><span>{m}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div style={{ display: "flex", gap: 10, marginBottom: 16 }}>
+                  <div style={{ flex: 1, borderRadius: 24, background: C.panel, boxShadow: C.shadow, border: `1px solid ${C.border}`, padding: "14px 16px" }}>
+                    <div style={{ fontWeight: 600, fontSize: 13, color: C.brass, marginBottom: 8 }}>{t.detailMusclesTitle}</div>
+                    <div style={{ fontSize: 12, color: C.textSecondary, lineHeight: 1.6 }}>{libraryDetailExercise.details.muscles.join(" · ")}</div>
+                  </div>
+                  <div style={{ flex: 1, borderRadius: 24, background: C.panel, boxShadow: C.shadow, border: `1px solid ${C.border}`, padding: "14px 16px" }}>
+                    <div style={{ fontWeight: 600, fontSize: 13, color: C.brass, marginBottom: 8 }}>{t.detailBenefitsTitle}</div>
+                    <div style={{ fontSize: 12, color: C.textSecondary, lineHeight: 1.6 }}>{libraryDetailExercise.details.benefits.join(" · ")}</div>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         )}
 
