@@ -177,7 +177,6 @@ const UI = {
     detailMusclesTitle: "Beanspruchte Muskeln",
     detailBenefitsTitle: "Vorteile",
     session: "Einheit",
-    block: "Block",
     restBetween: (s) => `${s} Sek. zwischen den Übungen`,
     emomLabel: (rounds, exCount, totalMin) => `EMOM — ${rounds} Runden à 1 Min. pro Übung (${totalMin} Min. gesamt)`,
     circuitFormat: (work, rest, rounds, min) => `${work} Sek. Arbeit / ${rest} Sek. Pause, ${rounds} Runden (${min} Min. gesamt)`,
@@ -209,7 +208,7 @@ const UI = {
     finisherTimerBtn: "Finisher-Timer starten",
     cycleLabel: (n) => `Zyklus ${n}`,
     cycleDoneTitle: "Zyklus abgeschlossen! 🎉",
-    cycleDoneText: "Alle 12 Einheiten geschafft. Starte den nächsten Zyklus — mit höherem Gewicht und, wenn du magst, einer höheren Stufe. Einheit 1 ist diesmal nicht mehr gesperrt.",
+    cycleDoneText: "Alle 12 Einheiten geschafft. Starte den nächsten Zyklus — mit höherem Gewicht und, wenn du magst, einer höheren Stufe.",
     startNewCycle: "Nächsten Zyklus starten",
     customBadge: "eigene Werte",
     customPlaceholder: "z. B. 15 Wdh.",
@@ -274,7 +273,6 @@ const UI = {
     detailMusclesTitle: "Muscles worked",
     detailBenefitsTitle: "Benefits",
     session: "Session",
-    block: "Block",
     restBetween: (s) => `${s} sec between exercises`,
     emomLabel: (rounds, exCount, totalMin) => `EMOM — ${rounds} rounds of 1 min per exercise (${totalMin} min total)`,
     circuitFormat: (work, rest, rounds, min) => `${work} sec work / ${rest} sec rest, ${rounds} rounds (${min} min total)`,
@@ -306,7 +304,7 @@ const UI = {
     finisherTimerBtn: "Start finisher timer",
     cycleLabel: (n) => `Cycle ${n}`,
     cycleDoneTitle: "Cycle complete! 🎉",
-    cycleDoneText: "All 12 sessions done. Start the next cycle — with heavier weight and, if you like, a higher tier. Session 1 is no longer locked this time.",
+    cycleDoneText: "All 12 sessions done. Start the next cycle — with heavier weight and, if you like, a higher tier.",
     startNewCycle: "Start next cycle",
     customBadge: "custom",
     customPlaceholder: "e.g. 15 reps",
@@ -2252,12 +2250,9 @@ function KettlebellTracker() {
     label: t.navLibrary,
     icon: "📚"
   }];
-  const isSessionLocked = () => false;
   const goToSession = s => {
-    if (!isSessionLocked(s)) {
-      setActiveSession(s);
-      setProgramView("detail");
-    }
+    setActiveSession(s);
+    setProgramView("detail");
   };
   const nextSessionNum = useMemo(() => {
     for (let s = 1; s <= TOTAL_SESSIONS; s++) if (!moduleState.sessions[s].completed) return s;
@@ -2868,12 +2863,10 @@ function KettlebellTracker() {
     }
   }, sessionPreviews.map(p => {
     const done = moduleState.sessions[p.num].completed;
-    const locked = isSessionLocked(p.num);
     const active = p.num === nextSessionNum && !done;
     return /*#__PURE__*/React.createElement("button", {
       key: p.num,
       className: "kb-card",
-      disabled: locked,
       onClick: () => goToSession(p.num),
       style: {
         borderRadius: 24,
@@ -2882,8 +2875,7 @@ function KettlebellTracker() {
         padding: "14px 16px",
         background: active ? C.brass : C.panel,
         border: `1px solid ${active ? C.brass : C.border}`,
-        opacity: locked ? 0.55 : 1,
-        cursor: locked ? "not-allowed" : "pointer",
+        cursor: "pointer",
         display: "flex",
         alignItems: "center",
         gap: 12
@@ -2902,7 +2894,7 @@ function KettlebellTracker() {
         fontSize: 13,
         fontWeight: 600
       }
-    }, locked ? "🔒" : done ? "✓" : String(p.num).padStart(2, "0")), /*#__PURE__*/React.createElement("div", {
+    }, done ? "✓" : String(p.num).padStart(2, "0")), /*#__PURE__*/React.createElement("div", {
       style: {
         flex: 1
       }
@@ -2918,7 +2910,7 @@ function KettlebellTracker() {
         color: active ? C.onBrass : C.textMuted,
         opacity: active ? 0.75 : 1
       }
-    }, FORMAT_ICON[p.format], " ", p.mins, " min")), !locked && /*#__PURE__*/React.createElement("div", {
+    }, FORMAT_ICON[p.format], " ", p.mins, " min")), /*#__PURE__*/React.createElement("div", {
       style: {
         fontSize: 16,
         color: active ? C.onBrass : C.textMuted
