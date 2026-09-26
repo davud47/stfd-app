@@ -1527,12 +1527,14 @@ const COOLDOWN = [{
 // beschränkt, die kettlebellsworkouts.com als "Beginner" einstuft, plus die
 // kettlebell-belastete Version des Russian Twist sowie Plank/Push-Up als
 // Zusatzübungen ohne Kettlebell. Swing und Clean gehören laut dieser Quelle
-// ebenfalls zum Einsteiger-Niveau und sind deshalb ab jetzt auch in Modul 1
-// enthalten. Jede Stufe ist ein eigenständiger 12-Einheiten-Plan (3x/Woche,
-// 4 Wochen): "leicht" baut sich bewusst langsam auf (Swing kommt ab Einheit 4
-// dazu, Clean ab Einheit 9). "normal" und "schwer" sind für sportliche bzw.
-// bereits Kettlebell-erfahrene Personen gedacht und haben Swing und Clean
-// schon ab Einheit 1 dabei, ohne Aufbauphase.
+// ebenfalls zum Einsteiger-Niveau — sie sind aber bewusst nur bei Normal und
+// Schwer enthalten. Jede Stufe ist ein eigenständiger 12-Einheiten-Plan
+// (3x/Woche, 4 Wochen): "leicht" enthält komplett kein Swing und kein Clean,
+// sondern baut mit Kniebeuge-, Hüft-Hinge- und Rumpfübungen gezielt die Basis
+// dafür auf (Kraft, Technik-Bausteine wie Racked-Halten und Hüftstreckung).
+// "normal" und "schwer" sind für sportliche bzw. bereits Kettlebell-erfahrene
+// Personen gedacht und haben Swing und Clean schon ab Einheit 1 dabei, ohne
+// Aufbauphase.
 const SESSIONS_BEGINNER = {
   leicht: {
     1: {
@@ -1637,20 +1639,20 @@ const SESSIONS_BEGINNER = {
       sets: 3,
       restBetween: 50,
       exercises: [{
-        n: "Kettlebell Swing",
+        n: "Kettlebell Racked Squat",
         b: 8,
-        u: "reps"
+        u: "reps_side"
       }, {
-        n: "Kettlebell Goblet Squat",
-        b: 13,
+        n: "Kettlebell Good Morning",
+        b: 10,
         u: "reps"
       }, {
         n: "Kettlebell Single Arm Row",
         b: 12,
         u: "reps_side"
       }, {
-        n: "Kettlebell One-Arm Press",
-        b: 10,
+        n: "Kettlebell Squat and Press",
+        b: 8,
         u: "reps_side"
       }, {
         n: "Kettlebell Farmers Carry",
@@ -1669,25 +1671,26 @@ const SESSIONS_BEGINNER = {
       sets: 3,
       restBetween: 50,
       exercises: [{
-        n: "Kettlebell Swing",
-        b: 9,
-        u: "reps"
-      }, {
-        n: "Kettlebell Racked Squat",
+        n: "Kettlebell Racked Reverse Lunge",
         b: 8,
         u: "reps_side"
       }, {
-        n: "Kettlebell Good Morning",
+        n: "Kettlebell Single Arm Deadlift",
         b: 10,
-        u: "reps"
+        u: "reps_side"
       }, {
         n: "Kettlebell Suitcase Row",
         b: 10,
         u: "reps_side"
       }, {
-        n: "Kettlebell Squat and Press",
+        n: "Kettlebell Sit and Press",
         b: 8,
-        u: "reps_side"
+        u: "reps"
+      }, {
+        n: "Kettlebell Farmers Carry",
+        b: 25,
+        u: "m",
+        r: 5
       }, {
         n: "Push-Up",
         b: 10,
@@ -1700,13 +1703,13 @@ const SESSIONS_BEGINNER = {
       sets: 3,
       restBetween: 50,
       exercises: [{
-        n: "Kettlebell Swing",
-        b: 10,
+        n: "Kettlebell Goblet Squat",
+        b: 14,
         u: "reps"
       }, {
-        n: "Kettlebell Racked Reverse Lunge",
-        b: 8,
-        u: "reps_side"
+        n: "Kettlebell Good Morning",
+        b: 12,
+        u: "reps"
       }, {
         n: "Kettlebell Single Arm Row",
         b: 12,
@@ -1716,10 +1719,9 @@ const SESSIONS_BEGINNER = {
         b: 8,
         u: "reps"
       }, {
-        n: "Kettlebell Farmers Carry",
-        b: 25,
-        u: "m",
-        r: 5
+        n: "Kettlebell Bob and Weave",
+        b: 10,
+        u: "reps_side"
       }, {
         n: "Kettlebell Russian Twist",
         b: 10,
@@ -1731,9 +1733,9 @@ const SESSIONS_BEGINNER = {
       format: "circuit",
       rounds: 3,
       exercises: [{
-        n: "Kettlebell Swing"
-      }, {
         n: "Kettlebell Goblet Squat"
+      }, {
+        n: "Kettlebell Single Arm Deadlift"
       }, {
         n: "Kettlebell Single Arm Row"
       }, {
@@ -1749,9 +1751,9 @@ const SESSIONS_BEGINNER = {
       format: "circuit",
       rounds: 3,
       exercises: [{
-        n: "Kettlebell Swing"
-      }, {
         n: "Kettlebell Racked Squat"
+      }, {
+        n: "Kettlebell Good Morning"
       }, {
         n: "Kettlebell Suitcase Row"
       }, {
@@ -1768,10 +1770,6 @@ const SESSIONS_BEGINNER = {
       sets: 3,
       restBetween: 50,
       exercises: [{
-        n: "Kettlebell Clean",
-        b: 6,
-        u: "reps_side"
-      }, {
         n: "Kettlebell Racked Reverse Lunge",
         b: 10,
         u: "reps_side"
@@ -1788,6 +1786,11 @@ const SESSIONS_BEGINNER = {
         b: 10,
         u: "reps_side"
       }, {
+        n: "Kettlebell Farmers Carry",
+        b: 30,
+        u: "m",
+        r: 5
+      }, {
         n: "Plank",
         b: 30,
         u: "sec",
@@ -1800,11 +1803,11 @@ const SESSIONS_BEGINNER = {
       sets: 3,
       restBetween: 50,
       exercises: [{
-        n: "Kettlebell Clean",
-        b: 7,
+        n: "Kettlebell Racked Squat",
+        b: 10,
         u: "reps_side"
       }, {
-        n: "Kettlebell Racked Squat",
+        n: "Kettlebell Single Arm Deadlift",
         b: 10,
         u: "reps_side"
       }, {
@@ -1816,10 +1819,9 @@ const SESSIONS_BEGINNER = {
         b: 10,
         u: "reps"
       }, {
-        n: "Kettlebell Farmers Carry",
-        b: 30,
-        u: "m",
-        r: 5
+        n: "Kettlebell Bob and Weave",
+        b: 12,
+        u: "reps_side"
       }, {
         n: "Push-Up",
         b: 12,
@@ -1831,23 +1833,23 @@ const SESSIONS_BEGINNER = {
       format: "emom",
       rounds: 3,
       exercises: [{
-        n: "Kettlebell Swing",
-        b: 10,
-        u: "reps"
-      }, {
-        n: "Kettlebell Clean",
-        b: 6,
-        u: "reps_side"
-      }, {
         n: "Kettlebell Goblet Squat",
         b: 10,
         u: "reps"
+      }, {
+        n: "Kettlebell Racked Reverse Lunge",
+        b: 8,
+        u: "reps_side"
       }, {
         n: "Kettlebell Single Arm Row",
         b: 8,
         u: "reps_side"
       }, {
         n: "Kettlebell One-Arm Press",
+        b: 8,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Squat and Press",
         b: 8,
         u: "reps_side"
       }, {
@@ -3547,14 +3549,14 @@ const SESSIONS_ADVANCED = {
 const BLOCK_INFO_BEGINNER = {
   foundation: {
     note: {
-      de: "Die Grundbewegungen — Kniebeuge, Kreuzheben-Variante, Rudern, Drücken. Bei Normal/Schwer ist der Swing von Anfang an dabei.",
-      en: "The core movements — squat, a deadlift variant, rowing, pressing. At Normal/Hard, the swing is part of training from day one."
+      de: "Die Grundbewegungen — Kniebeuge, Kreuzheben-Variante, Rudern, Drücken. Bei Normal/Schwer ist der Swing von Anfang an dabei, bei Leicht kommen Swing und Clean erst in Modul 2.",
+      en: "The core movements — squat, a deadlift variant, rowing, pressing. At Normal/Hard, the swing is part of training from day one; at Light, the swing and clean only appear in Module 2."
     }
   },
   buildup: {
     note: {
-      de: "Etwas mehr Wiederholungen und Abwechslung. Bei Leicht kommt jetzt der Kettlebell Swing dazu — das Hüft-Hinge-Muster aus den ersten Einheiten wird direkt ballistisch genutzt.",
-      en: "A bit more volume and variety. At Light, the kettlebell swing is introduced now — the hip-hinge pattern from the first sessions gets used ballistically right away."
+      de: "Etwas mehr Wiederholungen und Abwechslung, neue Bewegungsmuster wie Racked Squat und Racked Reverse Lunge kommen dazu. Bei Leicht bleibt es weiterhin ganz ohne Swing und Clean.",
+      en: "A bit more volume and variety, new movement patterns like the racked squat and racked reverse lunge are added. At Light, it stays completely without swing or clean."
     }
   },
   density: {
@@ -3565,8 +3567,8 @@ const BLOCK_INFO_BEGINNER = {
   },
   skill: {
     note: {
-      de: "Neue Bewegungsmuster (Racked Squat, Farmers Carry, Sit and Press) ergänzen die Basis. Bei Leicht kommt jetzt auch der Clean dazu.",
-      en: "New movement patterns (racked squat, farmers carry, sit and press) add to the base. At Light, the clean is introduced now too."
+      de: "Neue Bewegungsmuster (Farmers Carry, Sit and Press, Bob and Weave) ergänzen die Basis — bei Leicht weiterhin ohne Swing und Clean.",
+      en: "New movement patterns (farmers carry, sit and press, bob and weave) add to the base — at Light, still without swing or clean."
     }
   },
   bridge: {
@@ -3577,8 +3579,8 @@ const BLOCK_INFO_BEGINNER = {
   },
   finale: {
     note: {
-      de: "Der Abschluss-Chipper von Modul 1: jede Übung dieses Moduls einmal, keine Wiederholung. Danach bist du bereit für Modul 2 mit Snatch und den anspruchsvollen Kombinationsbewegungen.",
-      en: "Module 1's finisher chipper: every exercise from this module once, no repeats. After this, you're ready for Module 2 with the snatch and the demanding combination movements."
+      de: "Der Abschluss-Chipper von Modul 1: jede Übung dieses Moduls einmal, keine Wiederholung. Danach folgt Modul 2 mit Swing, Clean, Snatch und den anspruchsvollen Kombinationsbewegungen (bei Normal/Schwer sind Swing und Clean dann schon vertraut).",
+      en: "Module 1's finisher chipper: every exercise from this module once, no repeats. After this comes Module 2 with the swing, clean, snatch and the demanding combination movements (at Normal/Hard, the swing and clean will already feel familiar)."
     }
   }
 };
@@ -3802,8 +3804,10 @@ function getSessionData(module, sessionNum, intensityKey, lang, cycle) {
     };
   }
 
-  // Chipper (letzte Einheit): Modul 1 nutzt nur den Einsteiger-Pool, Modul 2 die volle Bibliothek — bewusst tierunabhängig als großes Finale.
-  const chipperPool = module === "beginner" ? BEGINNER_POOL : Object.keys(CUES);
+  // Chipper (letzte Einheit): Modul 1 nutzt nur den Einsteiger-Pool, Modul 2 die volle Bibliothek.
+  // Bei Leicht bleiben Swing und Clean komplett außen vor (auch im Chipper) — diese beiden
+  // sind in Modul 1 nur bei Normal/Schwer enthalten, Leicht baut lediglich darauf hin.
+  const chipperPool = module === "beginner" ? intensityKey === "leicht" ? BEGINNER_POOL.filter(n => n !== "Kettlebell Swing" && n !== "Kettlebell Clean") : BEGINNER_POOL : Object.keys(CUES);
   const names = interleaveByRegion(chipperPool);
   const exercises = names.map(n => ({
     name: n,
