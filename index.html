@@ -25,7 +25,6 @@
 <body>
 <div id="root"></div>
 <script>
-const { useState, useEffect, useCallback, useMemo } = React;
 
 // ============================================================
 // KONFIGURATION & DESIGN
@@ -152,13 +151,16 @@ const UI = {
     navLibrary: "Bibliothek",
     sessionsDone: "Einheiten abgeschlossen",
     intensity: "Intensität",
-    intensityNote: "Leicht baut sich über die 12 Einheiten Schritt für Schritt auf. Normal und Schwer starten ab Einheit 1 direkt auf dem passenden Niveau — ohne Aufbauphase, für alle, die bereits sportlich oder Kettlebell-erfahren sind. Die Dauer bleibt bei allen drei Stufen etwa gleich — Belastung, Tempo und teils auch die Übungsauswahl unterscheiden sich.",
+    intensityNote: "Beginner baut sich über die 12 Einheiten Schritt für Schritt auf. Normal und Schwer starten ab Einheit 1 direkt auf dem passenden Niveau — ohne Aufbauphase, für alle, die bereits sportlich oder Kettlebell-erfahren sind — und bringen zusätzliche Formate wie Leitern mit rein, orientiert an klassischen Kettlebell-Workouts. Die Dauer bleibt bei allen drei Stufen etwa gleich — Belastung, Tempo und teils auch die Übungsauswahl bzw. das Format unterscheiden sich. Schwer geht dabei noch einen Schritt weiter: eine zusätzliche Übung pro Einheit, kürzere Pausen und eine längere Leiter — ganz nach dem 'wenn du es schwerer willst'-Prinzip klassischer Kettlebell-Workouts.",
     intensityLabels: {
-      leicht: "Leicht",
+      leicht: "Beginner",
       normal: "Normal",
       schwer: "Schwer"
     },
     setsRounds: "Sätze / Runden",
+    durationLabel: "Dauer dieser Einheit",
+    durationStandard: "Standard",
+    durationMin: m => `${m} Min.`,
     save: "Speichern",
     libraryHeader: "Bibliothek",
     libraryNote: "Alle Übungen der 12-Einheiten-Reihe an einem Ort.",
@@ -209,6 +211,7 @@ const UI = {
     emomLabel: (rounds, exCount, totalMin) => `EMOM — ${rounds} Runden à 1 Min. pro Übung (${totalMin} Min. gesamt)`,
     circuitFormat: (work, rest, rounds, min) => `${work} Sek. Arbeit / ${rest} Sek. Pause, ${rounds} Runden (${min} Min. gesamt)`,
     chipperFormat: min => `40 Sek. Arbeit / 20 Sek. Pause, keine Übung wiederholt sich (${min} Min. gesamt)`,
+    ladderFormat: (rungs, rest) => `${rungs.join(" → ")} Wiederholungen pro Übung, ${rest} Sek. Pause zwischen den Runden`,
     loading: "Lade Programm …",
     homeNoteChair: "Zuhause: normaler stabiler Stuhl statt Bank.",
     sideNote: "Schwache Seite zuerst, dann dieselbe Anzahl mit der starken Seite — nie mehr auf der starken Seite.",
@@ -219,6 +222,8 @@ const UI = {
     circuitTitle: "Zirkel-Format",
     chipperTitle: "Abschluss-Chipper",
     emomTitle: "EMOM-Format",
+    ladderTitle: "Leiter-Format",
+    ladderTimerBtn: "Leiter starten",
     timerSegment: (i, n) => `Übung ${i} von ${n}`,
     timerRestLabel: "Pause",
     timerWorkLabel: "Arbeit",
@@ -259,13 +264,16 @@ const UI = {
     navLibrary: "Library",
     sessionsDone: "sessions completed",
     intensity: "Intensity",
-    intensityNote: "Light builds up gradually across the 12 sessions. Normal and Hard start right at the matching level from session 1 — no build-up phase, for anyone already active or experienced with kettlebells. Session length stays about the same across all three tiers — the workload, pace, and in places the exercise selection differ.",
+    intensityNote: "Beginner builds up gradually across the 12 sessions. Normal and Hard start right at the matching level from session 1 — no build-up phase, for anyone already active or experienced with kettlebells — and bring in extra formats like ladders, inspired by classic kettlebell workouts. Session length stays about the same across all three tiers — the workload, pace, and in places the exercise selection or format differ. Hard goes a step further still: one extra exercise per session, shorter rest, and a longer ladder — the same 'if you want it harder' approach classic kettlebell workouts use.",
     intensityLabels: {
-      leicht: "Light",
+      leicht: "Beginner",
       normal: "Normal",
       schwer: "Hard"
     },
     setsRounds: "sets / rounds",
+    durationLabel: "Duration of this session",
+    durationStandard: "Standard",
+    durationMin: m => `${m} min`,
     save: "Save",
     libraryHeader: "Library",
     libraryNote: "Every exercise from the 12-session series in one place.",
@@ -316,6 +324,7 @@ const UI = {
     emomLabel: (rounds, exCount, totalMin) => `EMOM — ${rounds} rounds of 1 min per exercise (${totalMin} min total)`,
     circuitFormat: (work, rest, rounds, min) => `${work} sec work / ${rest} sec rest, ${rounds} rounds (${min} min total)`,
     chipperFormat: min => `40 sec work / 20 sec rest, no exercise repeats (${min} min total)`,
+    ladderFormat: (rungs, rest) => `${rungs.join(" → ")} reps per exercise, ${rest} sec rest between rounds`,
     loading: "Loading program …",
     homeNoteChair: "At home: a regular sturdy chair works instead of a bench.",
     sideNote: "Weaker side first, then match the same number on the stronger side — never more reps on the stronger side.",
@@ -326,6 +335,8 @@ const UI = {
     circuitTitle: "Circuit format",
     chipperTitle: "Finisher chipper",
     emomTitle: "EMOM format",
+    ladderTitle: "Ladder format",
+    ladderTimerBtn: "Start ladder",
     timerSegment: (i, n) => `Exercise ${i} of ${n}`,
     timerRestLabel: "Rest",
     timerWorkLabel: "Work",
@@ -508,8 +519,8 @@ const CUES = {
     en: "Clean the kettlebell from the floor to the rack position, then press it overhead right after. Combines two fundamental movements into one flowing sequence."
   },
   "Kettlebell Squat and Press": {
-    de: "Kniebeuge mit der Kettlebell in Rack-Position, direkt im Anschluss aus dem Aufstehen heraus über den Kopf drücken. Ganzkörper-Kombination.",
-    en: "Squat while holding the kettlebell in the rack position, then press it overhead as you stand up. A full-body combination."
+    de: "Kniebeuge mit der Kettlebell beidhändig in der Goblet-Position vor der Brust, direkt im Anschluss aus dem Aufstehen heraus mit beiden Händen über den Kopf drücken. Ganzkörper-Kombination.",
+    en: "Squat while holding the kettlebell with both hands in the goblet position at chest height, then press it overhead with both hands as you stand up. A full-body combination."
   },
   "Kettlebell Lunge and Press": {
     de: "Ausfallschritt mit der Kettlebell in Rack-Position, beim Zurückkommen in den Stand die Kettlebell über den Kopf drücken. Fordert Balance und Kraft gleichzeitig.",
@@ -1027,8 +1038,8 @@ const EXERCISE_DETAILS = {
   },
   "Kettlebell Squat and Press": {
     steps: {
-      de: ["Kettlebell in der Goblet- oder Rack-Position halten.", "In die Kniebeuge absenken, Oberkörper bleibt aufrecht.", "Beim Hochkommen aus der Kniebeuge die Kettlebell direkt überkopf drücken.", "Oben kurz stabil halten, dann kontrolliert absenken."],
-      en: ["Hold the kettlebell in the goblet or rack position.", "Lower into the squat, torso stays upright.", "As you stand up from the squat, press the kettlebell straight overhead.", "Hold briefly and stable at the top, then lower under control."]
+      de: ["Kettlebell beidhändig in der Goblet-Position vor der Brust halten.", "In die Kniebeuge absenken, Oberkörper bleibt aufrecht.", "Beim Hochkommen aus der Kniebeuge die Kettlebell mit beiden Händen direkt überkopf drücken.", "Oben kurz stabil halten, dann kontrolliert absenken."],
+      en: ["Hold the kettlebell with both hands in the goblet position at chest height.", "Lower into the squat, torso stays upright.", "As you stand up from the squat, press the kettlebell overhead with both hands.", "Hold briefly and stable at the top, then lower under control."]
     },
     mistakes: {
       de: ["Kniebeuge wird zu flach ausgeführt", "Press beginnt zu früh, bevor die Beine vollständig gestreckt sind"],
@@ -1620,7 +1631,7 @@ const SESSIONS_BEGINNER = {
       }, {
         n: "Kettlebell Squat and Press",
         b: 8,
-        u: "reps_side"
+        u: "reps"
       }, {
         n: "Kettlebell Farmers Carry",
         b: 20,
@@ -1653,7 +1664,7 @@ const SESSIONS_BEGINNER = {
       }, {
         n: "Kettlebell Squat and Press",
         b: 8,
-        u: "reps_side"
+        u: "reps"
       }, {
         n: "Kettlebell Farmers Carry",
         b: 20,
@@ -1662,7 +1673,7 @@ const SESSIONS_BEGINNER = {
       }, {
         n: "Kettlebell Russian Twist",
         b: 8,
-        u: "reps_side"
+        u: "reps"
       }]
     },
     5: {
@@ -1725,7 +1736,7 @@ const SESSIONS_BEGINNER = {
       }, {
         n: "Kettlebell Russian Twist",
         b: 10,
-        u: "reps_side"
+        u: "reps"
       }]
     },
     7: {
@@ -1784,7 +1795,7 @@ const SESSIONS_BEGINNER = {
       }, {
         n: "Kettlebell Squat and Press",
         b: 10,
-        u: "reps_side"
+        u: "reps"
       }, {
         n: "Kettlebell Farmers Carry",
         b: 30,
@@ -1851,7 +1862,7 @@ const SESSIONS_BEGINNER = {
       }, {
         n: "Kettlebell Squat and Press",
         b: 8,
-        u: "reps_side"
+        u: "reps"
       }, {
         n: "Kettlebell Farmers Carry",
         b: 20,
@@ -1919,7 +1930,7 @@ const SESSIONS_BEGINNER = {
       }, {
         n: "Kettlebell Squat and Press",
         b: 8,
-        u: "reps_side"
+        u: "reps"
       }, {
         n: "Kettlebell Farmers Carry",
         b: 30,
@@ -1928,7 +1939,7 @@ const SESSIONS_BEGINNER = {
       }, {
         n: "Kettlebell Russian Twist",
         b: 10,
-        u: "reps_side"
+        u: "reps"
       }]
     },
     3: {
@@ -1964,35 +1975,27 @@ const SESSIONS_BEGINNER = {
     },
     4: {
       block: "buildup",
-      format: "sets",
-      sets: 3,
+      format: "ladder",
       restBetween: 45,
+      rungs: [10, 8, 6, 4],
       exercises: [{
         n: "Kettlebell Swing",
-        b: 15,
         u: "reps"
       }, {
         n: "Kettlebell Goblet Squat",
-        b: 12,
         u: "reps"
       }, {
         n: "Kettlebell Single Arm Row",
-        b: 10,
         u: "reps_side"
       }, {
         n: "Kettlebell One-Arm Press",
-        b: 10,
         u: "reps_side"
       }, {
-        n: "Kettlebell Farmers Carry",
-        b: 30,
-        u: "m",
-        r: 5
+        n: "Kettlebell Racked Reverse Lunge",
+        u: "reps_side"
       }, {
-        n: "Plank",
-        b: 30,
-        u: "sec",
-        r: 5
+        n: "Kettlebell Russian Twist",
+        u: "reps"
       }]
     },
     5: {
@@ -2015,7 +2018,7 @@ const SESSIONS_BEGINNER = {
       }, {
         n: "Kettlebell Squat and Press",
         b: 8,
-        u: "reps_side"
+        u: "reps"
       }, {
         n: "Kettlebell Farmers Carry",
         b: 30,
@@ -2024,37 +2027,31 @@ const SESSIONS_BEGINNER = {
       }, {
         n: "Kettlebell Russian Twist",
         b: 10,
-        u: "reps_side"
+        u: "reps"
       }]
     },
     6: {
       block: "buildup",
-      format: "sets",
-      sets: 3,
+      format: "ladder",
       restBetween: 45,
+      rungs: [8, 6, 4, 2],
       exercises: [{
         n: "Kettlebell Swing",
-        b: 15,
         u: "reps"
       }, {
-        n: "Kettlebell Racked Reverse Lunge",
-        b: 8,
+        n: "Kettlebell Clean",
         u: "reps_side"
       }, {
-        n: "Kettlebell Good Morning",
-        b: 10,
-        u: "reps"
+        n: "Kettlebell Racked Squat",
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Suitcase Row",
+        u: "reps_side"
       }, {
         n: "Kettlebell Sit and Press",
-        b: 8,
         u: "reps"
       }, {
-        n: "Kettlebell Bob and Weave",
-        b: 10,
-        u: "reps_side"
-      }, {
         n: "Push-Up",
-        b: 10,
         u: "reps"
       }]
     },
@@ -2147,7 +2144,7 @@ const SESSIONS_BEGINNER = {
       }, {
         n: "Kettlebell Squat and Press",
         b: 8,
-        u: "reps_side"
+        u: "reps"
       }, {
         n: "Kettlebell Farmers Carry",
         b: 30,
@@ -2156,7 +2153,7 @@ const SESSIONS_BEGINNER = {
       }, {
         n: "Kettlebell Russian Twist",
         b: 10,
-        u: "reps_side"
+        u: "reps"
       }]
     },
     11: {
@@ -2182,7 +2179,7 @@ const SESSIONS_BEGINNER = {
       }, {
         n: "Kettlebell Squat and Press",
         b: 8,
-        u: "reps_side"
+        u: "reps"
       }, {
         n: "Kettlebell Farmers Carry",
         b: 30,
@@ -2201,7 +2198,7 @@ const SESSIONS_BEGINNER = {
       block: "foundation",
       format: "sets",
       sets: 3,
-      restBetween: 35,
+      restBetween: 30,
       exercises: [{
         n: "Kettlebell Swing",
         b: 18,
@@ -2228,13 +2225,17 @@ const SESSIONS_BEGINNER = {
         b: 40,
         u: "sec",
         r: 5
+      }, {
+        n: "Kettlebell Russian Twist",
+        b: 13,
+        u: "reps"
       }]
     },
     2: {
       block: "foundation",
       format: "sets",
       sets: 3,
-      restBetween: 35,
+      restBetween: 30,
       exercises: [{
         n: "Kettlebell Clean",
         b: 10,
@@ -2250,7 +2251,7 @@ const SESSIONS_BEGINNER = {
       }, {
         n: "Kettlebell Squat and Press",
         b: 10,
-        u: "reps_side"
+        u: "reps"
       }, {
         n: "Kettlebell Farmers Carry",
         b: 35,
@@ -2259,14 +2260,18 @@ const SESSIONS_BEGINNER = {
       }, {
         n: "Kettlebell Russian Twist",
         b: 13,
-        u: "reps_side"
+        u: "reps"
+      }, {
+        n: "Push-Up",
+        b: 14,
+        u: "reps"
       }]
     },
     3: {
       block: "foundation",
       format: "sets",
       sets: 3,
-      restBetween: 35,
+      restBetween: 30,
       exercises: [{
         n: "Kettlebell Swing",
         b: 18,
@@ -2291,34 +2296,71 @@ const SESSIONS_BEGINNER = {
         n: "Push-Up",
         b: 14,
         u: "reps"
-      }]
-    },
-    4: {
-      block: "buildup",
-      format: "sets",
-      sets: 3,
-      restBetween: 35,
-      exercises: [{
-        n: "Kettlebell Swing",
-        b: 18,
-        u: "reps"
-      }, {
-        n: "Kettlebell Goblet Squat",
-        b: 15,
-        u: "reps"
-      }, {
-        n: "Kettlebell Single Arm Row",
-        b: 13,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell One-Arm Press",
-        b: 12,
-        u: "reps_side"
       }, {
         n: "Kettlebell Farmers Carry",
         b: 35,
         u: "m",
         r: 5
+      }]
+    },
+    4: {
+      block: "buildup",
+      format: "ladder",
+      restBetween: 30,
+      rungs: [12, 10, 8, 6, 4],
+      exercises: [{
+        n: "Kettlebell Swing",
+        u: "reps"
+      }, {
+        n: "Kettlebell Goblet Squat",
+        u: "reps"
+      }, {
+        n: "Kettlebell Single Arm Row",
+        u: "reps_side"
+      }, {
+        n: "Kettlebell One-Arm Press",
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Racked Reverse Lunge",
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Russian Twist",
+        u: "reps"
+      }, {
+        n: "Kettlebell Sit and Press",
+        u: "reps"
+      }]
+    },
+    5: {
+      block: "buildup",
+      format: "sets",
+      sets: 3,
+      restBetween: 30,
+      exercises: [{
+        n: "Kettlebell Clean",
+        b: 10,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Racked Squat",
+        b: 14,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Suitcase Row",
+        b: 13,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Squat and Press",
+        b: 10,
+        u: "reps"
+      }, {
+        n: "Kettlebell Farmers Carry",
+        b: 35,
+        u: "m",
+        r: 5
+      }, {
+        n: "Kettlebell Russian Twist",
+        b: 13,
+        u: "reps"
       }, {
         n: "Plank",
         b: 40,
@@ -2326,66 +2368,31 @@ const SESSIONS_BEGINNER = {
         r: 5
       }]
     },
-    5: {
+    6: {
       block: "buildup",
-      format: "sets",
-      sets: 3,
-      restBetween: 35,
+      format: "ladder",
+      restBetween: 30,
+      rungs: [10, 8, 6, 4, 2],
       exercises: [{
+        n: "Kettlebell Swing",
+        u: "reps"
+      }, {
         n: "Kettlebell Clean",
-        b: 10,
         u: "reps_side"
       }, {
         n: "Kettlebell Racked Squat",
-        b: 14,
         u: "reps_side"
       }, {
         n: "Kettlebell Suitcase Row",
-        b: 13,
         u: "reps_side"
-      }, {
-        n: "Kettlebell Squat and Press",
-        b: 10,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Farmers Carry",
-        b: 35,
-        u: "m",
-        r: 5
-      }, {
-        n: "Kettlebell Russian Twist",
-        b: 13,
-        u: "reps_side"
-      }]
-    },
-    6: {
-      block: "buildup",
-      format: "sets",
-      sets: 3,
-      restBetween: 35,
-      exercises: [{
-        n: "Kettlebell Swing",
-        b: 18,
-        u: "reps"
-      }, {
-        n: "Kettlebell Racked Reverse Lunge",
-        b: 10,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Good Morning",
-        b: 13,
-        u: "reps"
       }, {
         n: "Kettlebell Sit and Press",
-        b: 10,
         u: "reps"
       }, {
-        n: "Kettlebell Bob and Weave",
-        b: 12,
-        u: "reps_side"
-      }, {
         n: "Push-Up",
-        b: 14,
+        u: "reps"
+      }, {
+        n: "Kettlebell Goblet Squat",
         u: "reps"
       }]
     },
@@ -2405,6 +2412,8 @@ const SESSIONS_BEGINNER = {
         n: "Kettlebell Farmers Carry"
       }, {
         n: "Plank"
+      }, {
+        n: "Kettlebell Racked Reverse Lunge"
       }]
     },
     8: {
@@ -2423,13 +2432,15 @@ const SESSIONS_BEGINNER = {
         n: "Kettlebell Bob and Weave"
       }, {
         n: "Kettlebell Russian Twist"
+      }, {
+        n: "Push-Up"
       }]
     },
     9: {
       block: "skill",
       format: "sets",
       sets: 3,
-      restBetween: 35,
+      restBetween: 30,
       exercises: [{
         n: "Kettlebell Swing",
         b: 18,
@@ -2456,13 +2467,17 @@ const SESSIONS_BEGINNER = {
         b: 40,
         u: "sec",
         r: 5
+      }, {
+        n: "Kettlebell Bob and Weave",
+        b: 12,
+        u: "reps_side"
       }]
     },
     10: {
       block: "skill",
       format: "sets",
       sets: 3,
-      restBetween: 35,
+      restBetween: 30,
       exercises: [{
         n: "Kettlebell Clean",
         b: 10,
@@ -2478,7 +2493,7 @@ const SESSIONS_BEGINNER = {
       }, {
         n: "Kettlebell Squat and Press",
         b: 10,
-        u: "reps_side"
+        u: "reps"
       }, {
         n: "Kettlebell Farmers Carry",
         b: 35,
@@ -2487,7 +2502,11 @@ const SESSIONS_BEGINNER = {
       }, {
         n: "Kettlebell Russian Twist",
         b: 13,
-        u: "reps_side"
+        u: "reps"
+      }, {
+        n: "Kettlebell Sit and Press",
+        b: 10,
+        u: "reps"
       }]
     },
     11: {
@@ -2513,11 +2532,16 @@ const SESSIONS_BEGINNER = {
       }, {
         n: "Kettlebell Squat and Press",
         b: 10,
-        u: "reps_side"
+        u: "reps"
       }, {
         n: "Kettlebell Farmers Carry",
         b: 35,
         u: "m",
+        r: 5
+      }, {
+        n: "Plank",
+        b: 40,
+        u: "sec",
         r: 5
       }]
     },
@@ -2600,7 +2624,7 @@ const SESSIONS_ADVANCED = {
       }, {
         n: "Russian Twist",
         b: 8,
-        u: "reps_side"
+        u: "reps"
       }]
     },
     3: {
@@ -2665,7 +2689,7 @@ const SESSIONS_ADVANCED = {
       }, {
         n: "Russian Twist",
         b: 10,
-        u: "reps_side"
+        u: "reps"
       }]
     },
     5: {
@@ -2866,7 +2890,7 @@ const SESSIONS_ADVANCED = {
       }, {
         n: "Russian Twist",
         b: 8,
-        u: "reps_side"
+        u: "reps"
       }]
     },
     12: {
@@ -2937,7 +2961,7 @@ const SESSIONS_ADVANCED = {
       }, {
         n: "Russian Twist",
         b: 10,
-        u: "reps_side"
+        u: "reps"
       }]
     },
     3: {
@@ -3033,7 +3057,7 @@ const SESSIONS_ADVANCED = {
       }, {
         n: "Russian Twist",
         b: 10,
-        u: "reps_side"
+        u: "reps"
       }]
     },
     6: {
@@ -3171,7 +3195,7 @@ const SESSIONS_ADVANCED = {
       }, {
         n: "Russian Twist",
         b: 10,
-        u: "reps_side"
+        u: "reps"
       }]
     },
     11: {
@@ -3201,7 +3225,7 @@ const SESSIONS_ADVANCED = {
       }, {
         n: "Russian Twist",
         b: 10,
-        u: "reps_side"
+        u: "reps"
       }]
     },
     12: {
@@ -3260,7 +3284,7 @@ const SESSIONS_ADVANCED = {
       }, {
         n: "Kettlebell Squat and Press",
         b: 6,
-        u: "reps_side"
+        u: "reps"
       }, {
         n: "Kettlebell Suitcase Row",
         b: 12,
@@ -3268,7 +3292,7 @@ const SESSIONS_ADVANCED = {
       }, {
         n: "Russian Twist",
         b: 12,
-        u: "reps_side"
+        u: "reps"
       }, {
         n: "Push-Up",
         b: 12,
@@ -3356,7 +3380,7 @@ const SESSIONS_ADVANCED = {
       }, {
         n: "Kettlebell Squat and Press",
         b: 6,
-        u: "reps_side"
+        u: "reps"
       }, {
         n: "Kettlebell Suitcase Row",
         b: 12,
@@ -3364,7 +3388,7 @@ const SESSIONS_ADVANCED = {
       }, {
         n: "Russian Twist",
         b: 12,
-        u: "reps_side"
+        u: "reps"
       }, {
         n: "Push-Up",
         b: 12,
@@ -3494,7 +3518,7 @@ const SESSIONS_ADVANCED = {
       }, {
         n: "Kettlebell Squat and Press",
         b: 6,
-        u: "reps_side"
+        u: "reps"
       }, {
         n: "Kettlebell Suitcase Row",
         b: 12,
@@ -3502,7 +3526,7 @@ const SESSIONS_ADVANCED = {
       }, {
         n: "Russian Twist",
         b: 12,
-        u: "reps_side"
+        u: "reps"
       }, {
         n: "Push-Up",
         b: 12,
@@ -3536,7 +3560,7 @@ const SESSIONS_ADVANCED = {
       }, {
         n: "Russian Twist",
         b: 12,
-        u: "reps_side"
+        u: "reps"
       }]
     },
     12: {
@@ -3549,14 +3573,14 @@ const SESSIONS_ADVANCED = {
 const BLOCK_INFO_BEGINNER = {
   foundation: {
     note: {
-      de: "Die Grundbewegungen — Kniebeuge, Kreuzheben-Variante, Rudern, Drücken. Bei Normal/Schwer ist der Swing von Anfang an dabei, bei Leicht kommen Swing und Clean erst in Modul 2.",
-      en: "The core movements — squat, a deadlift variant, rowing, pressing. At Normal/Hard, the swing is part of training from day one; at Light, the swing and clean only appear in Module 2."
+      de: "Die Grundbewegungen — Kniebeuge, Kreuzheben-Variante, Rudern, Drücken. Bei Normal/Schwer ist der Swing von Anfang an dabei, bei Beginner kommen Swing und Clean erst in Modul 2.",
+      en: "The core movements — squat, a deadlift variant, rowing, pressing. At Normal/Hard, the swing is part of training from day one; at Beginner, the swing and clean only appear in Module 2."
     }
   },
   buildup: {
     note: {
-      de: "Etwas mehr Wiederholungen und Abwechslung, neue Bewegungsmuster wie Racked Squat und Racked Reverse Lunge kommen dazu. Bei Leicht bleibt es weiterhin ganz ohne Swing und Clean.",
-      en: "A bit more volume and variety, new movement patterns like the racked squat and racked reverse lunge are added. At Light, it stays completely without swing or clean."
+      de: "Etwas mehr Wiederholungen und Abwechslung, neue Bewegungsmuster wie Racked Squat und Racked Reverse Lunge kommen dazu. Bei Normal/Schwer ist hier auch das Leiter-Format dabei (absteigende Wiederholungen), angelehnt an klassische Kettlebell-Workouts. Bei Beginner bleibt es weiterhin ganz ohne Swing und Clean.",
+      en: "A bit more volume and variety, new movement patterns like the racked squat and racked reverse lunge are added. At Normal/Hard, the ladder format (descending reps) appears here too, inspired by classic kettlebell workouts. At Beginner, it stays completely without swing or clean."
     }
   },
   density: {
@@ -3567,8 +3591,8 @@ const BLOCK_INFO_BEGINNER = {
   },
   skill: {
     note: {
-      de: "Neue Bewegungsmuster (Farmers Carry, Sit and Press, Bob and Weave) ergänzen die Basis — bei Leicht weiterhin ohne Swing und Clean.",
-      en: "New movement patterns (farmers carry, sit and press, bob and weave) add to the base — at Light, still without swing or clean."
+      de: "Neue Bewegungsmuster (Farmers Carry, Sit and Press, Bob and Weave) ergänzen die Basis — bei Beginner weiterhin ohne Swing und Clean.",
+      en: "New movement patterns (farmers carry, sit and press, bob and weave) add to the base — at Beginner, still without swing or clean."
     }
   },
   bridge: {
@@ -3701,6 +3725,63 @@ function buildSetsSteps(exercises, sets) {
   return steps;
 }
 
+// Leiter-Format (angelehnt an klassische Kettlebell-Workouts wie "Take Five"):
+// anders als bei buildSetsSteps läuft hier die Runde außen — pro Runde einmal
+// durch ALLE Übungen, mit derselben (absteigenden) Wiederholungszahl je Runde,
+// erst danach beginnt die nächste Runde mit weniger Wiederholungen.
+function buildLadderSteps(exercises, rungs, lang) {
+  const steps = [];
+  rungs.forEach((rungReps, rungIndex) => {
+    exercises.forEach((ex, exIndex) => {
+      steps.push({
+        label: ex.name,
+        reps: formatReps(rungReps, ex.unit, lang),
+        setNumber: rungIndex + 1,
+        totalSets: rungs.length,
+        exerciseIndex: exIndex + 1,
+        totalExercises: exercises.length
+      });
+    });
+  });
+  return steps;
+}
+
+// Erlaubte Dauer-Optionen für eine einzelne Einheit, als Anzahl Sätze/Runden
+// (nicht für Chipper — der bleibt bewusst ein fester Einmal-alles-Test).
+// Bei 6 Übungen pro Einheit ergibt das 12 / 18 / 24 / 30 Minuten.
+const DURATION_CHOICES = [2, 3, 4, 5];
+
+// Wendet eine abweichende Dauer (Anzahl Sätze bzw. Runden) auf eine bereits
+// berechnete sessionData an, ohne die zugrunde liegenden Stufen-Daten zu
+// verändern. count === null bedeutet: die im Plan hinterlegte Standarddauer.
+function applyDurationChoice(sessionData, count, t) {
+  if (!count || sessionData.format === "chipper") return sessionData;
+  if (sessionData.format === "sets") {
+    return {
+      ...sessionData,
+      sets: count
+    };
+  }
+  if (sessionData.format === "circuit") {
+    const totalMinutes = Math.round(count * sessionData.exercises.length * (sessionData.workSec + sessionData.restSec) / 60);
+    return {
+      ...sessionData,
+      rounds: count,
+      totalMinutes
+    };
+  }
+  if (sessionData.format === "emom") {
+    const totalMinutes = count * sessionData.exercises.length;
+    return {
+      ...sessionData,
+      rounds: count,
+      totalMinutes,
+      restLabel: t.emomLabel(count, sessionData.exercises.length, totalMinutes)
+    };
+  }
+  return sessionData;
+}
+
 // ============================================================
 // PROGRAMM-LOGIK — Einheit/Bibliothek aus den Trainingsplan-Daten ableiten
 // ============================================================
@@ -3748,6 +3829,27 @@ function getSessionData(module, sessionNum, intensityKey, lang, cycle) {
       restLabel: t.restBetween(session.restBetween),
       exercises,
       finisher,
+      isFirstSession
+    };
+  }
+  if (session.format === "ladder") {
+    const exercises = session.exercises.map(e => ({
+      name: e.n,
+      key: slug(e.n),
+      cue: CUES[e.n][lang],
+      homeNote: HOME_NOTE_EXERCISES[e.n] ? t[HOME_NOTE_EXERCISES[e.n]] : null,
+      unit: e.u
+    }));
+    const rungs = session.rungs;
+    const totalMinutes = rungs.length * exercises.length;
+    return {
+      session,
+      block: session.block,
+      format: "ladder",
+      rungs,
+      restBetween: session.restBetween,
+      totalMinutes,
+      exercises,
       isFirstSession
     };
   }
@@ -3842,6 +3944,10 @@ function getLibraryExercises(lang) {
     } : null
   }));
 }
+
+// ============================================================
+// STATE & PERSISTENZ
+// ============================================================
 const STORAGE_KEY = "kb10-single-tracker-v1";
 function makeEmptySessions() {
   const sessions = {};
@@ -4369,10 +4475,15 @@ function SetsTimer({
     }
   }, t.timerClose)));
 }
+
+// ============================================================
+// HAUPTKOMPONENTE
+// ============================================================
 function KettlebellTracker() {
   const [state, setState] = useState(emptyState());
   const [tab, setTab] = useState("dashboard");
   const [activeSession, setActiveSession] = useState(1);
+  const [durationChoice, setDurationChoice] = useState(null);
   const [programView, setProgramView] = useState("list");
   const [libraryView, setLibraryView] = useState("grid");
   const [libraryDetailKey, setLibraryDetailKey] = useState(null);
@@ -4448,23 +4559,31 @@ function KettlebellTracker() {
     await supabaseClient.auth.signOut();
   };
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        setState({
-          ...emptyState(),
-          ...parsed
-        });
+    (async () => {
+      try {
+        const result = await window.storage.get(STORAGE_KEY);
+        if (result && result.value) {
+          const parsed = JSON.parse(result.value);
+          setState({
+            ...emptyState(),
+            ...parsed,
+            sessions: {
+              ...emptyState().sessions,
+              ...(parsed.sessions || {})
+            }
+          });
+        }
+      } catch (e) {
+        // no saved state yet
+      } finally {
+        setLoading(false);
       }
-    } catch (e) {} finally {
-      setLoading(false);
-    }
+    })();
   }, []);
-  const persist = useCallback(next => {
+  const persist = useCallback(async next => {
     setState(next);
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      await window.storage.set(STORAGE_KEY, JSON.stringify(next));
     } catch (e) {
       console.error("Speichern fehlgeschlagen", e);
     }
@@ -4520,19 +4639,26 @@ function KettlebellTracker() {
   const sessionData = useMemo(() => getSessionData(activeModule, activeSession, moduleState.intensity, lang, moduleState.cycle), [activeModule, activeSession, moduleState.intensity, lang, moduleState.cycle]);
   const sessionState = moduleState.sessions[activeSession];
   const libraryExercises = useMemo(() => getLibraryExercises(lang), [lang]);
+
+  // Dauer-Auswahl gilt nur für die gerade geöffnete Einheit und wird beim
+  // Wechsel zu einer anderen Einheit/Modul/Stufe zurückgesetzt (kein globaler Wert).
+  useEffect(() => {
+    setDurationChoice(null);
+  }, [activeModule, activeSession, moduleState.intensity]);
+  const displaySessionData = useMemo(() => applyDurationChoice(sessionData, durationChoice, t), [sessionData, durationChoice, t]);
   const totalSessionsComplete = useMemo(() => Object.values(moduleState.sessions).filter(s => s.completed).length, [moduleState]);
   const NAV_ITEMS = [{
     id: "dashboard",
     label: t.navDashboard,
-    icon: "📊"
+    Icon: LayoutDashboard
   }, {
     id: "program",
     label: t.navProgram,
-    icon: "🏋"
+    Icon: Dumbbell
   }, {
     id: "library",
     label: t.navLibrary,
-    icon: "📚"
+    Icon: LibraryIcon
   }];
   const goToSession = s => {
     setActiveSession(s);
@@ -4569,7 +4695,8 @@ function KettlebellTracker() {
     sets: "🏋",
     circuit: "🔁",
     emom: "⏱",
-    chipper: "🏁"
+    chipper: "🏁",
+    ladder: "🪜"
   };
   const REGION_ICON = {
     lower: "🦵",
@@ -5222,14 +5349,14 @@ function KettlebellTracker() {
       letterSpacing: "0.04em",
       marginBottom: 4
     }
-  }, t.session, " ", String(activeSession).padStart(2, "0"), " · ", t.blockNames[sessionData.block]), /*#__PURE__*/React.createElement("h1", {
+  }, t.session, " ", String(activeSession).padStart(2, "0"), " · ", t.blockNames[displaySessionData.block]), /*#__PURE__*/React.createElement("h1", {
     style: {
       fontFamily: "'Oswald', sans-serif",
       fontWeight: 600,
       fontSize: 24,
       margin: "0 0 16px"
     }
-  }, t.blockNames[sessionData.block]), /*#__PURE__*/React.createElement("div", {
+  }, t.blockNames[displaySessionData.block]), /*#__PURE__*/React.createElement("div", {
     style: {
       borderRadius: 24,
       background: C.panel,
@@ -5245,7 +5372,7 @@ function KettlebellTracker() {
       lineHeight: 1.6,
       marginBottom: 14
     }
-  }, BLOCK_INFO[sessionData.block].note[lang]), /*#__PURE__*/React.createElement("div", {
+  }, BLOCK_INFO[displaySessionData.block].note[lang]), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       gap: 18,
@@ -5257,7 +5384,7 @@ function KettlebellTracker() {
       fontFamily: "'Oswald', sans-serif",
       fontSize: 18
     }
-  }, sessionPreviews[activeSession - 1].mins), /*#__PURE__*/React.createElement("div", {
+  }, displaySessionData.format === "sets" ? displaySessionData.exercises.length * displaySessionData.sets : displaySessionData.totalMinutes), /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 11,
       color: C.textMuted
@@ -5267,7 +5394,7 @@ function KettlebellTracker() {
       fontFamily: "'Oswald', sans-serif",
       fontSize: 18
     }
-  }, sessionData.exercises.length), /*#__PURE__*/React.createElement("div", {
+  }, displaySessionData.exercises.length), /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 11,
       color: C.textMuted
@@ -5282,7 +5409,7 @@ function KettlebellTracker() {
       fontSize: 11,
       color: C.textMuted
     }
-  }, t.intensity))), sessionData.format === "sets" && /*#__PURE__*/React.createElement("div", {
+  }, t.intensity))), displaySessionData.format === "sets" && /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 12.5,
       color: C.textMuted,
@@ -5291,7 +5418,49 @@ function KettlebellTracker() {
       flexWrap: "wrap",
       marginTop: 12
     }
-  }, /*#__PURE__*/React.createElement("span", null, sessionData.sets, " ", t.setsRounds), /*#__PURE__*/React.createElement("span", null, sessionData.restLabel))), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("span", null, displaySessionData.sets, " ", t.setsRounds), /*#__PURE__*/React.createElement("span", null, displaySessionData.restLabel)), displaySessionData.format === "ladder" && /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 12.5,
+      color: C.textMuted,
+      marginTop: 12
+    }
+  }, t.ladderFormat(displaySessionData.rungs, displaySessionData.restBetween)), sessionData.format !== "chipper" && sessionData.format !== "ladder" && /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 14,
+      paddingTop: 14,
+      borderTop: `1px solid ${C.border}`
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 12,
+      color: C.textMuted,
+      marginBottom: 8
+    }
+  }, t.durationLabel), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 8,
+      flexWrap: "wrap"
+    }
+  }, DURATION_CHOICES.map(count => {
+    const isStandard = count === sessionData.sets || count === sessionData.rounds;
+    const isActive = durationChoice === count || durationChoice === null && isStandard;
+    const minutes = count * displaySessionData.exercises.length;
+    return /*#__PURE__*/React.createElement("button", {
+      key: count,
+      onClick: () => setDurationChoice(count),
+      style: {
+        borderRadius: 999,
+        padding: "6px 12px",
+        fontSize: 12.5,
+        fontWeight: 600,
+        cursor: "pointer",
+        border: `1px solid ${isActive ? C.brass : C.border}`,
+        background: isActive ? C.brass : "transparent",
+        color: isActive ? C.onBrass : C.textSecondary
+      }
+    }, t.durationMin(minutes), isStandard ? ` · ${t.durationStandard}` : "");
+  })))), /*#__PURE__*/React.createElement("div", {
     style: {
       borderRadius: 24,
       background: C.panelAlt,
@@ -5309,7 +5478,7 @@ function KettlebellTracker() {
       color: C.text,
       fontWeight: 500
     }
-  }, t.youNeed, ":"), " ", [t.needsKettlebell, sessionData.exercises.some(ex => ["Plank", "Push-Up", "Russian Twist"].includes(ex.name)) ? t.needsMat : null, sessionData.exercises.some(ex => ex.name === "Kettlebell Suitcase Carry") ? t.needsCarrySpace : null].filter(Boolean).join(" · ")), /*#__PURE__*/React.createElement("div", {
+  }, t.youNeed, ":"), " ", [t.needsKettlebell, displaySessionData.exercises.some(ex => ["Plank", "Push-Up", "Russian Twist"].includes(ex.name)) ? t.needsMat : null, displaySessionData.exercises.some(ex => ex.name === "Kettlebell Suitcase Carry" || ex.name === "Kettlebell Farmers Carry") ? t.needsCarrySpace : null].filter(Boolean).join(" · ")), /*#__PURE__*/React.createElement("div", {
     style: {
       marginBottom: 16
     }
@@ -5365,7 +5534,7 @@ function KettlebellTracker() {
       color: C.textSecondary,
       lineHeight: 1.5
     }
-  }, w.d[lang]))))), (sessionData.format === "circuit" || sessionData.format === "chipper" || sessionData.format === "emom") && /*#__PURE__*/React.createElement("div", {
+  }, w.d[lang]))))), (displaySessionData.format === "circuit" || displaySessionData.format === "chipper" || displaySessionData.format === "emom") && /*#__PURE__*/React.createElement("div", {
     style: {
       borderRadius: 24,
       background: C.panelAlt,
@@ -5381,23 +5550,23 @@ function KettlebellTracker() {
       color: C.brass,
       marginBottom: 4
     }
-  }, sessionData.format === "chipper" ? t.chipperTitle : sessionData.format === "circuit" ? t.circuitTitle : t.emomTitle), /*#__PURE__*/React.createElement("div", {
+  }, displaySessionData.format === "chipper" ? t.chipperTitle : displaySessionData.format === "circuit" ? t.circuitTitle : t.emomTitle), /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 12.5,
       color: C.textMuted,
       marginBottom: 10
     }
-  }, sessionData.format === "chipper" ? t.chipperFormat(sessionData.totalMinutes) : sessionData.format === "circuit" ? t.circuitFormat(sessionData.workSec, sessionData.restSec, sessionData.rounds, sessionData.totalMinutes) : sessionData.restLabel), /*#__PURE__*/React.createElement("button", {
+  }, displaySessionData.format === "chipper" ? t.chipperFormat(displaySessionData.totalMinutes) : displaySessionData.format === "circuit" ? t.circuitFormat(displaySessionData.workSec, displaySessionData.restSec, displaySessionData.rounds, displaySessionData.totalMinutes) : displaySessionData.restLabel), /*#__PURE__*/React.createElement("button", {
     onClick: () => {
-      if (sessionData.format === "chipper" || sessionData.format === "circuit") {
+      if (displaySessionData.format === "chipper" || displaySessionData.format === "circuit") {
         setActiveTimer({
-          title: sessionData.format === "chipper" ? t.chipperTitle : t.circuitTitle,
-          sequence: buildIntervalSequence(sessionData.exercises, sessionData.rounds, sessionData.workSec, sessionData.restSec, t.timerRestLabel)
+          title: displaySessionData.format === "chipper" ? t.chipperTitle : t.circuitTitle,
+          sequence: buildIntervalSequence(displaySessionData.exercises, displaySessionData.rounds, displaySessionData.workSec, displaySessionData.restSec, t.timerRestLabel)
         });
       } else {
         setActiveTimer({
           title: t.emomTitle,
-          sequence: buildEmomSequence(sessionData.exercises, sessionData.rounds)
+          sequence: buildEmomSequence(displaySessionData.exercises, displaySessionData.rounds)
         });
       }
     },
@@ -5412,7 +5581,7 @@ function KettlebellTracker() {
       fontWeight: 600,
       cursor: "pointer"
     }
-  }, "⏱ ", sessionData.format === "chipper" ? t.chipperTimerBtn : sessionData.format === "circuit" ? t.circuitTimerBtn : t.emomTimerBtn)), sessionData.format === "sets" && /*#__PURE__*/React.createElement("div", {
+  }, "⏱ ", displaySessionData.format === "chipper" ? t.chipperTimerBtn : displaySessionData.format === "circuit" ? t.circuitTimerBtn : t.emomTimerBtn)), displaySessionData.format === "sets" && /*#__PURE__*/React.createElement("div", {
     style: {
       marginBottom: 16
     }
@@ -5420,8 +5589,8 @@ function KettlebellTracker() {
     onClick: () => setActiveTimer({
       type: "sets",
       title: `${t.session} ${String(activeSession).padStart(2, "0")}`,
-      steps: buildSetsSteps(sessionData.exercises, sessionData.sets),
-      restSeconds: sessionData.restBetween
+      steps: buildSetsSteps(displaySessionData.exercises, displaySessionData.sets),
+      restSeconds: displaySessionData.restBetween
     }),
     style: {
       borderRadius: 999,
@@ -5434,15 +5603,37 @@ function KettlebellTracker() {
       fontWeight: 700,
       cursor: "pointer"
     }
-  }, "▶ ", t.startSession)), /*#__PURE__*/React.createElement("div", {
+  }, "▶ ", t.startSession)), displaySessionData.format === "ladder" && /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: () => setActiveTimer({
+      type: "sets",
+      title: t.ladderTitle,
+      steps: buildLadderSteps(displaySessionData.exercises, displaySessionData.rungs, lang),
+      restSeconds: displaySessionData.restBetween
+    }),
+    style: {
+      borderRadius: 999,
+      width: "100%",
+      padding: "16px 14px",
+      background: C.brass,
+      border: "none",
+      color: C.onBrass,
+      fontSize: 15,
+      fontWeight: 700,
+      cursor: "pointer"
+    }
+  }, "⏱ ", t.ladderTimerBtn)), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       flexDirection: "column",
       gap: 10
     }
-  }, sessionData.exercises.map((ex, i) => {
+  }, displaySessionData.exercises.map((ex, i) => {
     const isOpen = expandedExercise === ex.key;
-    const compactStat = ex.reps ? sessionData.format === "sets" ? t.setsTimes(sessionData.sets, `${sessionState.custom && sessionState.custom[ex.key] || ex.repsValue}${ex.isSide ? ` ${t.perSideShort}` : UNIT_LABELS[lang][ex.unit] || ""}`) : ex.reps : null;
+    const compactStat = ex.reps ? displaySessionData.format === "sets" ? t.setsTimes(displaySessionData.sets, `${sessionState.custom && sessionState.custom[ex.key] || ex.repsValue}${ex.isSide ? ` ${t.perSideShort}` : UNIT_LABELS[lang][ex.unit] || ""}`) : ex.reps : null;
     return /*#__PURE__*/React.createElement("div", {
       key: ex.key,
       style: {
@@ -5626,7 +5817,7 @@ function KettlebellTracker() {
         fontStyle: "italic"
       }
     }, ex.homeNote)));
-  })), sessionData.finisher && /*#__PURE__*/React.createElement("div", {
+  })), displaySessionData.finisher && /*#__PURE__*/React.createElement("div", {
     style: {
       marginTop: 18
     }
@@ -5661,28 +5852,28 @@ function KettlebellTracker() {
       fontSize: 15,
       marginBottom: 2
     }
-  }, sessionData.finisher.name), /*#__PURE__*/React.createElement("div", {
+  }, displaySessionData.finisher.name), /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 12.5,
       color: C.brass,
       marginBottom: 2
     }
-  }, t.finisherIntro(sessionData.finisher.minutes)), /*#__PURE__*/React.createElement("div", {
+  }, t.finisherIntro(displaySessionData.finisher.minutes)), /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 12.5,
       color: C.brass,
       marginBottom: 6
     }
-  }, sessionData.finisher.reps), /*#__PURE__*/React.createElement("div", {
+  }, displaySessionData.finisher.reps), /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 13,
       color: C.textSecondary,
       lineHeight: 1.5
     }
-  }, sessionData.finisher.cue))), /*#__PURE__*/React.createElement("button", {
+  }, displaySessionData.finisher.cue))), /*#__PURE__*/React.createElement("button", {
     onClick: () => setActiveTimer({
       title: t.finisherTimerBtn,
-      sequence: buildFinisherSequence(sessionData.finisher.name, sessionData.finisher.minutes)
+      sequence: buildFinisherSequence(displaySessionData.finisher.name, displaySessionData.finisher.minutes)
     }),
     style: {
       borderRadius: 14,
@@ -6101,7 +6292,7 @@ function KettlebellTracker() {
   }, NAV_ITEMS.map(({
     id,
     label,
-    icon
+    Icon
   }) => {
     const active = tab === id;
     return /*#__PURE__*/React.createElement("button", {
@@ -6125,12 +6316,10 @@ function KettlebellTracker() {
         fontWeight: 500,
         cursor: "pointer"
       }
-    }, /*#__PURE__*/React.createElement("span", {
-      style: {
-        fontSize: 16,
-        lineHeight: 1
-      }
-    }, icon), active && /*#__PURE__*/React.createElement("span", null, label));
+    }, /*#__PURE__*/React.createElement(Icon, {
+      size: 17,
+      strokeWidth: 2
+    }), active && /*#__PURE__*/React.createElement("span", null, label));
   })), activeTimer && activeTimer.type === "sets" && /*#__PURE__*/React.createElement(SetsTimer, {
     title: activeTimer.title,
     steps: activeTimer.steps,
@@ -6145,9 +6334,7 @@ function KettlebellTracker() {
     t: t,
     theme: theme
   }));
-}
-
-const root = ReactDOM.createRoot(document.getElementById("root"));
+}const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(React.createElement(KettlebellTracker));
 </script>
 <script>
