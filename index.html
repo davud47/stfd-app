@@ -104,6 +104,15 @@ const CIRCUIT_RATIO = {
     rest: 20
   }
 };
+
+// Pause zwischen den Runden bei "sets"-Einheiten (nicht mehr zwischen jedem
+// einzelnen Satz derselben Übung — jede Runde geht einmal durch alle Übungen,
+// erst danach folgt diese Pause). Nach Stufe gestaffelt statt pro Einheit fix.
+const SETS_REST_BY_TIER = {
+  leicht: 120,
+  normal: 90,
+  schwer: 60
+};
 const UNIT_LABELS = {
   de: {
     reps: " Wdh.",
@@ -208,7 +217,7 @@ const UI = {
     detailMusclesTitle: "Beanspruchte Muskeln",
     detailBenefitsTitle: "Vorteile",
     session: "Einheit",
-    restBetween: s => `${s} Sek. zwischen den Übungen`,
+    restBetween: s => `${s >= 60 && s % 60 === 0 ? `${s / 60} Min.` : `${s} Sek.`} Pause zwischen den Runden`,
     emomLabel: (rounds, exCount, totalMin) => `EMOM — ${rounds} Runden à 1 Min. pro Übung (${totalMin} Min. gesamt)`,
     circuitFormat: (work, rest, rounds, min) => `${work} Sek. Arbeit / ${rest} Sek. Pause, ${rounds} Runden (${min} Min. gesamt)`,
     chipperFormat: min => `40 Sek. Arbeit / 20 Sek. Pause, keine Übung wiederholt sich (${min} Min. gesamt)`,
@@ -236,6 +245,7 @@ const UI = {
     timerSetLabel: (n, total) => `Satz ${n}/${total}`,
     setProgressLabel: "Satzfortschritt",
     timerDoneStartRest: "Fertig — Pause starten",
+    timerDoneNextExercise: "Fertig — weiter",
     circuitTimerBtn: "Zirkel-Timer starten",
     emomTimerBtn: "EMOM-Timer starten",
     chipperTimerBtn: "Chipper-Timer starten",
@@ -321,7 +331,7 @@ const UI = {
     detailMusclesTitle: "Muscles worked",
     detailBenefitsTitle: "Benefits",
     session: "Session",
-    restBetween: s => `${s} sec between exercises`,
+    restBetween: s => `${s >= 60 && s % 60 === 0 ? `${s / 60} min` : `${s} sec`} rest between rounds`,
     emomLabel: (rounds, exCount, totalMin) => `EMOM — ${rounds} rounds of 1 min per exercise (${totalMin} min total)`,
     circuitFormat: (work, rest, rounds, min) => `${work} sec work / ${rest} sec rest, ${rounds} rounds (${min} min total)`,
     chipperFormat: min => `40 sec work / 20 sec rest, no exercise repeats (${min} min total)`,
@@ -349,6 +359,7 @@ const UI = {
     timerSetLabel: (n, total) => `Set ${n}/${total}`,
     setProgressLabel: "Set progress",
     timerDoneStartRest: "Done — start rest",
+    timerDoneNextExercise: "Done — next",
     circuitTimerBtn: "Start circuit timer",
     emomTimerBtn: "Start EMOM timer",
     chipperTimerBtn: "Start chipper timer",
@@ -3709,10 +3720,14 @@ function buildFinisherSequence(name, minutes) {
 
 // Liste aller Sätze einer Sätze-Einheit — ohne feste Zeit, die Pause wird jeweils
 // manuell gestartet, sobald die Wiederholungen erledigt sind.
+// Runde läuft außen: einmal durch ALLE Übungen (je ein Satz), erst danach beginnt
+// die nächste Runde — nicht mehr eine Übung dreimal hintereinander. Die Pause
+// zwischen den Übungen innerhalb einer Runde entfällt (siehe SetsTimer), nur
+// zwischen den Runden wird pausiert.
 function buildSetsSteps(exercises, sets) {
   const steps = [];
-  exercises.forEach((ex, exIndex) => {
-    for (let s = 1; s <= sets; s++) {
+  for (let s = 1; s <= sets; s++) {
+    exercises.forEach((ex, exIndex) => {
       steps.push({
         label: ex.name,
         reps: ex.reps,
@@ -3721,8 +3736,8 @@ function buildSetsSteps(exercises, sets) {
         exerciseIndex: exIndex + 1,
         totalExercises: exercises.length
       });
-    }
-  });
+    });
+  }
   return steps;
 }
 
@@ -3821,13 +3836,14 @@ function getSessionData(module, sessionNum, intensityKey, lang, cycle) {
         reps: formatReps(Math.max(1, Math.round(f.b)), f.u, lang)
       };
     }
+    const restBetween = SETS_REST_BY_TIER[intensityKey] || SETS_REST_BY_TIER.normal;
     return {
       session,
       block: session.block,
       format: "sets",
       sets: session.sets,
-      restBetween: session.restBetween,
-      restLabel: t.restBetween(session.restBetween),
+      restBetween,
+      restLabel: t.restBetween(restBetween),
       exercises,
       finisher,
       isFirstSession
@@ -4417,9 +4433,22 @@ function SetsTimer({
     }
   }, phase === "work" ? /*#__PURE__*/React.createElement("button", {
     onClick: () => {
-      setPhase("resting");
-      setRemaining(restSeconds);
-      setRunning(true);
+      const isLastOfRound = current.exerciseIndex === current.totalExercises;
+      if (isLastOfRound) {
+        setPhase("resting");
+        setRemaining(restSeconds);
+        setRunning(true);
+      } else {
+        // Zwischen den Übungen einer Runde wird nicht pausiert — direkt weiter.
+        const next = stepIndex + 1;
+        if (next < steps.length) {
+          playBeep(false);
+          setStepIndex(next);
+        } else {
+          playBeep(true);
+          setPhase("done");
+        }
+      }
     },
     style: {
       borderRadius: 999,
@@ -4432,7 +4461,7 @@ function SetsTimer({
       fontWeight: 700,
       cursor: "pointer"
     }
-  }, "✓ ", t.timerDoneStartRest) : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
+  }, "✓ ", current.exerciseIndex === current.totalExercises ? t.timerDoneStartRest : t.timerDoneNextExercise) : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
     onClick: () => setRunning(r => !r),
     style: {
       borderRadius: 999,
@@ -4497,6 +4526,46 @@ function KettlebellTracker() {
   const [editingReps, setEditingReps] = useState(null);
   const [repsDraft, setRepsDraft] = useState("");
   const [activeTimer, setActiveTimer] = useState(null);
+
+  // ---------- Handy-Zurücktaste ----------
+  // Jede "tiefere" Ansicht (Einheit-Detail, Übungs-Detail, Timer-Overlay) legt beim
+  // Öffnen einen History-Eintrag an. Die Zurücktaste löst dadurch "popstate" statt
+  // eines App-Exits aus, und der Listener schließt die jeweils oberste offene Ebene
+  // (Timer zuerst, dann Detail-Ansichten). Schließen per X/Zurück-Button ruft ebenfalls
+  // history.back() auf, damit der History-Stack immer zum sichtbaren Zustand passt.
+  useEffect(() => {
+    if (activeTimer) window.history.pushState({
+      kbLayer: "timer"
+    }, "");
+  }, [activeTimer]);
+  useEffect(() => {
+    if (libraryView === "detail") window.history.pushState({
+      kbLayer: "libraryDetail"
+    }, "");
+  }, [libraryView]);
+  useEffect(() => {
+    if (programView === "detail") window.history.pushState({
+      kbLayer: "programDetail"
+    }, "");
+  }, [programView]);
+  useEffect(() => {
+    const handlePopState = () => {
+      if (activeTimer) {
+        setActiveTimer(null);
+        return;
+      }
+      if (libraryView === "detail") {
+        setLibraryView("grid");
+        return;
+      }
+      if (programView === "detail") {
+        setProgramView("list");
+        return;
+      }
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, [activeTimer, libraryView, programView]);
 
   // ---------- Auth-State ----------
   const [session, setSession] = useState(null);
@@ -5323,7 +5392,7 @@ function KettlebellTracker() {
       }
     }, "→"));
   }))), tab === "program" && programView === "detail" && !advancedLocked && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
-    onClick: () => setProgramView("list"),
+    onClick: () => window.history.back(),
     style: {
       background: "transparent",
       border: "none",
@@ -6075,7 +6144,7 @@ function KettlebellTracker() {
       color: C.textMuted
     }
   }, ex.region === "lower" ? t.filterLower : ex.region === "upper" ? t.filterUpper : ex.region === "core" ? t.filterCore : t.filterCarry)))))), tab === "library" && libraryView === "detail" && libraryDetailExercise && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
-    onClick: () => setLibraryView("grid"),
+    onClick: () => window.history.back(),
     style: {
       background: "transparent",
       border: "none",
@@ -6321,13 +6390,13 @@ function KettlebellTracker() {
     title: activeTimer.title,
     steps: activeTimer.steps,
     restSeconds: activeTimer.restSeconds,
-    onClose: () => setActiveTimer(null),
+    onClose: () => window.history.back(),
     t: t,
     theme: theme
   }), activeTimer && activeTimer.type !== "sets" && /*#__PURE__*/React.createElement(TimerOverlay, {
     title: activeTimer.title,
     sequence: activeTimer.sequence,
-    onClose: () => setActiveTimer(null),
+    onClose: () => window.history.back(),
     t: t,
     theme: theme
   }));
