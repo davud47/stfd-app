@@ -25,6 +25,7 @@
 <body>
 <div id="root"></div>
 <script>
+const { useState, useEffect, useCallback, useMemo } = React;
 
 // ============================================================
 // KONFIGURATION & DESIGN
@@ -4650,15 +4651,15 @@ function KettlebellTracker() {
   const NAV_ITEMS = [{
     id: "dashboard",
     label: t.navDashboard,
-    Icon: LayoutDashboard
+    icon: "📊"
   }, {
     id: "program",
     label: t.navProgram,
-    Icon: Dumbbell
+    icon: "🏋"
   }, {
     id: "library",
     label: t.navLibrary,
-    Icon: LibraryIcon
+    icon: "📚"
   }];
   const goToSession = s => {
     setActiveSession(s);
@@ -6292,7 +6293,7 @@ function KettlebellTracker() {
   }, NAV_ITEMS.map(({
     id,
     label,
-    Icon
+    icon
   }) => {
     const active = tab === id;
     return /*#__PURE__*/React.createElement("button", {
@@ -6316,10 +6317,12 @@ function KettlebellTracker() {
         fontWeight: 500,
         cursor: "pointer"
       }
-    }, /*#__PURE__*/React.createElement(Icon, {
-      size: 17,
-      strokeWidth: 2
-    }), active && /*#__PURE__*/React.createElement("span", null, label));
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 16,
+        lineHeight: 1
+      }
+    }, icon), active && /*#__PURE__*/React.createElement("span", null, label));
   })), activeTimer && activeTimer.type === "sets" && /*#__PURE__*/React.createElement(SetsTimer, {
     title: activeTimer.title,
     steps: activeTimer.steps,
@@ -6334,7 +6337,8 @@ function KettlebellTracker() {
     t: t,
     theme: theme
   }));
-}const root = ReactDOM.createRoot(document.getElementById("root"));
+}
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(React.createElement(KettlebellTracker));
 </script>
 <script>
