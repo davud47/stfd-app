@@ -4560,31 +4560,25 @@ function KettlebellTracker() {
     await supabaseClient.auth.signOut();
   };
   useEffect(() => {
-    (async () => {
-      try {
-        const result = await window.storage.get(STORAGE_KEY);
-        if (result && result.value) {
-          const parsed = JSON.parse(result.value);
-          setState({
-            ...emptyState(),
-            ...parsed,
-            sessions: {
-              ...emptyState().sessions,
-              ...(parsed.sessions || {})
-            }
-          });
-        }
-      } catch (e) {
-        // no saved state yet
-      } finally {
-        setLoading(false);
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        setState({
+          ...emptyState(),
+          ...parsed
+        });
       }
-    })();
+    } catch (e) {
+      // noch kein gespeicherter Zustand
+    } finally {
+      setLoading(false);
+    }
   }, []);
-  const persist = useCallback(async next => {
+  const persist = useCallback(next => {
     setState(next);
     try {
-      await window.storage.set(STORAGE_KEY, JSON.stringify(next));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
     } catch (e) {
       console.error("Speichern fehlgeschlagen", e);
     }
