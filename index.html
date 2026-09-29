@@ -24,7 +24,12 @@
 <body>
 <div id="root"></div>
 <script>
-const { useState, useEffect, useCallback, useMemo } = React;
+const {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo
+} = React;
 
 // ============================================================
 // KONFIGURATION & DESIGN
@@ -1591,6 +1596,10 @@ const SESSIONS_EINSTEIGER = {
         b: 10,
         u: "reps"
       }, {
+        n: "Kettlebell Romanian Deadlift",
+        b: 8,
+        u: "reps"
+      }, {
         n: "Push-Up",
         b: 8,
         u: "reps"
@@ -1631,6 +1640,10 @@ const SESSIONS_EINSTEIGER = {
       restBetween: 50,
       exercises: [{
         n: "Kettlebell Good Morning",
+        b: 10,
+        u: "reps"
+      }, {
+        n: "Kettlebell Romanian Deadlift",
         b: 10,
         u: "reps"
       }, {
@@ -1732,6 +1745,8 @@ const SESSIONS_EINSTEIGER = {
       }, {
         n: "Kettlebell Good Morning"
       }, {
+        n: "Kettlebell Romanian Deadlift"
+      }, {
         n: "Kettlebell Sit and Press"
       }, {
         n: "Kettlebell Bob and Weave"
@@ -1801,6 +1816,10 @@ const SESSIONS_EINSTEIGER = {
       rounds: 3,
       exercises: [{
         n: "Kettlebell Goblet Squat",
+        b: 10,
+        u: "reps"
+      }, {
+        n: "Kettlebell Romanian Deadlift",
         b: 10,
         u: "reps"
       }, {
@@ -2502,7 +2521,7 @@ const SESSIONS_KURS = {
     }
   }
 };
-const EINSTEIGER_POOL = ["Kettlebell Slingshot", "Kettlebell Halo", "Kettlebell Good Morning", "Kettlebell Single Arm Deadlift", "Kettlebell Goblet Squat", "Kettlebell Bob and Weave", "Kettlebell Bent-Over Row", "Kettlebell Squat and Press", "Kettlebell Farmers Carry", "Kettlebell Sit and Press", "Kettlebell Russian Twist", "Plank", "Push-Up"];
+const EINSTEIGER_POOL = ["Kettlebell Slingshot", "Kettlebell Halo", "Kettlebell Good Morning", "Kettlebell Romanian Deadlift", "Kettlebell Single Arm Deadlift", "Kettlebell Goblet Squat", "Kettlebell Bob and Weave", "Kettlebell Bent-Over Row", "Kettlebell Squat and Press", "Kettlebell Farmers Carry", "Kettlebell Sit and Press", "Kettlebell Russian Twist", "Plank", "Push-Up"];
 const BLOCK_INFO_EINSTEIGER = {
   foundation: {
     note: {
@@ -2524,8 +2543,8 @@ const BLOCK_INFO_EINSTEIGER = {
   },
   skill: {
     note: {
-      de: "Neue Bewegungsmuster (Farmers Carry, Sit and Press, Bob and Weave) ergänzen die Basis — weiterhin ohne Swing und Clean.",
-      en: "New movement patterns (farmers carry, sit and press, bob and weave) add to the base — still without swing or clean."
+      de: "Die bekannten Bewegungen aus Fundament und Aufbau werden in höherem Volumen kombiniert, um Kraftausdauer aufzubauen — weiterhin ohne Swing und Clean.",
+      en: "The movements from foundation and build-up are combined at higher volume to build strength endurance — still without swing or clean."
     }
   },
   bridge: {
@@ -2550,8 +2569,8 @@ const BLOCK_INFO_KURS = {
   },
   buildup: {
     note: {
-      de: "Etwas mehr Wiederholungen und Abwechslung. Hier kommen zusätzlich anspruchsvollere Bewegungsmuster wie Racked Squat und Racked Reverse Lunge dazu, außerdem das Leiter-Format (absteigende Wiederholungen), angelehnt an klassische Kettlebell-Workouts.",
-      en: "A bit more volume and variety. More demanding movement patterns like the racked squat and racked reverse lunge are added here, plus the ladder format (descending reps), inspired by classic kettlebell workouts."
+      de: "Etwas mehr Wiederholungen und Abwechslung. Hier kommt das Leiter-Format (absteigende Wiederholungen) dazu, angelehnt an klassische Kettlebell-Workouts, außerdem der Floor Press als neue Übung.",
+      en: "A bit more volume and variety. This is where the ladder format (descending reps) comes in, inspired by classic kettlebell workouts, plus the floor press as a new exercise."
     }
   },
   density: {
@@ -2562,8 +2581,8 @@ const BLOCK_INFO_KURS = {
   },
   skill: {
     note: {
-      de: "Neue Bewegungsmuster (Farmers Carry, Sit and Press, Bob and Weave) ergänzen die Basis.",
-      en: "New movement patterns (farmers carry, sit and press, bob and weave) add to the base."
+      de: "Die bekannten Bewegungen werden in höherem Volumen kombiniert, um Kraftausdauer aufzubauen — dazu kommt das Sumo Deadlift als neue Übung.",
+      en: "The movements you already know are combined at higher volume to build strength endurance — plus the sumo deadlift as a new exercise."
     }
   },
   bridge: {
