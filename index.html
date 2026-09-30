@@ -380,7 +380,7 @@ const UI = {
     sessionsDone: "Einheiten abgeschlossen",
     minutesTrained: "Minuten trainiert",
     intensity: "Intensität",
-    intensityNote: "Normal und Schwer starten direkt auf dem passenden Niveau — ohne Aufbauphase, für alle, die bereits sportlich oder Kettlebell-erfahren sind — und bringen zusätzliche Formate wie Leitern mit rein, orientiert an klassischen Kettlebell-Workouts. Die Dauer bleibt bei beiden Stufen etwa gleich — Belastung, Tempo und teils auch die Übungsauswahl bzw. das Format unterscheiden sich. Schwer geht dabei noch einen Schritt weiter: eine zusätzliche Übung pro Einheit, kürzere Pausen und eine längere Leiter — ganz nach dem 'wenn du es schwerer willst'-Prinzip klassischer Kettlebell-Workouts.",
+    intensityNote: "Normal und Schwer verwenden dieselben Grundübungen — Schwer erhöht die Belastung, je nach Einheit durch einen zusätzlichen Satz, mehr Wiederholungen, längere Arbeitszeit, kürzere Pausen, EMOM-Zeitvorgaben oder zusätzliche Abschlussarbeit. Schwer bedeutet nicht, dass die Technik schlechter werden darf — wenn die Bewegung nicht mehr sauber bleibt, ist Normal die richtige Wahl.",
     intensityLabels: {
       leicht: "Einsteiger",
       normal: "Normal",
@@ -478,7 +478,11 @@ const UI = {
       bridge: "Übergang",
       finale: "Abschluss",
       rackTransition: "Rack & Übergang",
-      beginnerBridge: "Beginner-Übergang"
+      beginnerBridge: "Beginner-Übergang",
+      kursBasis: "Basis",
+      kursAufbau: "Aufbau",
+      kursVerdichtung: "Verdichtung",
+      kursIntegration: "Integration"
     }
   },
   en: {
@@ -489,7 +493,7 @@ const UI = {
     sessionsDone: "sessions completed",
     minutesTrained: "minutes trained",
     intensity: "Intensity",
-    intensityNote: "Normal and Hard start right at the matching level — no build-up phase, for anyone already active or experienced with kettlebells — and bring in extra formats like ladders, inspired by classic kettlebell workouts. Session length stays about the same across both tiers — the workload, pace, and in places the exercise selection or format differ. Hard goes a step further still: one extra exercise per session, shorter rest, and a longer ladder — the same 'if you want it harder' approach classic kettlebell workouts use.",
+    intensityNote: "Normal and Hard use the same core exercises — Hard raises the workload, depending on the session through an extra set, more reps, longer work time, shorter rest, EMOM time limits, or extra finishing work. Hard doesn't mean your technique is allowed to slip — if the movement stops being clean, Normal is the right choice.",
     intensityLabels: {
       leicht: "Beginner",
       normal: "Normal",
@@ -587,7 +591,11 @@ const UI = {
       bridge: "Bridge",
       finale: "Finale",
       rackTransition: "Rack & Transition",
-      beginnerBridge: "Beginner Transition"
+      beginnerBridge: "Beginner Transition",
+      kursBasis: "Basics",
+      kursAufbau: "Build-Up",
+      kursVerdichtung: "Density",
+      kursIntegration: "Integration"
     }
   }
 };
@@ -646,10 +654,6 @@ const CUES = {
     de: "Kontrolliert hochziehen, kurz oben halten, langsam absenken. Isoliert gezielt den oberen Trapezmuskel.",
     en: "Pull up with control, pause briefly at the top, lower slowly. Isolates the upper traps directly."
   },
-  "Kettlebell Alternating Curtsy Lunge": {
-    de: "Bein diagonal nach hinten kreuzen, Knie sanft Richtung Boden. Beansprucht gezielt die seitliche Gesäßmuskulatur und die Bein-Stabilisatoren.",
-    en: "Cross one leg diagonally behind you, knee drifts gently toward the floor. Targets the glute medius and inner-leg stabilizers."
-  },
   "Plank": {
     de: "Unterarme und Zehenspitzen am Boden, Körper bildet eine gerade Linie von Kopf bis Ferse. Beansprucht die gesamte Rumpfmuskulatur.",
     en: "Forearms and toes on the floor, body forms a straight line from head to heel. Engages the entire core."
@@ -682,21 +686,9 @@ const CUES = {
     de: "Kettlebell im Nacken oder vor der Brust halten, Hüfte nach hinten schieben, leichte Kniebeugung, Rücken bleibt gerade. Als Trainingsübung mit mehr Wiederholungen: kräftigt gezielt die hintere Kette.",
     en: "Hold the kettlebell behind the neck or at the chest, push the hips back, slight knee bend, back stays straight. As a training exercise with more reps: builds the posterior chain directly."
   },
-  "Kettlebell Deck Squat": {
-    de: "Aus dem Sitzen auf dem Boden mit Schwung und Hüftmobilität zurück in den Stand kommen, Kettlebell vor der Brust. Fortgeschrittene Übung, braucht gute Hüftbeweglichkeit.",
-    en: "From sitting on the floor, use momentum and hip mobility to come back up to standing, kettlebell held at the chest. An advanced movement that needs good hip mobility."
-  },
-  "Kettlebell Pistol Squat": {
-    de: "Einbeinige Kniebeuge, Kettlebell vor der Brust als Gegengewicht. Sehr anspruchsvoll für Kraft, Balance und Beweglichkeit — freies Bein bleibt während der ganzen Bewegung angehoben.",
-    en: "Single-leg squat, kettlebell held at the chest as a counterbalance. Very demanding for strength, balance and mobility — the free leg stays raised throughout the movement."
-  },
   "Kettlebell Single-Leg Deadlift": {
     de: "Auf einem Bein stehend, Kettlebell in der gegenüberliegenden Hand, Oberkörper nach vorne kippen während das freie Bein nach hinten streckt. Trainiert Balance und die hintere Kette einseitig.",
     en: "Standing on one leg, kettlebell in the opposite hand, tip the torso forward as the free leg extends back. Trains balance and the posterior chain on one side."
-  },
-  "Kettlebell Bottoms-Up Press": {
-    de: "Kettlebell verkehrt herum halten (Kugel nach oben), dann über den Kopf drücken. Verlangt extreme Griff- und Rumpfspannung, um die Kettlebell stabil zu halten — deutlich leichteres Gewicht als beim normalen Press nötig.",
-    en: "Hold the kettlebell upside down (bell facing up), then press it overhead. Demands extreme grip and core tension to keep it stable — needs noticeably less weight than a normal press."
   },
   "Kettlebell Slingshot": {
     de: "Kettlebell locker um den Körper herum von einer Hand zur anderen kreisen lassen, Rumpf bleibt stabil und aufrecht. Gewöhnt Körper und Griff an die Kettlebell, gute erste Übung zum Kennenlernen des Geräts.",
@@ -709,18 +701,6 @@ const CUES = {
   "Kettlebell Squat and Press": {
     de: "Kniebeuge mit der Kettlebell beidhändig in der Goblet-Position vor der Brust, direkt im Anschluss aus dem Aufstehen heraus mit beiden Händen über den Kopf drücken. Ganzkörper-Kombination.",
     en: "Squat while holding the kettlebell with both hands in the goblet position at chest height, then press it overhead with both hands as you stand up. A full-body combination."
-  },
-  "Kettlebell Lunge and Press": {
-    de: "Ausfallschritt mit der Kettlebell in Rack-Position, beim Zurückkommen in den Stand die Kettlebell über den Kopf drücken. Fordert Balance und Kraft gleichzeitig.",
-    en: "Lunge while holding the kettlebell in the rack position, press it overhead as you return to standing. Demands balance and strength at once."
-  },
-  "Kettlebell Static Lunge and Press": {
-    de: "Wie Lunge and Press, aber die Füße bleiben während der ganzen Übung an derselben Stelle stehen. Belastet eine Körperseite gezielt mehrfach hintereinander.",
-    en: "Like the lunge and press, but the feet stay planted in the same spot throughout. Loads one side of the body repeatedly in a row."
-  },
-  "Kettlebell Clean, Squat and Press": {
-    de: "Kettlebell cleanen, aus der Rack-Position in die Kniebeuge gehen, danach über den Kopf drücken. Anspruchsvolle Dreifach-Kombination, braucht geübte Technik in allen drei Teilbewegungen.",
-    en: "Clean the kettlebell, squat from the rack position, then press it overhead. A demanding three-part combination that needs solid technique in all three phases."
   },
   "Kettlebell Racked Squat": {
     de: "Kettlebell in der Rack-Position an der Schulter halten, Oberkörper bleibt trotz der einseitigen Last aufrecht. Fordert Rumpfstabilität stärker als die beidhändige Goblet-Variante.",
@@ -1057,24 +1037,6 @@ const EXERCISE_DETAILS = {
       en: ["Targeted strengthening of the upper trapezius", "Supports posture"]
     }
   },
-  "Kettlebell Alternating Curtsy Lunge": {
-    steps: {
-      de: ["Kettlebell in der Rack- oder Goblet-Position halten.", "Ein Bein diagonal nach hinten hinter das andere kreuzen.", "In den Ausfallschritt absenken, beide Knie beugen sich.", "Zurück in den Stand drücken, Seite wechseln."],
-      en: ["Hold the kettlebell in the rack or goblet position.", "Cross one leg diagonally behind the other.", "Lower into the lunge, both knees bending.", "Push back to standing, switch sides."]
-    },
-    mistakes: {
-      de: ["Vorderes Knie fällt nach innen", "Oberkörper dreht mit statt stabil nach vorne zu bleiben"],
-      en: ["The front knee caves inward", "The torso rotates instead of staying stable and facing forward"]
-    },
-    muscles: {
-      de: ["Gesäßmuskulatur (v. a. seitlich)", "Quadrizeps", "Hüftadduktoren", "Rumpf"],
-      en: ["Glutes (especially lateral)", "Quadriceps", "Hip adductors", "Core"]
-    },
-    benefits: {
-      de: ["Trainiert die seitliche Gesäßmuskulatur zusätzlich zur normalen Lunge", "Fordert Balance und Koordination"],
-      en: ["Trains the lateral glutes in addition to a standard lunge", "Challenges balance and coordination"]
-    }
-  },
   "Kettlebell Suitcase Row": {
     steps: {
       de: ["Kettlebell seitlich am Körper wie einen Koffer halten.", "Aus dieser Position den Ellbogen nach oben ziehen, Kettlebell zur Hüfte führen.", "Oben kurz halten, kontrolliert absenken."],
@@ -1147,78 +1109,6 @@ const EXERCISE_DETAILS = {
       en: ["A full-body movement with a high heart-rate response", "A good progression after the standalone goblet squat"]
     }
   },
-  "Kettlebell Lunge and Press": {
-    steps: {
-      de: ["Kettlebell in der Rack-Position halten.", "In den Ausfallschritt nach hinten treten.", "Beim Zurückkommen in den Stand die Kettlebell gleichzeitig überkopf drücken.", "Alle Wiederholungen einer Seite abschließen, dann Seite wechseln."],
-      en: ["Hold the kettlebell in the rack position.", "Step back into the lunge.", "As you return to standing, simultaneously press the kettlebell overhead.", "Complete all reps on one side, then switch sides."]
-    },
-    mistakes: {
-      de: ["Timing zwischen Aufstehen und Drücken passt nicht zusammen", "Oberkörper kippt zur Seite"],
-      en: ["The timing between standing up and pressing doesn't line up", "The torso tips sideways"]
-    },
-    muscles: {
-      de: ["Gesäßmuskulatur", "Quadrizeps", "Deltamuskel", "Rumpf"],
-      en: ["Glutes", "Quadriceps", "Deltoid", "Core"]
-    },
-    benefits: {
-      de: ["Verbindet einseitige Beinarbeit mit Überkopf-Stabilität", "Deckt Asymmetrien zwischen den Körperseiten auf"],
-      en: ["Combines single-leg work with overhead stability", "Reveals asymmetries between the sides of the body"]
-    }
-  },
-  "Kettlebell Static Lunge and Press": {
-    steps: {
-      de: ["Ausfallschritt-Position einnehmen und für alle Wiederholungen beibehalten (Füße bewegen sich nicht).", "Kettlebell in der Rack-Position halten.", "Aus der Lunge-Position heraus nach unten und oben bewegen, dabei überkopf drücken.", "Alle Wiederholungen abschließen, dann Seite wechseln."],
-      en: ["Take a lunge position and hold it for all reps (feet don't move).", "Hold the kettlebell in the rack position.", "Move up and down from the lunge position, pressing overhead as you do.", "Complete all reps, then switch sides."]
-    },
-    mistakes: {
-      de: ["Vorderes Knie wandert weit über die Zehen hinaus", "Rumpf gibt seitlich nach"],
-      en: ["The front knee travels far past the toes", "The core gives way sideways"]
-    },
-    muscles: {
-      de: ["Quadrizeps", "Gesäßmuskulatur", "Deltamuskel", "Rumpf"],
-      en: ["Quadriceps", "Glutes", "Deltoid", "Core"]
-    },
-    benefits: {
-      de: ["Belastet eine Körperseite mehrfach hintereinander gezielt", "Gut für Balance und Stabilität"],
-      en: ["Deliberately loads one side of the body repeatedly", "Good for balance and stability"]
-    }
-  },
-  "Kettlebell Clean, Squat and Press": {
-    steps: {
-      de: ["Kettlebell sauber cleanen.", "Aus der Rack-Position in die Kniebeuge gehen.", "Beim Hochkommen die Kettlebell überkopf drücken.", "Kontrolliert absenken, Reihenfolge für jede Wiederholung wiederholen."],
-      en: ["Clean the kettlebell cleanly.", "From the rack position, squat down.", "As you stand up, press the kettlebell overhead.", "Lower under control, repeat the sequence for each rep."]
-    },
-    mistakes: {
-      de: ["Reihenfolge der drei Teilbewegungen wird durcheinandergebracht", "Ermüdung lässt zuerst die Clean-Technik leiden"],
-      en: ["The order of the three parts gets mixed up", "Fatigue affects the clean technique first"]
-    },
-    muscles: {
-      de: ["Gesäßmuskulatur", "Hintere Oberschenkel", "Quadrizeps", "Deltamuskel", "Rumpf", "Unterarme/Griff"],
-      en: ["Glutes", "Hamstrings", "Quadriceps", "Deltoid", "Core", "Forearms/grip"]
-    },
-    benefits: {
-      de: ["Anspruchsvolle Dreifach-Kombination, sehr hohe Herzfrequenz", "Fordert Technik in allen drei Teilbewegungen gleichzeitig"],
-      en: ["A demanding three-part combination with a very high heart-rate response", "Demands technique in all three component movements at once"]
-    }
-  },
-  "Kettlebell Pistol Squat": {
-    steps: {
-      de: ["Auf einem Bein stehen, Kettlebell vor der Brust als Gegengewicht halten.", "Freies Bein nach vorne anheben und während der ganzen Bewegung angehoben halten.", "Kontrolliert in die einbeinige Kniebeuge absenken, so tief wie möglich unter Kontrolle.", "Über das Standbein zurück nach oben drücken."],
-      en: ["Stand on one leg, hold the kettlebell at the chest as a counterbalance.", "Lift the free leg forward and keep it raised throughout the movement.", "Lower under control into the single-leg squat, as deep as control allows.", "Push back up through the standing leg."]
-    },
-    mistakes: {
-      de: ["Knie des Standbeins fällt nach innen", "Freies Bein sinkt während der Bewegung ab", "Zu wenig Beweglichkeit/Kraft für die volle Tiefe, dadurch Ausweichbewegungen"],
-      en: ["The standing knee caves inward", "The free leg drops during the movement", "Not enough mobility/strength for full depth, leading to compensations"]
-    },
-    muscles: {
-      de: ["Quadrizeps", "Gesäßmuskulatur", "Hüftadduktoren", "Rumpf", "Wadenmuskulatur"],
-      en: ["Quadriceps", "Glutes", "Hip adductors", "Core", "Calves"]
-    },
-    benefits: {
-      de: ["Fordert Kraft, Beweglichkeit und Balance gleichzeitig auf höchstem Niveau", "Deckt Kraftunterschiede zwischen den Beinen auf"],
-      en: ["Demands strength, mobility and balance at the highest level simultaneously", "Reveals strength differences between the legs"]
-    }
-  },
   "Kettlebell Single-Leg Deadlift": {
     steps: {
       de: ["Auf einem Bein stehen, Kettlebell in der gegenüberliegenden Hand.", "Oberkörper nach vorne kippen, während das freie Bein sich gleichzeitig nach hinten streckt.", "Hüfte bleibt möglichst gerade zum Boden ausgerichtet.", "Über die Hüftstreckung zurück in den aufrechten Stand kommen."],
@@ -1237,24 +1127,6 @@ const EXERCISE_DETAILS = {
       en: ["Balances out strength and balance differences between the sides of the body", "Combines the hip hinge with balance training", "Strengthens the connection between the shoulder and the opposite hip"]
     }
   },
-  "Kettlebell Bottoms-Up Press": {
-    steps: {
-      de: ["Kettlebell verkehrt herum greifen, Kugel zeigt nach oben.", "In der Rack-Position beginnen, extreme Griff- und Rumpfspannung aufbauen.", "Kettlebell gerade nach oben drücken, dabei die Balance der Kugel aktiv kontrollieren.", "Kontrolliert zurück in die Rack-Position absenken."],
-      en: ["Grip the kettlebell upside down, bell facing up.", "Start in the rack position, build extreme grip and core tension.", "Press the kettlebell straight up, actively controlling the bell's balance.", "Lower back to the rack position under control."]
-    },
-    mistakes: {
-      de: ["Zu schweres Gewicht für diese Präzisionsübung gewählt", "Griff lockert sich, Kettlebell kippt um"],
-      en: ["Too heavy a weight chosen for this precision exercise", "The grip loosens, the kettlebell tips over"]
-    },
-    muscles: {
-      de: ["Deltamuskel", "Rotatorenmanschette", "Unterarme/Griff", "Rumpf"],
-      en: ["Deltoid", "Rotator cuff", "Forearms/grip", "Core"]
-    },
-    benefits: {
-      de: ["Verbessert Griffkraft und Handgelenksstabilität deutlich", "Verlangt volle Konzentration, dadurch auch gute Technikschulung für den normalen Press"],
-      en: ["Significantly improves grip strength and wrist stability", "Demands full concentration, making it good technique practice for the standard press too"]
-    }
-  },
   "Kettlebell Slingshot": {
     steps: {
       de: ["Kettlebell an den Hörnern vor dem Körper halten.", "Kettlebell locker um den Körper herum von einer Hand zur anderen übergeben.", "Rumpf bleibt während der ganzen Bewegung stabil und aufrecht.", "Nach der vorgesehenen Rundenzahl die Richtung wechseln."],
@@ -1271,24 +1143,6 @@ const EXERCISE_DETAILS = {
     benefits: {
       de: ["Gewöhnt Körper und Griff an die Kettlebell", "Gute aktive Erholung zwischen anspruchsvolleren Übungen", "Einfacher Einstieg für den allerersten Kontakt mit der Kettlebell"],
       en: ["Gets the body and grip used to the kettlebell", "Good active recovery between more demanding exercises", "A simple entry point for the very first contact with a kettlebell"]
-    }
-  },
-  "Kettlebell Deck Squat": {
-    steps: {
-      de: ["Aus dem Sitzen auf dem Boden beginnen, Kettlebell vor der Brust.", "Mit Schwung und Hüftmobilität in eine tiefe Kniebeuge kommen.", "Aus der tiefen Position heraus in den Stand hochkommen.", "Kontrolliert zurück in die Sitzposition absenken."],
-      en: ["Start sitting on the floor, kettlebell at the chest.", "Use momentum and hip mobility to come into a deep squat.", "Stand up from the deep position.", "Lower back to the seated position under control."]
-    },
-    mistakes: {
-      de: ["Fehlende Hüftbeweglichkeit wird durch Schwung statt Kontrolle ausgeglichen", "Rücken rundet sich stark beim Aufstehen"],
-      en: ["Lacking hip mobility is compensated with momentum instead of control", "The back rounds heavily while standing up"]
-    },
-    muscles: {
-      de: ["Gesäßmuskulatur", "Quadrizeps", "Hüftadduktoren", "Rumpf"],
-      en: ["Glutes", "Quadriceps", "Hip adductors", "Core"]
-    },
-    benefits: {
-      de: ["Verbessert Hüftbeweglichkeit deutlich", "Fordert Koordination zwischen Boden und Stand", "Fortgeschrittene Ergänzung für alle, die die Grundübungen bereits sicher beherrschen"],
-      en: ["Significantly improves hip mobility", "Demands coordination between floor and standing", "An advanced addition for anyone who already has the foundational exercises down"]
     }
   },
   "Kettlebell Sumo High Pull": {
@@ -1405,7 +1259,6 @@ const BODY_REGION = {
   "Kettlebell Sumo Deadlift": "lower",
   "Kettlebell Romanian Deadlift": "lower",
   "Kettlebell Swing": "lower",
-  "Kettlebell Alternating Curtsy Lunge": "lower",
   "Kettlebell Bent-Over Row": "upper",
   "Kettlebell Front Raise": "upper",
   "Kettlebell Shrug": "upper",
@@ -1419,19 +1272,13 @@ const BODY_REGION = {
   "Kettlebell Clean": "lower",
   "Kettlebell Sumo High Pull": "lower",
   "Kettlebell Racked Reverse Lunge": "lower",
-  "Kettlebell Deck Squat": "lower",
   "Kettlebell Good Morning": "lower",
-  "Kettlebell Pistol Squat": "lower",
   "Kettlebell Single-Leg Deadlift": "lower",
-  "Kettlebell Bottoms-Up Press": "upper",
   "Kettlebell Slingshot": "upper",
   "Kettlebell Single Arm Deadlift": "lower",
   "Kettlebell Suitcase Row": "upper",
   "Kettlebell Halo": "upper",
   "Kettlebell Squat and Press": "lower",
-  "Kettlebell Lunge and Press": "lower",
-  "Kettlebell Static Lunge and Press": "lower",
-  "Kettlebell Clean, Squat and Press": "lower",
   "Kettlebell Racked Squat": "lower",
   "Kettlebell Bob and Weave": "lower",
   "Kettlebell Suitcase Carry": "carry",
@@ -1914,31 +1761,153 @@ const SESSIONS_EINSTEIGER = {
 const SESSIONS_KURS = {
   normal: {
     1: {
-      block: "foundation",
+      block: "kursBasis",
+      format: "sets",
+      sets: 4,
+      exercises: [{
+        n: "Kettlebell Swing",
+        b: 12,
+        u: "reps"
+      }, {
+        n: "Kettlebell Clean",
+        b: 5,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Goblet Squat",
+        b: 10,
+        u: "reps"
+      }, {
+        n: "Kettlebell Bent-Over Row",
+        b: 8,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Floor Press",
+        b: 8,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Suitcase Carry",
+        b: 20,
+        u: "m",
+        r: 5
+      }]
+    },
+    2: {
+      block: "kursBasis",
       format: "sets",
       sets: 3,
-      restBetween: 45,
+      exercises: [{
+        n: "Kettlebell Sumo Deadlift",
+        b: 10,
+        u: "reps"
+      }, {
+        n: "Kettlebell Romanian Deadlift",
+        b: 10,
+        u: "reps"
+      }, {
+        n: "Kettlebell Push Press",
+        b: 6,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Suitcase Row",
+        b: 8,
+        u: "reps_side"
+      }, {
+        n: "Plank",
+        b: 30,
+        u: "sec",
+        r: 5
+      }, {
+        n: "Kettlebell Suitcase Carry",
+        b: 25,
+        u: "m",
+        r: 5
+      }]
+    },
+    3: {
+      block: "kursBasis",
+      format: "sets",
+      sets: 4,
       exercises: [{
         n: "Kettlebell Swing",
         b: 15,
         u: "reps"
       }, {
+        n: "Kettlebell Clean",
+        b: 5,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Racked Squat",
+        b: 6,
+        u: "reps_side"
+      }, {
+        n: "Push-Up",
+        b: 8,
+        u: "reps"
+      }, {
+        n: "Kettlebell Bent-Over Row",
+        b: 8,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Halo",
+        b: 6,
+        u: "reps_side"
+      }]
+    },
+    4: {
+      block: "kursAufbau",
+      format: "sets",
+      sets: 4,
+      exercises: [{
         n: "Kettlebell Goblet Squat",
         b: 12,
         u: "reps"
+      }, {
+        n: "Kettlebell Racked Squat",
+        b: 8,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Floor Press",
+        b: 10,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Overhead Press",
+        b: 6,
+        u: "reps_side"
+      }, {
+        n: "Push-Up",
+        b: 10,
+        u: "reps"
+      }, {
+        n: "Kettlebell Suitcase Carry",
+        b: 25,
+        u: "m",
+        r: 5
+      }]
+    },
+    5: {
+      block: "kursAufbau",
+      format: "sets",
+      sets: 4,
+      exercises: [{
+        n: "Kettlebell Swing",
+        b: 15,
+        u: "reps"
+      }, {
+        n: "Kettlebell Sumo Deadlift",
+        b: 10,
+        u: "reps"
+      }, {
+        n: "Kettlebell Single Arm Deadlift",
+        b: 8,
+        u: "reps_side"
       }, {
         n: "Kettlebell Bent-Over Row",
         b: 10,
         u: "reps_side"
       }, {
-        n: "Kettlebell Overhead Press",
-        b: 10,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Suitcase Carry",
-        b: 30,
-        u: "m",
-        r: 5
+        n: "Kettlebell Shrug",
+        b: 12,
+        u: "reps"
       }, {
         n: "Plank",
         b: 30,
@@ -1946,163 +1915,51 @@ const SESSIONS_KURS = {
         r: 5
       }]
     },
-    2: {
-      block: "foundation",
-      format: "sets",
-      sets: 3,
-      restBetween: 45,
-      exercises: [{
-        n: "Kettlebell Clean",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Racked Squat",
-        b: 12,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Suitcase Row",
-        b: 10,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Squat and Press",
-        b: 8,
-        u: "reps"
-      }, {
-        n: "Kettlebell Suitcase Carry",
-        b: 30,
-        u: "m",
-        r: 5
-      }, {
-        n: "Kettlebell Russian Twist",
-        b: 10,
-        u: "reps"
-      }]
-    },
-    3: {
-      block: "foundation",
-      format: "sets",
-      sets: 3,
-      restBetween: 45,
-      exercises: [{
-        n: "Kettlebell Swing",
-        b: 15,
-        u: "reps"
-      }, {
-        n: "Kettlebell Racked Reverse Lunge",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Romanian Deadlift",
-        b: 10,
-        u: "reps"
-      }, {
-        n: "Kettlebell Sit and Press",
-        b: 8,
-        u: "reps"
-      }, {
-        n: "Kettlebell Bob and Weave",
-        b: 10,
-        u: "reps_side"
-      }, {
-        n: "Push-Up",
-        b: 10,
-        u: "reps"
-      }]
-    },
-    4: {
-      block: "buildup",
-      format: "ladder",
-      restBetween: 45,
-      rungs: [10, 8, 6, 4],
-      exercises: [{
-        n: "Kettlebell Swing",
-        u: "reps"
-      }, {
-        n: "Kettlebell Goblet Squat",
-        u: "reps"
-      }, {
-        n: "Kettlebell Bent-Over Row",
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Overhead Press",
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Racked Reverse Lunge",
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Russian Twist",
-        u: "reps"
-      }]
-    },
-    5: {
-      block: "buildup",
-      format: "sets",
-      sets: 3,
-      restBetween: 45,
-      exercises: [{
-        n: "Kettlebell Clean",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Racked Squat",
-        b: 12,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Suitcase Row",
-        b: 10,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Squat and Press",
-        b: 8,
-        u: "reps"
-      }, {
-        n: "Kettlebell Suitcase Carry",
-        b: 30,
-        u: "m",
-        r: 5
-      }, {
-        n: "Kettlebell Russian Twist",
-        b: 10,
-        u: "reps"
-      }]
-    },
     6: {
-      block: "buildup",
-      format: "ladder",
-      restBetween: 45,
-      rungs: [8, 6, 4, 2],
+      block: "kursAufbau",
+      format: "sets",
+      sets: 5,
       exercises: [{
-        n: "Kettlebell Swing",
-        u: "reps"
-      }, {
         n: "Kettlebell Clean",
+        b: 3,
         u: "reps_side"
       }, {
         n: "Kettlebell Racked Squat",
+        b: 5,
         u: "reps_side"
       }, {
-        n: "Kettlebell Suitcase Row",
+        n: "Kettlebell Push Press",
+        b: 5,
         u: "reps_side"
       }, {
-        n: "Kettlebell Sit and Press",
+        n: "Kettlebell Swing",
+        b: 10,
         u: "reps"
       }, {
-        n: "Kettlebell Floor Press",
+        n: "Kettlebell Suitcase Carry",
+        b: 20,
+        u: "m",
+        r: 5
+      }, {
+        n: "Kettlebell Halo",
+        b: 8,
         u: "reps_side"
       }]
     },
     7: {
-      block: "density",
+      block: "kursVerdichtung",
       format: "circuit",
       rounds: 3,
+      workSec: 40,
+      restSec: 20,
       exercises: [{
-        n: "Kettlebell Swing"
-      }, {
         n: "Kettlebell Goblet Squat"
+      }, {
+        n: "Kettlebell Swing"
       }, {
         n: "Kettlebell Bent-Over Row"
       }, {
-        n: "Kettlebell Overhead Press"
+        n: "Push-Up"
       }, {
         n: "Kettlebell Suitcase Carry"
       }, {
@@ -2110,44 +1967,147 @@ const SESSIONS_KURS = {
       }]
     },
     8: {
-      block: "density",
-      format: "circuit",
-      rounds: 3,
+      block: "kursVerdichtung",
+      format: "sets",
+      sets: 4,
       exercises: [{
-        n: "Kettlebell Clean"
+        n: "Kettlebell Swing",
+        b: 15,
+        u: "reps"
       }, {
-        n: "Kettlebell Racked Squat"
+        n: "Kettlebell Romanian Deadlift",
+        b: 10,
+        u: "reps"
       }, {
-        n: "Kettlebell Suitcase Row"
+        n: "Kettlebell Single Arm Deadlift",
+        b: 8,
+        u: "reps_side"
       }, {
-        n: "Kettlebell Front Raise"
+        n: "Kettlebell Suitcase Row",
+        b: 8,
+        u: "reps_side"
       }, {
-        n: "Kettlebell Bob and Weave"
+        n: "Kettlebell Good Morning",
+        b: 10,
+        u: "reps"
       }, {
-        n: "Kettlebell Russian Twist"
+        n: "Kettlebell Suitcase Carry",
+        b: 25,
+        u: "m",
+        r: 5
       }]
     },
     9: {
-      block: "skill",
+      block: "kursVerdichtung",
+      format: "emom",
+      rounds: 6,
+      exercises: [{
+        n: "Kettlebell Swing",
+        b: 12,
+        u: "reps"
+      }, {
+        n: "Kettlebell Clean",
+        b: 5,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Squat and Press",
+        b: 8,
+        u: "reps"
+      }]
+    },
+    10: {
+      block: "kursIntegration",
+      format: "sets",
+      sets: 4,
+      exercises: [{
+        n: "Kettlebell Racked Reverse Lunge",
+        b: 6,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Single Arm Deadlift",
+        b: 8,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Overhead Press",
+        b: 6,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Suitcase Row",
+        b: 10,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Bob and Weave",
+        b: 6,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Suitcase Carry",
+        b: 30,
+        u: "m",
+        r: 5
+      }]
+    },
+    11: {
+      block: "kursIntegration",
+      format: "sets",
+      sets: 4,
+      exercises: [{
+        n: "Kettlebell Swing",
+        b: 15,
+        u: "reps"
+      }, {
+        n: "Kettlebell Clean",
+        b: 5,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Racked Squat",
+        b: 8,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Floor Press",
+        b: 8,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Sumo High Pull",
+        b: 8,
+        u: "reps"
+      }, {
+        n: "Kettlebell Russian Twist",
+        b: 10,
+        u: "reps_side"
+      }]
+    },
+    12: {
+      block: "kursIntegration",
       format: "sets",
       sets: 3,
-      restBetween: 45,
       exercises: [{
         n: "Kettlebell Swing",
         b: 15,
         u: "reps"
       }, {
         n: "Kettlebell Goblet Squat",
-        b: 12,
+        b: 10,
         u: "reps"
       }, {
-        n: "Kettlebell Bent-Over Row",
-        b: 10,
+        n: "Kettlebell Clean",
+        b: 5,
         u: "reps_side"
       }, {
-        n: "Kettlebell Overhead Press",
-        b: 10,
+        n: "Kettlebell Racked Reverse Lunge",
+        b: 6,
         u: "reps_side"
+      }, {
+        n: "Kettlebell Bent-Over Row",
+        b: 8,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Floor Press",
+        b: 8,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Squat and Press",
+        b: 8,
+        u: "reps"
       }, {
         n: "Kettlebell Suitcase Carry",
         b: 30,
@@ -2159,432 +2119,368 @@ const SESSIONS_KURS = {
         u: "sec",
         r: 5
       }]
-    },
-    10: {
-      block: "skill",
-      format: "sets",
-      sets: 3,
-      restBetween: 45,
-      exercises: [{
-        n: "Kettlebell Clean",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Sumo Deadlift",
-        b: 12,
-        u: "reps"
-      }, {
-        n: "Kettlebell Suitcase Row",
-        b: 10,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Squat and Press",
-        b: 8,
-        u: "reps"
-      }, {
-        n: "Kettlebell Suitcase Carry",
-        b: 30,
-        u: "m",
-        r: 5
-      }, {
-        n: "Kettlebell Russian Twist",
-        b: 10,
-        u: "reps"
-      }]
-    },
-    11: {
-      block: "bridge",
-      format: "emom",
-      rounds: 3,
-      exercises: [{
-        n: "Kettlebell Swing",
-        b: 15,
-        u: "reps"
-      }, {
-        n: "Kettlebell Clean",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Racked Reverse Lunge",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Bent-Over Row",
-        b: 10,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Squat and Press",
-        b: 8,
-        u: "reps"
-      }, {
-        n: "Kettlebell Suitcase Carry",
-        b: 30,
-        u: "m",
-        r: 5
-      }]
-    },
-    12: {
-      block: "finale",
-      format: "chipper",
-      exercises: []
     }
   },
   schwer: {
     1: {
-      block: "foundation",
+      block: "kursBasis",
       format: "sets",
-      sets: 3,
-      restBetween: 30,
+      sets: 5,
       exercises: [{
         n: "Kettlebell Swing",
-        b: 18,
+        b: 12,
         u: "reps"
       }, {
+        n: "Kettlebell Clean",
+        b: 5,
+        u: "reps_side"
+      }, {
         n: "Kettlebell Goblet Squat",
-        b: 15,
+        b: 10,
         u: "reps"
       }, {
         n: "Kettlebell Bent-Over Row",
-        b: 13,
+        b: 8,
         u: "reps_side"
       }, {
-        n: "Kettlebell Overhead Press",
-        b: 12,
+        n: "Kettlebell Floor Press",
+        b: 8,
         u: "reps_side"
       }, {
         n: "Kettlebell Suitcase Carry",
-        b: 35,
+        b: 20,
         u: "m",
         r: 5
-      }, {
-        n: "Plank",
-        b: 40,
-        u: "sec",
-        r: 5
-      }, {
-        n: "Kettlebell Russian Twist",
-        b: 13,
-        u: "reps"
       }]
     },
     2: {
-      block: "foundation",
+      block: "kursBasis",
       format: "sets",
-      sets: 3,
-      restBetween: 30,
+      sets: 4,
       exercises: [{
-        n: "Kettlebell Clean",
+        n: "Kettlebell Sumo Deadlift",
         b: 10,
-        u: "reps_side"
+        u: "reps"
       }, {
-        n: "Kettlebell Racked Squat",
-        b: 14,
+        n: "Kettlebell Romanian Deadlift",
+        b: 10,
+        u: "reps"
+      }, {
+        n: "Kettlebell Push Press",
+        b: 6,
         u: "reps_side"
       }, {
         n: "Kettlebell Suitcase Row",
-        b: 13,
+        b: 8,
         u: "reps_side"
       }, {
-        n: "Kettlebell Squat and Press",
-        b: 10,
-        u: "reps"
-      }, {
-        n: "Kettlebell Suitcase Carry",
-        b: 35,
-        u: "m",
+        n: "Plank",
+        b: 30,
+        u: "sec",
         r: 5
       }, {
-        n: "Kettlebell Russian Twist",
-        b: 13,
-        u: "reps"
-      }, {
-        n: "Push-Up",
-        b: 14,
-        u: "reps"
+        n: "Kettlebell Suitcase Carry",
+        b: 25,
+        u: "m",
+        r: 5
       }]
     },
     3: {
-      block: "foundation",
+      block: "kursBasis",
       format: "sets",
-      sets: 3,
-      restBetween: 30,
+      sets: 5,
       exercises: [{
         n: "Kettlebell Swing",
-        b: 18,
+        b: 15,
         u: "reps"
       }, {
-        n: "Kettlebell Racked Reverse Lunge",
-        b: 10,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Romanian Deadlift",
-        b: 13,
-        u: "reps"
-      }, {
-        n: "Kettlebell Sit and Press",
-        b: 10,
-        u: "reps"
-      }, {
-        n: "Kettlebell Bob and Weave",
-        b: 12,
-        u: "reps_side"
-      }, {
-        n: "Push-Up",
-        b: 14,
-        u: "reps"
-      }, {
-        n: "Kettlebell Suitcase Carry",
-        b: 35,
-        u: "m",
-        r: 5
-      }]
-    },
-    4: {
-      block: "buildup",
-      format: "ladder",
-      restBetween: 30,
-      rungs: [12, 10, 8, 6, 4],
-      exercises: [{
-        n: "Kettlebell Swing",
-        u: "reps"
-      }, {
-        n: "Kettlebell Goblet Squat",
-        u: "reps"
-      }, {
-        n: "Kettlebell Bent-Over Row",
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Overhead Press",
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Racked Reverse Lunge",
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Russian Twist",
-        u: "reps"
-      }, {
-        n: "Kettlebell Sit and Press",
-        u: "reps"
-      }]
-    },
-    5: {
-      block: "buildup",
-      format: "sets",
-      sets: 3,
-      restBetween: 30,
-      exercises: [{
         n: "Kettlebell Clean",
-        b: 10,
+        b: 5,
         u: "reps_side"
       }, {
         n: "Kettlebell Racked Squat",
-        b: 14,
+        b: 6,
         u: "reps_side"
       }, {
-        n: "Kettlebell Suitcase Row",
-        b: 13,
+        n: "Push-Up",
+        b: 8,
+        u: "reps"
+      }, {
+        n: "Kettlebell Bent-Over Row",
+        b: 8,
         u: "reps_side"
       }, {
-        n: "Kettlebell Squat and Press",
+        n: "Kettlebell Halo",
+        b: 6,
+        u: "reps_side"
+      }]
+    },
+    4: {
+      block: "kursAufbau",
+      format: "sets",
+      sets: 4,
+      exercises: [{
+        n: "Kettlebell Goblet Squat",
+        b: 17,
+        u: "reps"
+      }, {
+        n: "Kettlebell Racked Squat",
+        b: 8,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Floor Press",
+        b: 10,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Overhead Press",
+        b: 6,
+        u: "reps_side"
+      }, {
+        n: "Push-Up",
         b: 10,
         u: "reps"
       }, {
         n: "Kettlebell Suitcase Carry",
-        b: 35,
+        b: 25,
         u: "m",
         r: 5
+      }]
+    },
+    5: {
+      block: "kursAufbau",
+      format: "sets",
+      sets: 5,
+      exercises: [{
+        n: "Kettlebell Swing",
+        b: 15,
+        u: "reps"
       }, {
-        n: "Kettlebell Russian Twist",
-        b: 13,
+        n: "Kettlebell Sumo Deadlift",
+        b: 10,
+        u: "reps"
+      }, {
+        n: "Kettlebell Single Arm Deadlift",
+        b: 8,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Bent-Over Row",
+        b: 10,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Shrug",
+        b: 12,
         u: "reps"
       }, {
         n: "Plank",
-        b: 40,
+        b: 30,
         u: "sec",
         r: 5
       }]
     },
     6: {
-      block: "buildup",
-      format: "ladder",
-      restBetween: 30,
-      rungs: [10, 8, 6, 4, 2],
+      block: "kursAufbau",
+      format: "sets",
+      sets: 6,
       exercises: [{
-        n: "Kettlebell Swing",
-        u: "reps"
-      }, {
         n: "Kettlebell Clean",
+        b: 3,
         u: "reps_side"
       }, {
         n: "Kettlebell Racked Squat",
+        b: 5,
         u: "reps_side"
       }, {
-        n: "Kettlebell Suitcase Row",
+        n: "Kettlebell Push Press",
+        b: 5,
         u: "reps_side"
       }, {
-        n: "Kettlebell Sit and Press",
+        n: "Kettlebell Swing",
+        b: 10,
         u: "reps"
       }, {
-        n: "Kettlebell Floor Press",
-        u: "reps_side"
+        n: "Kettlebell Suitcase Carry",
+        b: 20,
+        u: "m",
+        r: 5
       }, {
-        n: "Kettlebell Goblet Squat",
-        u: "reps"
+        n: "Kettlebell Halo",
+        b: 8,
+        u: "reps_side"
       }]
     },
     7: {
-      block: "density",
+      block: "kursVerdichtung",
       format: "circuit",
-      rounds: 3,
+      rounds: 4,
+      workSec: 40,
+      restSec: 20,
       exercises: [{
-        n: "Kettlebell Swing"
-      }, {
         n: "Kettlebell Goblet Squat"
+      }, {
+        n: "Kettlebell Swing"
       }, {
         n: "Kettlebell Bent-Over Row"
       }, {
-        n: "Kettlebell Overhead Press"
+        n: "Push-Up"
       }, {
         n: "Kettlebell Suitcase Carry"
       }, {
         n: "Plank"
-      }, {
-        n: "Kettlebell Racked Reverse Lunge"
       }]
     },
     8: {
-      block: "density",
-      format: "circuit",
-      rounds: 3,
+      block: "kursVerdichtung",
+      format: "sets",
+      sets: 5,
       exercises: [{
-        n: "Kettlebell Clean"
+        n: "Kettlebell Swing",
+        b: 15,
+        u: "reps"
       }, {
-        n: "Kettlebell Racked Squat"
+        n: "Kettlebell Romanian Deadlift",
+        b: 10,
+        u: "reps"
       }, {
-        n: "Kettlebell Suitcase Row"
+        n: "Kettlebell Single Arm Deadlift",
+        b: 8,
+        u: "reps_side"
       }, {
-        n: "Kettlebell Front Raise"
+        n: "Kettlebell Suitcase Row",
+        b: 8,
+        u: "reps_side"
       }, {
-        n: "Kettlebell Bob and Weave"
+        n: "Kettlebell Good Morning",
+        b: 10,
+        u: "reps"
       }, {
-        n: "Kettlebell Russian Twist"
-      }, {
-        n: "Push-Up"
+        n: "Kettlebell Suitcase Carry",
+        b: 25,
+        u: "m",
+        r: 5
       }]
     },
     9: {
-      block: "skill",
-      format: "sets",
-      sets: 3,
-      restBetween: 30,
+      block: "kursVerdichtung",
+      format: "emom",
+      rounds: 7,
       exercises: [{
         n: "Kettlebell Swing",
-        b: 18,
+        b: 15,
+        u: "reps"
+      }, {
+        n: "Kettlebell Clean",
+        b: 6,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Squat and Press",
+        b: 8,
+        u: "reps"
+      }]
+    },
+    10: {
+      block: "kursIntegration",
+      format: "sets",
+      sets: 5,
+      exercises: [{
+        n: "Kettlebell Racked Reverse Lunge",
+        b: 6,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Single Arm Deadlift",
+        b: 8,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Overhead Press",
+        b: 6,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Suitcase Row",
+        b: 10,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Bob and Weave",
+        b: 6,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Suitcase Carry",
+        b: 30,
+        u: "m",
+        r: 5
+      }]
+    },
+    11: {
+      block: "kursIntegration",
+      format: "sets",
+      sets: 5,
+      exercises: [{
+        n: "Kettlebell Swing",
+        b: 15,
+        u: "reps"
+      }, {
+        n: "Kettlebell Clean",
+        b: 5,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Racked Squat",
+        b: 8,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Floor Press",
+        b: 8,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Sumo High Pull",
+        b: 8,
+        u: "reps"
+      }, {
+        n: "Kettlebell Russian Twist",
+        b: 10,
+        u: "reps_side"
+      }]
+    },
+    12: {
+      block: "kursIntegration",
+      format: "sets",
+      sets: 3,
+      exercises: [{
+        n: "Kettlebell Swing",
+        b: 25,
         u: "reps"
       }, {
         n: "Kettlebell Goblet Squat",
         b: 15,
         u: "reps"
       }, {
-        n: "Kettlebell Bent-Over Row",
-        b: 13,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Overhead Press",
-        b: 12,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Suitcase Carry",
-        b: 35,
-        u: "m",
-        r: 5
-      }, {
-        n: "Plank",
-        b: 40,
-        u: "sec",
-        r: 5
-      }, {
-        n: "Kettlebell Bob and Weave",
-        b: 12,
-        u: "reps_side"
-      }]
-    },
-    10: {
-      block: "skill",
-      format: "sets",
-      sets: 3,
-      restBetween: 30,
-      exercises: [{
         n: "Kettlebell Clean",
-        b: 10,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Sumo Deadlift",
-        b: 14,
-        u: "reps"
-      }, {
-        n: "Kettlebell Suitcase Row",
-        b: 13,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Squat and Press",
-        b: 10,
-        u: "reps"
-      }, {
-        n: "Kettlebell Suitcase Carry",
-        b: 35,
-        u: "m",
-        r: 5
-      }, {
-        n: "Kettlebell Russian Twist",
-        b: 13,
-        u: "reps"
-      }, {
-        n: "Kettlebell Sit and Press",
-        b: 10,
-        u: "reps"
-      }]
-    },
-    11: {
-      block: "bridge",
-      format: "emom",
-      rounds: 3,
-      exercises: [{
-        n: "Kettlebell Swing",
-        b: 18,
-        u: "reps"
-      }, {
-        n: "Kettlebell Clean",
-        b: 10,
+        b: 5,
         u: "reps_side"
       }, {
         n: "Kettlebell Racked Reverse Lunge",
-        b: 10,
+        b: 6,
         u: "reps_side"
       }, {
         n: "Kettlebell Bent-Over Row",
-        b: 13,
+        b: 8,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Floor Press",
+        b: 8,
         u: "reps_side"
       }, {
         n: "Kettlebell Squat and Press",
-        b: 10,
+        b: 8,
         u: "reps"
       }, {
         n: "Kettlebell Suitcase Carry",
-        b: 35,
+        b: 40,
         u: "m",
         r: 5
       }, {
         n: "Plank",
-        b: 40,
+        b: 30,
         u: "sec",
         r: 5
       }]
-    },
-    12: {
-      block: "finale",
-      format: "chipper",
-      exercises: []
     }
   }
 };
@@ -2622,40 +2518,28 @@ const BLOCK_INFO_EINSTEIGER = {
   }
 };
 const BLOCK_INFO_KURS = {
-  foundation: {
+  kursBasis: {
     note: {
-      de: "Die Grundbewegungen plus Swing von Anfang an — der Ausgangspunkt für Normal und Schwer.",
-      en: "The core movements plus the swing from day one — the starting point for Normal and Hard."
+      de: "Swing und Clean werden von Einheit 1 an trainiert. Technik und Basisvolumen stehen im Vordergrund.",
+      en: "Swing and clean are trained from session 1. The focus is on technique and a basic training volume."
     }
   },
-  buildup: {
+  kursAufbau: {
     note: {
-      de: "Etwas mehr Wiederholungen und Abwechslung. Hier kommt das Leiter-Format (absteigende Wiederholungen) dazu, angelehnt an klassische Kettlebell-Workouts, außerdem der Floor Press als neue Übung.",
-      en: "A bit more volume and variety. This is where the ladder format (descending reps) comes in, inspired by classic kettlebell workouts, plus the floor press as a new exercise."
+      de: "Mehr Wiederholungen und die ersten anspruchsvolleren Kombinationen.",
+      en: "More reps and the first more demanding combinations."
     }
   },
-  density: {
+  kursVerdichtung: {
     note: {
-      de: "Zirkelformat statt fester Sätze — Verhältnis von Arbeit zu Pause richtet sich nach der gewählten Stufe.",
-      en: "Circuit format instead of fixed sets — the work-to-rest ratio depends on the selected tier."
+      de: "Jetzt wird nicht einfach mehr Gewicht verwendet — die gleiche Arbeit wird mit weniger Erholungszeit erledigt. Zirkelformat und EMOM erhöhen die Trainingsdichte.",
+      en: "This isn't about using more weight — the same work gets done with less recovery time. Circuit format and EMOM raise the training density."
     }
   },
-  skill: {
+  kursIntegration: {
     note: {
-      de: "Die bekannten Bewegungen werden in höherem Volumen kombiniert, um Kraftausdauer aufzubauen — dazu kommt das Sumo Deadlift als neue Übung.",
-      en: "The movements you already know are combined at higher volume to build strength endurance — plus the sumo deadlift as a new exercise."
-    }
-  },
-  bridge: {
-    note: {
-      de: "Erste EMOM-Einheit — zu Beginn jeder Minute die Wiederholungen absolvieren, der Rest der Minute ist Pause.",
-      en: "First EMOM session — do the reps at the start of each minute, the rest of the minute is rest."
-    }
-  },
-  finale: {
-    note: {
-      de: "Der Abschluss-Chipper: jede Übung aus der gesamten Bibliothek einmal, keine Wiederholung.",
-      en: "The finisher chipper: every exercise from the full library once, no repeats."
+      de: "Die gelernten Bewegungen werden zu anspruchsvolleren Ganzkörper-Einheiten verbunden, bis zur abschließenden Firdaws Challenge.",
+      en: "The movements you've learned are combined into more demanding full-body sessions, ending with the Firdaws Challenge."
     }
   }
 };
@@ -2913,14 +2797,16 @@ function getSessionData(module, sessionNum, intensityKey, lang, cycle) {
     }));
     const rounds = session.rounds;
     const ratio = CIRCUIT_RATIO[tierKey] || CIRCUIT_RATIO.normal;
-    const totalMinutes = Math.round(rounds * exercises.length * (ratio.work + ratio.rest) / 60);
+    const workSec = session.workSec || ratio.work;
+    const restSec = session.restSec || ratio.rest;
+    const totalMinutes = Math.round(rounds * exercises.length * (workSec + restSec) / 60);
     return {
       session,
       block: session.block,
       format: "circuit",
       rounds,
-      workSec: ratio.work,
-      restSec: ratio.rest,
+      workSec,
+      restSec,
       totalMinutes,
       exercises,
       isFirstSession
@@ -3800,7 +3686,11 @@ function KettlebellTracker() {
     bridge: "clock",
     finale: "flag",
     rackTransition: "flame",
-    beginnerBridge: "flag"
+    beginnerBridge: "flag",
+    kursBasis: "target",
+    kursAufbau: "stairs",
+    kursVerdichtung: "loop",
+    kursIntegration: "flag"
   };
   const BLOCK_ORDER = ["foundation", "buildup", "density", "skill", "bridge", "finale"];
   if (loading) {
