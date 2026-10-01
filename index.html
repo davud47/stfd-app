@@ -290,7 +290,6 @@ function Icon({
 const LOGO_DATA_URI = "data:image/png;base64,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";
 const MODULE_TOTAL_SESSIONS = {
   einsteiger: 12,
-  einfuehrung: 12,
   kurs: 12
 };
 
@@ -304,7 +303,6 @@ const INTENSITY_KEYS = ["leicht", "normal", "schwer"];
 // (kein Umschalter nötig), das Beginner-Modul (Kurs) bietet Normal/Schwer.
 const MODULE_INTENSITY_KEYS = {
   einsteiger: ["leicht"],
-  einfuehrung: ["einfuehrung"],
   kurs: ["normal", "schwer"]
 };
 
@@ -312,10 +310,6 @@ const MODULE_INTENSITY_KEYS = {
 // Leicht mehr Pause als Arbeit, Schwer umgekehrt — nicht mehr fix 40/20 für alle.
 const CIRCUIT_RATIO = {
   leicht: {
-    work: 40,
-    rest: 20
-  },
-  einfuehrung: {
     work: 40,
     rest: 20
   },
@@ -334,7 +328,6 @@ const CIRCUIT_RATIO = {
 // erst danach folgt diese Pause). Nach Stufe gestaffelt statt pro Einheit fix.
 const SETS_REST_BY_TIER = {
   leicht: 120,
-  einfuehrung: 120,
   normal: 90,
   schwer: 60
 };
@@ -395,12 +388,10 @@ const UI = {
     },
     moduleLabels: {
       einsteiger: "Einsteiger",
-      einfuehrung: "Einführung",
       kurs: "Beginner-Modul"
     },
     moduleSubtitle: {
       einsteiger: "Kostenlos · Grundlagen",
-      einfuehrung: "4 Wochen · Swing & Clean lernen",
       kurs: "Alle Übungen · Normal & Schwer"
     },
     setsRounds: "Sätze / Runden",
@@ -473,12 +464,10 @@ const UI = {
     cycleLabel: n => `Zyklus ${n}`,
     cycleDoneTitle: "Zyklus abgeschlossen! 🎉",
     cycleDoneText: (n, module) => {
-      if (module === "einsteiger") return `Alle ${n} Einheiten geschafft — die Grundbewegungen sitzen. Du kannst sie jederzeit erneut durchlaufen, oder direkt weiter zur Einführung in Swing & Clean.`;
-      if (module === "einfuehrung") return `Alle ${n} Einheiten geschafft — Swing und Clean sitzen. Du kannst die Einführung erneut durchlaufen, oder direkt weiter zum eigentlichen Trainingsplan im Beginner-Modul.`;
+      if (module === "einsteiger") return `Alle ${n} Einheiten geschafft — die Grundbewegungen inklusive Swing und Clean sitzen. Du kannst sie jederzeit erneut durchlaufen, oder direkt weiter zum eigentlichen Trainingsplan im Beginner-Modul.`;
       return `Alle ${n} Einheiten geschafft. Starte den nächsten Zyklus — entweder mit höherem Gewicht (wenn das letzte Gewicht gut ging) oder bei gleichem Gewicht mit mehr Dichte: kürzere Pausen, mehr Runden.`;
     },
     startNewCycle: "Nächsten Zyklus starten",
-    continueToEinfuehrung: "Weiter zur Einführung",
     continueToKurs: "Weiter zum Trainingsplan",
     customBadge: "eigene Werte",
     customPlaceholder: "z. B. 15 Wdh.",
@@ -501,7 +490,13 @@ const UI = {
       swingBasis: "Swing-Basis",
       cleanEinzeln: "Clean einzeln",
       kombination: "Kombination",
-      uebergang: "Übergang"
+      uebergang: "Übergang",
+      swingLernen: "Swing lernen",
+      cleanLernen: "Clean lernen",
+      integration: "Integration",
+      verdichtung: "Verdichtung",
+      technikZeitdruck: "Technik unter Zeitdruck",
+      grundlagenTest: "Grundlagen-Test"
     }
   },
   en: {
@@ -520,12 +515,10 @@ const UI = {
     },
     moduleLabels: {
       einsteiger: "Beginner",
-      einfuehrung: "Introduction",
       kurs: "Beginner Module"
     },
     moduleSubtitle: {
       einsteiger: "Free · Fundamentals",
-      einfuehrung: "4 weeks · Learn swing & clean",
       kurs: "All exercises · Normal & Hard"
     },
     setsRounds: "sets / rounds",
@@ -598,12 +591,10 @@ const UI = {
     cycleLabel: n => `Cycle ${n}`,
     cycleDoneTitle: "Cycle complete! 🎉",
     cycleDoneText: (n, module) => {
-      if (module === "einsteiger") return `All ${n} sessions done — the core movements are solid. Go through them again any time, or move straight on to the swing & clean introduction.`;
-      if (module === "einfuehrung") return `All ${n} sessions done — swing and clean are solid. Go through the introduction again, or move straight on to the actual training plan in the Beginner Module.`;
+      if (module === "einsteiger") return `All ${n} sessions done — the core movements including swing and clean are solid. Go through them again any time, or move straight on to the actual training plan in the Beginner Module.`;
       return `All ${n} sessions done. Start the next cycle — either with heavier weight (if the last weight felt good) or, at the same weight, with more density: shorter rests, more rounds.`;
     },
     startNewCycle: "Start next cycle",
-    continueToEinfuehrung: "Continue to the introduction",
     continueToKurs: "Continue to the training plan",
     customBadge: "custom",
     customPlaceholder: "e.g. 15 reps",
@@ -626,7 +617,13 @@ const UI = {
       swingBasis: "Swing Basics",
       cleanEinzeln: "Clean Alone",
       kombination: "Combination",
-      uebergang: "Transition"
+      uebergang: "Transition",
+      swingLernen: "Learning the Swing",
+      cleanLernen: "Learning the Clean",
+      integration: "Integration",
+      verdichtung: "Density",
+      technikZeitdruck: "Technique Under Pressure",
+      grundlagenTest: "Foundation Test"
     }
   }
 };
@@ -1627,42 +1624,72 @@ const SESSIONS_EINSTEIGER = {
       }]
     },
     7: {
-      block: "density",
-      format: "circuit",
-      rounds: 3,
-      exercises: [{
-        n: "Kettlebell Goblet Squat"
-      }, {
-        n: "Kettlebell Single Arm Deadlift"
-      }, {
-        n: "Kettlebell Bent-Over Row"
-      }, {
-        n: "Push-Up"
-      }, {
-        n: "Kettlebell Suitcase Carry"
-      }]
-    },
-    8: {
-      block: "density",
-      format: "circuit",
-      rounds: 3,
-      exercises: [{
-        n: "Kettlebell Goblet Squat"
-      }, {
-        n: "Kettlebell Romanian Deadlift"
-      }, {
-        n: "Kettlebell Bent-Over Row"
-      }, {
-        n: "Kettlebell Goblet Press"
-      }, {
-        n: "Kettlebell Suitcase Carry"
-      }]
-    },
-    9: {
-      block: "vertiefung",
+      block: "swingLernen",
       format: "sets",
       sets: 3,
       exercises: [{
+        n: "Kettlebell Swing",
+        b: 8,
+        u: "reps"
+      }, {
+        n: "Kettlebell Goblet Squat",
+        b: 8,
+        u: "reps"
+      }, {
+        n: "Kettlebell Bent-Over Row",
+        b: 8,
+        u: "reps_side"
+      }, {
+        n: "Push-Up",
+        b: 6,
+        u: "reps"
+      }, {
+        n: "Kettlebell Suitcase Carry",
+        b: 20,
+        u: "m",
+        r: 5
+      }]
+    },
+    8: {
+      block: "cleanLernen",
+      format: "sets",
+      sets: 3,
+      exercises: [{
+        n: "Kettlebell Swing",
+        b: 8,
+        u: "reps"
+      }, {
+        n: "Kettlebell Clean",
+        b: 3,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Goblet Squat",
+        b: 8,
+        u: "reps"
+      }, {
+        n: "Kettlebell Bent-Over Row",
+        b: 8,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Suitcase Carry",
+        b: 20,
+        u: "m",
+        r: 5
+      }]
+    },
+    9: {
+      block: "integration",
+      format: "sets",
+      sets: 3,
+      exercises: [{
+        n: "Kettlebell Swing",
+        b: 10,
+        u: "reps"
+      }, {
+        n: "Kettlebell Clean",
+        b: 4,
+        u: "reps_side"
+      }, {
         n: "Kettlebell Goblet Squat",
         b: 8,
         u: "reps"
@@ -1691,17 +1718,21 @@ const SESSIONS_EINSTEIGER = {
       }]
     },
     10: {
-      block: "vertiefung",
+      block: "verdichtung",
       format: "sets",
       sets: 3,
       exercises: [{
+        n: "Kettlebell Swing",
+        b: 12,
+        u: "reps"
+      }, {
+        n: "Kettlebell Clean",
+        b: 4,
+        u: "reps_side"
+      }, {
         n: "Kettlebell Goblet Squat",
         b: 10,
         u: "reps"
-      }, {
-        n: "Kettlebell Single Arm Deadlift",
-        b: 8,
-        u: "reps_side"
       }, {
         n: "Kettlebell Bent-Over Row",
         b: 10,
@@ -1722,10 +1753,18 @@ const SESSIONS_EINSTEIGER = {
       }]
     },
     11: {
-      block: "beginnerBridge",
+      block: "technikZeitdruck",
       format: "emom",
       rounds: 3,
       exercises: [{
+        n: "Kettlebell Swing",
+        b: 10,
+        u: "reps"
+      }, {
+        n: "Kettlebell Clean",
+        b: 4,
+        u: "reps_side"
+      }, {
         n: "Kettlebell Goblet Squat",
         b: 8,
         u: "reps"
@@ -1749,10 +1788,18 @@ const SESSIONS_EINSTEIGER = {
       }]
     },
     12: {
-      block: "beginnerBridge",
+      block: "grundlagenTest",
       format: "sets",
       sets: 3,
       exercises: [{
+        n: "Kettlebell Swing",
+        b: 15,
+        u: "reps"
+      }, {
+        n: "Kettlebell Clean",
+        b: 5,
+        u: "reps_side"
+      }, {
         n: "Kettlebell Goblet Squat",
         b: 10,
         u: "reps"
@@ -2516,277 +2563,7 @@ const SESSIONS_KURS = {
     }
   }
 };
-
-// Einführungs-Modul: 4 Wochen, ausschließlich für den Weg zu Swing und Clean,
-// Teil des Beginner-Moduls (Kurs) und jederzeit überspringbar (eigener Tab in
-// der Modul-Navigation, kein erzwungener Ablauf). Woche 1: Swing isoliert.
-// Woche 2: Swing-Volumen steigt, Clean wird separat eingeführt (eigene
-// Einheiten, noch nicht kombiniert). Woche 3: Swing und Clean erstmals in
-// derselben Einheit. Woche 4: EMOM unter leichtem Zeitdruck, danach ein
-// Abschluss-Check ohne Zeitdruck als Übergang zum eigentlichen Trainingsplan.
-const SESSIONS_EINFUEHRUNG = {
-  einfuehrung: {
-    1: {
-      block: "swingBasis",
-      format: "sets",
-      sets: 4,
-      exercises: [{
-        n: "Kettlebell Single Arm Deadlift",
-        b: 6,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Swing",
-        b: 8,
-        u: "reps"
-      }, {
-        n: "Plank",
-        b: 20,
-        u: "sec",
-        r: 5
-      }]
-    },
-    2: {
-      block: "swingBasis",
-      format: "sets",
-      sets: 4,
-      exercises: [{
-        n: "Kettlebell Swing",
-        b: 10,
-        u: "reps"
-      }, {
-        n: "Kettlebell Single Arm Deadlift",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Push-Up",
-        b: 6,
-        u: "reps"
-      }]
-    },
-    3: {
-      block: "swingBasis",
-      format: "sets",
-      sets: 4,
-      exercises: [{
-        n: "Kettlebell Swing",
-        b: 12,
-        u: "reps"
-      }, {
-        n: "Kettlebell Suitcase Carry",
-        b: 20,
-        u: "m",
-        r: 5
-      }, {
-        n: "Plank",
-        b: 25,
-        u: "sec",
-        r: 5
-      }]
-    },
-    4: {
-      block: "cleanEinzeln",
-      format: "sets",
-      sets: 4,
-      exercises: [{
-        n: "Kettlebell Swing",
-        b: 14,
-        u: "reps"
-      }, {
-        n: "Kettlebell Single Arm Deadlift",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Push-Up",
-        b: 8,
-        u: "reps"
-      }]
-    },
-    5: {
-      block: "cleanEinzeln",
-      format: "sets",
-      sets: 4,
-      exercises: [{
-        n: "Kettlebell Clean",
-        b: 3,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Racked Squat",
-        b: 6,
-        u: "reps_side"
-      }, {
-        n: "Plank",
-        b: 25,
-        u: "sec",
-        r: 5
-      }]
-    },
-    6: {
-      block: "cleanEinzeln",
-      format: "sets",
-      sets: 4,
-      exercises: [{
-        n: "Kettlebell Swing",
-        b: 15,
-        u: "reps"
-      }, {
-        n: "Kettlebell Suitcase Carry",
-        b: 25,
-        u: "m",
-        r: 5
-      }, {
-        n: "Plank",
-        b: 25,
-        u: "sec",
-        r: 5
-      }]
-    },
-    7: {
-      block: "kombination",
-      format: "sets",
-      sets: 4,
-      exercises: [{
-        n: "Kettlebell Swing",
-        b: 12,
-        u: "reps"
-      }, {
-        n: "Kettlebell Clean",
-        b: 4,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Goblet Squat",
-        b: 8,
-        u: "reps"
-      }]
-    },
-    8: {
-      block: "kombination",
-      format: "sets",
-      sets: 4,
-      exercises: [{
-        n: "Kettlebell Clean",
-        b: 4,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Swing",
-        b: 12,
-        u: "reps"
-      }, {
-        n: "Kettlebell Bent-Over Row",
-        b: 8,
-        u: "reps_side"
-      }]
-    },
-    9: {
-      block: "kombination",
-      format: "sets",
-      sets: 4,
-      exercises: [{
-        n: "Kettlebell Swing",
-        b: 15,
-        u: "reps"
-      }, {
-        n: "Kettlebell Clean",
-        b: 5,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Racked Squat",
-        b: 6,
-        u: "reps_side"
-      }, {
-        n: "Plank",
-        b: 30,
-        u: "sec",
-        r: 5
-      }]
-    },
-    10: {
-      block: "uebergang",
-      format: "emom",
-      rounds: 5,
-      exercises: [{
-        n: "Kettlebell Swing",
-        b: 10,
-        u: "reps"
-      }, {
-        n: "Kettlebell Clean",
-        b: 4,
-        u: "reps_side"
-      }]
-    },
-    11: {
-      block: "uebergang",
-      format: "emom",
-      rounds: 6,
-      exercises: [{
-        n: "Kettlebell Swing",
-        b: 12,
-        u: "reps"
-      }, {
-        n: "Kettlebell Clean",
-        b: 5,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Goblet Squat",
-        b: 6,
-        u: "reps"
-      }]
-    },
-    12: {
-      block: "uebergang",
-      format: "sets",
-      sets: 3,
-      exercises: [{
-        n: "Kettlebell Swing",
-        b: 15,
-        u: "reps"
-      }, {
-        n: "Kettlebell Clean",
-        b: 5,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Racked Squat",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Single Arm Deadlift",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Plank",
-        b: 30,
-        u: "sec",
-        r: 5
-      }]
-    }
-  }
-};
-const BLOCK_INFO_EINFUEHRUNG = {
-  swingBasis: {
-    note: {
-      de: "Der Swing wird isoliert aufgebaut — die Hüftstreckung erzeugt den Schwung, nicht die Arme. Noch kein Clean.",
-      en: "The swing is built up in isolation — hip extension powers the movement, not the arms. No clean yet."
-    }
-  },
-  cleanEinzeln: {
-    note: {
-      de: "Der Clean wird als eigene Bewegung eingeführt, getrennt vom Swing-Training — beide wechseln sich einheitenweise ab, noch nicht in derselben Einheit kombiniert.",
-      en: "The clean is introduced as its own movement, kept separate from swing training — the two alternate session by session, not yet combined in the same session."
-    }
-  },
-  kombination: {
-    note: {
-      de: "Swing und Clean werden jetzt erstmals in derselben Einheit kombiniert.",
-      en: "Swing and clean are now combined in the same session for the first time."
-    }
-  },
-  uebergang: {
-    note: {
-      de: "Erst das EMOM-Format unter leichtem Zeitdruck, danach ein Abschluss-Check ohne Zeitdruck — die Grundlage für den eigentlichen, wiederkehrenden Trainingsplan im Beginner-Modul.",
-      en: "First the EMOM format under light time pressure, then a final check with no time pressure — the foundation for the actual, repeating training plan in the Beginner Module."
-    }
-  }
-};
-const EINSTEIGER_POOL = ["Kettlebell Romanian Deadlift", "Kettlebell Single Arm Deadlift", "Kettlebell Goblet Squat", "Kettlebell Bent-Over Row", "Kettlebell Goblet Press", "Kettlebell Suitcase Carry", "Push-Up", "Plank"];
+const EINSTEIGER_POOL = ["Kettlebell Romanian Deadlift", "Kettlebell Single Arm Deadlift", "Kettlebell Goblet Squat", "Kettlebell Bent-Over Row", "Kettlebell Goblet Press", "Kettlebell Suitcase Carry", "Push-Up", "Plank", "Kettlebell Swing", "Kettlebell Clean"];
 const BLOCK_INFO_EINSTEIGER = {
   foundation: {
     note: {
@@ -2800,22 +2577,40 @@ const BLOCK_INFO_EINSTEIGER = {
       en: "More reps, more confidence, and the first full-body combination — still completely without swing or clean."
     }
   },
-  density: {
+  swingLernen: {
     note: {
-      de: "Zirkelformat statt fester Sätze — die bekannten Übungen werden erstmals zeitbasiert kombiniert. 40 Sekunden Arbeit, 20 Sekunden Wechsel.",
-      en: "Circuit format instead of fixed sets — the exercises you already know are combined in a time-based format for the first time. 40 seconds of work, 20 seconds to switch."
+      de: "Der Swing wird aus dem bereits bekannten Hinge-Muster entwickelt. Die neue ballistische Bewegung wird bewusst zuerst ohne Zeitdruck gelernt.",
+      en: "The swing is developed out of the hinge pattern you already know. This new ballistic movement is learned first without any time pressure."
     }
   },
-  vertiefung: {
+  cleanLernen: {
     note: {
-      de: "Mehr Volumen auf den bekannten Bewegungen, bevor es in die Abschlussphase geht. Weiterhin ganz ohne Swing und Clean.",
-      en: "More volume on the movements you already know, before moving into the final phase. Still completely without swing or clean."
+      de: "Der Clean kommt als neue technische Bewegung dazu — der Swing bleibt bekannt und gibt genug Raum, damit der Clean saubere Technik in die Rack-Position lernen kann.",
+      en: "The clean is introduced as a new technical movement — the swing stays familiar, leaving room to learn clean technique into the rack position."
     }
   },
-  beginnerBridge: {
+  integration: {
     note: {
-      de: "Erst das EMOM-Format kennenlernen — zu Beginn jeder Minute die Wiederholungen absolvieren, der Rest der Minute ist Pause. Danach der Grundlagen-Test: drei kontrollierte Sätze ohne Zeitdruck, die zeigen, ob du die Grundlagen des Moduls auch unter vollem Trainingsumfang sauber anwenden kannst.",
-      en: "First get familiar with the EMOM format — do the reps at the start of each minute, the rest of the minute is rest. Then the foundations test: three controlled sets with no time pressure, showing whether you can apply the module's fundamentals cleanly under a full training volume."
+      de: "Swing und Clean werden erstmals gemeinsam mit den Grundbewegungen in einer Einheit ausgeführt.",
+      en: "Swing and clean are performed together with the foundational movements in the same session for the first time."
+    }
+  },
+  verdichtung: {
+    note: {
+      de: "Das gesamte System aus Grundbewegungen, Swing und Clean wird mit etwas höherem Volumen trainiert.",
+      en: "The whole system of foundational movements, swing and clean is trained with slightly higher volume."
+    }
+  },
+  technikZeitdruck: {
+    note: {
+      de: "Swing und Clean werden erstmals unter leichtem Zeitdruck technisch sauber gehalten — Geschwindigkeit ist nicht das Ziel, die Technik bestimmt das Tempo.",
+      en: "Swing and clean are kept technically clean under light time pressure for the first time — speed is not the goal, technique sets the pace."
+    }
+  },
+  grundlagenTest: {
+    note: {
+      de: "Grundlagen-Test ohne Zeitlimit: alle erlernten Bewegungen kontrolliert und reproduzierbar zeigen, bevor es ins Beginner-Modul geht.",
+      en: "Foundation test with no time limit: show all the movements you've learned in a controlled, repeatable way before moving into the Beginner Module."
     }
   }
 };
@@ -3021,11 +2816,10 @@ function getSessionData(module, sessionNum, intensityKey, lang, cycle) {
   const isFirstSession = sessionNum === 1 && (cycle || 1) === 1;
   const t = UI[lang];
   const isEinsteiger = module === "einsteiger";
-  const isEinfuehrung = module === "einfuehrung";
-  const tierKey = isEinsteiger ? "leicht" : isEinfuehrung ? "einfuehrung" : intensityKey;
-  const SESSIONS_BY_TIER = isEinsteiger ? SESSIONS_EINSTEIGER : isEinfuehrung ? SESSIONS_EINFUEHRUNG : SESSIONS_KURS;
+  const tierKey = isEinsteiger ? "leicht" : intensityKey;
+  const SESSIONS_BY_TIER = isEinsteiger ? SESSIONS_EINSTEIGER : SESSIONS_KURS;
   const SESSIONS = SESSIONS_BY_TIER[tierKey] || SESSIONS_BY_TIER.normal;
-  const BLOCK_INFO = isEinsteiger ? BLOCK_INFO_EINSTEIGER : isEinfuehrung ? BLOCK_INFO_EINFUEHRUNG : BLOCK_INFO_KURS;
+  const BLOCK_INFO = isEinsteiger ? BLOCK_INFO_EINSTEIGER : BLOCK_INFO_KURS;
   const session = SESSIONS[sessionNum];
   if (session.format === "sets") {
     let exercises = session.exercises.map(e => {
@@ -3204,11 +2998,6 @@ function emptyState() {
         sessions: makeEmptySessions(MODULE_TOTAL_SESSIONS.einsteiger),
         cycle: 1,
         intensity: "leicht"
-      },
-      einfuehrung: {
-        sessions: makeEmptySessions(MODULE_TOTAL_SESSIONS.einfuehrung),
-        cycle: 1,
-        intensity: "einfuehrung"
       },
       kurs: {
         sessions: makeEmptySessions(MODULE_TOTAL_SESSIONS.kurs),
@@ -3844,9 +3633,12 @@ function KettlebellTracker() {
           // Migration: falls ein Modul inzwischen mehr Einheiten hat als der
           // gespeicherte Stand (z. B. Einsteiger 12 -> 16), fehlende Einheiten ergänzen.
           merged.modules.einsteiger = fillMissingSessions(merged.modules.einsteiger, MODULE_TOTAL_SESSIONS.einsteiger);
-          merged.modules.einfuehrung = fillMissingSessions(merged.modules.einfuehrung, MODULE_TOTAL_SESSIONS.einfuehrung);
           merged.modules.kurs = fillMissingSessions(merged.modules.kurs, MODULE_TOTAL_SESSIONS.kurs);
         }
+        // Migration: das Einführungs-Modul wurde entfernt (Swing & Clean sind jetzt
+        // Teil des Grundlagen-Moduls) — alte Speicherstände, die noch darauf zeigen,
+        // landen stattdessen im Beginner-Modul.
+        if (merged.activeModule === "einfuehrung") merged.activeModule = "kurs";
         setState(merged);
       }
     } catch (e) {
@@ -3910,8 +3702,7 @@ function KettlebellTracker() {
   const moduleState = state.modules[activeModule];
   const totalSessions = MODULE_TOTAL_SESSIONS[activeModule];
   const isEinsteigerModule = activeModule === "einsteiger";
-  const isEinfuehrungModule = activeModule === "einfuehrung";
-  const BLOCK_INFO = isEinsteigerModule ? BLOCK_INFO_EINSTEIGER : isEinfuehrungModule ? BLOCK_INFO_EINFUEHRUNG : BLOCK_INFO_KURS;
+  const BLOCK_INFO = isEinsteigerModule ? BLOCK_INFO_EINSTEIGER : BLOCK_INFO_KURS;
   const sessionData = useMemo(() => getSessionData(activeModule, activeSession, moduleState.intensity, lang, moduleState.cycle), [activeModule, activeSession, moduleState.intensity, lang, moduleState.cycle]);
   const sessionState = moduleState.sessions[activeSession];
   const libraryExercises = useMemo(() => getLibraryExercises(lang), [lang]);
@@ -4000,7 +3791,13 @@ function KettlebellTracker() {
     kursBasis: "target",
     kursAufbau: "stairs",
     kursVerdichtung: "loop",
-    kursIntegration: "flag"
+    kursIntegration: "flag",
+    swingLernen: "flame",
+    cleanLernen: "flame",
+    integration: "loop",
+    verdichtung: "stairs",
+    technikZeitdruck: "clock",
+    grundlagenTest: "flag"
   };
   const BLOCK_ORDER = ["foundation", "buildup", "density", "skill", "bridge", "finale"];
   if (loading) {
@@ -4052,7 +3849,7 @@ function KettlebellTracker() {
       display: "flex",
       gap: 8
     }
-  }, ["einsteiger", "einfuehrung", "kurs"].map(m => {
+  }, ["einsteiger", "kurs"].map(m => {
     const active = activeModule === m;
     return /*#__PURE__*/React.createElement("button", {
       key: m,
@@ -4082,7 +3879,7 @@ function KettlebellTracker() {
         justifyContent: "center"
       }
     }, /*#__PURE__*/React.createElement(Icon, {
-      name: m === "einsteiger" ? "flame" : m === "einfuehrung" ? "target" : "dumbbell",
+      name: m === "einsteiger" ? "flame" : "dumbbell",
       size: 15,
       color: active ? C.brass : C.textSecondary
     })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
@@ -4190,8 +3987,8 @@ function KettlebellTracker() {
       lineHeight: 1.6,
       marginBottom: 12
     }
-  }, t.cycleDoneText(totalSessions, activeModule)), (activeModule === "einsteiger" || activeModule === "einfuehrung") && /*#__PURE__*/React.createElement("button", {
-    onClick: () => setActiveModule(activeModule === "einsteiger" ? "einfuehrung" : "kurs"),
+  }, t.cycleDoneText(totalSessions, activeModule)), activeModule === "einsteiger" && /*#__PURE__*/React.createElement("button", {
+    onClick: () => setActiveModule("kurs"),
     style: {
       borderRadius: 24,
       width: "100%",
@@ -4204,7 +4001,7 @@ function KettlebellTracker() {
       cursor: "pointer",
       marginBottom: 8
     }
-  }, activeModule === "einsteiger" ? t.continueToEinfuehrung : t.continueToKurs), /*#__PURE__*/React.createElement("button", {
+  }, t.continueToKurs), /*#__PURE__*/React.createElement("button", {
     onClick: startNewCycle,
     style: {
       borderRadius: 24,
