@@ -472,8 +472,14 @@ const UI = {
     finisherTimerBtn: "Finisher-Timer starten",
     cycleLabel: n => `Zyklus ${n}`,
     cycleDoneTitle: "Zyklus abgeschlossen! 🎉",
-    cycleDoneText: n => `Alle ${n} Einheiten geschafft. Starte den nächsten Zyklus — mit höherem Gewicht und, wenn du magst, einer höheren Stufe.`,
+    cycleDoneText: (n, module) => {
+      if (module === "einsteiger") return `Alle ${n} Einheiten geschafft — die Grundbewegungen sitzen. Du kannst sie jederzeit erneut durchlaufen, oder direkt weiter zur Einführung in Swing & Clean.`;
+      if (module === "einfuehrung") return `Alle ${n} Einheiten geschafft — Swing und Clean sitzen. Du kannst die Einführung erneut durchlaufen, oder direkt weiter zum eigentlichen Trainingsplan im Beginner-Modul.`;
+      return `Alle ${n} Einheiten geschafft. Starte den nächsten Zyklus — entweder mit höherem Gewicht (wenn das letzte Gewicht gut ging) oder bei gleichem Gewicht mit mehr Dichte: kürzere Pausen, mehr Runden.`;
+    },
     startNewCycle: "Nächsten Zyklus starten",
+    continueToEinfuehrung: "Weiter zur Einführung",
+    continueToKurs: "Weiter zum Trainingsplan",
     customBadge: "eigene Werte",
     customPlaceholder: "z. B. 15 Wdh.",
     customReset: "Zurücksetzen",
@@ -491,7 +497,11 @@ const UI = {
       kursBasis: "Basis",
       kursAufbau: "Aufbau",
       kursVerdichtung: "Verdichtung",
-      kursIntegration: "Integration"
+      kursIntegration: "Integration",
+      swingBasis: "Swing-Basis",
+      cleanEinzeln: "Clean einzeln",
+      kombination: "Kombination",
+      uebergang: "Übergang"
     }
   },
   en: {
@@ -587,8 +597,14 @@ const UI = {
     finisherTimerBtn: "Start finisher timer",
     cycleLabel: n => `Cycle ${n}`,
     cycleDoneTitle: "Cycle complete! 🎉",
-    cycleDoneText: n => `All ${n} sessions done. Start the next cycle — with heavier weight and, if you like, a higher tier.`,
+    cycleDoneText: (n, module) => {
+      if (module === "einsteiger") return `All ${n} sessions done — the core movements are solid. Go through them again any time, or move straight on to the swing & clean introduction.`;
+      if (module === "einfuehrung") return `All ${n} sessions done — swing and clean are solid. Go through the introduction again, or move straight on to the actual training plan in the Beginner Module.`;
+      return `All ${n} sessions done. Start the next cycle — either with heavier weight (if the last weight felt good) or, at the same weight, with more density: shorter rests, more rounds.`;
+    },
     startNewCycle: "Start next cycle",
+    continueToEinfuehrung: "Continue to the introduction",
+    continueToKurs: "Continue to the training plan",
     customBadge: "custom",
     customPlaceholder: "e.g. 15 reps",
     customReset: "Reset",
@@ -606,7 +622,11 @@ const UI = {
       kursBasis: "Basics",
       kursAufbau: "Build-Up",
       kursVerdichtung: "Density",
-      kursIntegration: "Integration"
+      kursIntegration: "Integration",
+      swingBasis: "Swing Basics",
+      cleanEinzeln: "Clean Alone",
+      kombination: "Combination",
+      uebergang: "Transition"
     }
   }
 };
@@ -4146,8 +4166,8 @@ function KettlebellTracker() {
       lineHeight: 1.6,
       marginBottom: 12
     }
-  }, t.cycleDoneText(totalSessions)), /*#__PURE__*/React.createElement("button", {
-    onClick: startNewCycle,
+  }, t.cycleDoneText(totalSessions, activeModule)), (activeModule === "einsteiger" || activeModule === "einfuehrung") && /*#__PURE__*/React.createElement("button", {
+    onClick: () => setActiveModule(activeModule === "einsteiger" ? "einfuehrung" : "kurs"),
     style: {
       borderRadius: 24,
       width: "100%",
@@ -4155,6 +4175,20 @@ function KettlebellTracker() {
       background: C.brass,
       border: "none",
       color: C.onBrass,
+      fontSize: 13,
+      fontWeight: 600,
+      cursor: "pointer",
+      marginBottom: 8
+    }
+  }, activeModule === "einsteiger" ? t.continueToEinfuehrung : t.continueToKurs), /*#__PURE__*/React.createElement("button", {
+    onClick: startNewCycle,
+    style: {
+      borderRadius: 24,
+      width: "100%",
+      padding: "10px 14px",
+      background: activeModule === "kurs" ? C.brass : C.panelAlt,
+      border: `1px solid ${activeModule === "kurs" ? C.brass : C.border}`,
+      color: activeModule === "kurs" ? C.onBrass : C.text,
       fontSize: 13,
       fontWeight: 600,
       cursor: "pointer"
