@@ -477,20 +477,10 @@ const UI = {
     blockNames: {
       foundation: "Fundament",
       buildup: "Aufbau",
-      density: "Verdichtung",
-      skill: "Skill-Aufbau",
-      bridge: "Übergang",
-      finale: "Abschluss",
-      vertiefung: "Vertiefung",
-      beginnerBridge: "Beginner-Übergang",
       kursBasis: "Basis",
       kursAufbau: "Aufbau",
       kursVerdichtung: "Verdichtung",
       kursIntegration: "Integration",
-      swingBasis: "Swing-Basis",
-      cleanEinzeln: "Clean einzeln",
-      kombination: "Kombination",
-      uebergang: "Übergang",
       swingLernen: "Swing lernen",
       cleanLernen: "Clean lernen",
       integration: "Integration",
@@ -604,20 +594,10 @@ const UI = {
     blockNames: {
       foundation: "Foundation",
       buildup: "Build-Up",
-      density: "Density",
-      skill: "Skill Building",
-      bridge: "Bridge",
-      finale: "Finale",
-      vertiefung: "Deepening",
-      beginnerBridge: "Beginner Transition",
       kursBasis: "Basics",
       kursAufbau: "Build-Up",
       kursVerdichtung: "Density",
       kursIntegration: "Integration",
-      swingBasis: "Swing Basics",
-      cleanEinzeln: "Clean Alone",
-      kombination: "Combination",
-      uebergang: "Transition",
       swingLernen: "Learning the Swing",
       cleanLernen: "Learning the Clean",
       integration: "Integration",
@@ -3782,12 +3762,6 @@ function KettlebellTracker() {
   const BLOCK_ICON = {
     foundation: "target",
     buildup: "stairs",
-    density: "loop",
-    skill: "flame",
-    bridge: "clock",
-    finale: "flag",
-    vertiefung: "flame",
-    beginnerBridge: "flag",
     kursBasis: "target",
     kursAufbau: "stairs",
     kursVerdichtung: "loop",
@@ -3799,7 +3773,11 @@ function KettlebellTracker() {
     technikZeitdruck: "clock",
     grundlagenTest: "flag"
   };
-  const BLOCK_ORDER = ["foundation", "buildup", "density", "skill", "bridge", "finale"];
+  const MODULE_BLOCK_ORDER = {
+    einsteiger: ["foundation", "buildup", "swingLernen", "cleanLernen", "integration", "verdichtung", "technikZeitdruck", "grundlagenTest"],
+    kurs: ["kursBasis", "kursAufbau", "kursVerdichtung", "kursIntegration"]
+  };
+  const BLOCK_ORDER = MODULE_BLOCK_ORDER[activeModule] || MODULE_BLOCK_ORDER.kurs;
   if (loading) {
     return /*#__PURE__*/React.createElement("div", {
       style: {
