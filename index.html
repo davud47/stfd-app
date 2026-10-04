@@ -481,11 +481,9 @@ const UI = {
       kursAufbau: "Aufbau",
       kursVerdichtung: "Verdichtung",
       kursIntegration: "Integration",
-      swingCleanLernen: "Swing & Clean",
-      integration: "Integration",
-      verdichtung: "Verdichtung",
-      technikZeitdruck: "Technik unter Zeitdruck",
-      grundlagenTest: "Grundlagen-Test"
+      swingLernen: "Swing-Einführung",
+      ganzkoerper: "Ganzkörper",
+      grundlagenCheck: "Grundlagen-Check"
     }
   },
   en: {
@@ -597,11 +595,9 @@ const UI = {
       kursAufbau: "Build-Up",
       kursVerdichtung: "Density",
       kursIntegration: "Integration",
-      swingCleanLernen: "Swing & Clean",
-      integration: "Integration",
-      verdichtung: "Density",
-      technikZeitdruck: "Technique Under Pressure",
-      grundlagenTest: "Foundation Test"
+      swingLernen: "Swing Introduction",
+      ganzkoerper: "Full Body",
+      grundlagenCheck: "Foundation Check"
     }
   }
 };
@@ -631,6 +627,10 @@ const CUES = {
   "Kettlebell Floor Press": {
     de: "Rückenlage, Ellbogen auf dem Boden abgestützt, Kettlebell von dort nach oben drücken. Schonende, liegende Alternative zum klassischen Bankdrücken.",
     en: "Lying on your back, elbow supported on the floor, press the kettlebell up from there. A shoulder-friendly, floor-based alternative to the bench press."
+  },
+  "Kettlebell Crush Grip Floor Press": {
+    de: "Rückenlage, zwei Kettlebells seitlich gegeneinander gepresst halten, beidarmig aus der Ellbogenablage nach oben drücken. Der Crush Grip (Zusammenpressen der Gewichte) aktiviert zusätzlich Unterarme und Rumpf.",
+    en: "Lying on your back, pressing two kettlebells together from the sides, press both up from the elbows resting on the floor. The crush grip (pressing the weights together) also activates the forearms and core."
   },
   "Kettlebell Swing": {
     de: "Hüftstreckung erzeugt den Schwung, kein Anheben mit den Armen — die Kettlebell schwebt nur bis Brusthöhe, nicht höher. Die definierende Kettlebell-Übung — explosive Hüftstreckung für Gesäß und hintere Oberschenkel.",
@@ -865,6 +865,24 @@ const EXERCISE_DETAILS = {
     benefits: {
       de: ["Der Boden begrenzt die Bewegungsbahn und schont die Schulter", "Guter Einstieg ins Drücken, risikoärmer als eine stehende Press-Variante", "Lässt sich gut mit wenig Aufwand in eine Einheit einbauen"],
       en: ["The floor limits the range of motion and is easier on the shoulder", "A good entry into pressing, lower-risk than a standing press variant", "Easy to slot into a session with minimal setup"]
+    }
+  },
+  "Kettlebell Crush Grip Floor Press": {
+    steps: {
+      de: ["Rückenlage, Beine aufgestellt, zwei Kettlebells seitlich mit beiden Händen gegeneinander pressen.", "Ellbogen auf dem Boden abstützen, Rumpf leicht anspannen.", "Beide Kettlebells gleichzeitig nach oben drücken, dabei den Druck zwischen den Gewichten halten, dann kontrolliert absenken."],
+      en: ["Lying on your back, knees bent, pressing two kettlebells together from the sides with both hands.", "Elbows supported on the floor, brace the core lightly.", "Press both kettlebells up at the same time while keeping them pressed together, then lower with control."]
+    },
+    mistakes: {
+      de: ["Der Druck zwischen den Kettlebells lässt während der Bewegung nach.", "Ellbogen schlagen hart auf dem Boden auf statt sanft aufzusetzen.", "Eine Seite drückt schneller als die andere."],
+      en: ["The pressure between the kettlebells drops off during the movement.", "The elbows slam onto the floor instead of touching down gently.", "One side presses faster than the other."]
+    },
+    muscles: {
+      de: ["Trizeps", "Vordere Schulter", "Brustmuskulatur", "Unterarme", "Rumpf"],
+      en: ["Triceps", "Front deltoid", "Chest", "Forearms", "Core"]
+    },
+    benefits: {
+      de: ["Zusätzliche Unterarm- und Rumpfaktivierung durch den Crush Grip", "Der Boden begrenzt die Bewegungsbahn und schont die Schulter", "Beidarmige Variante baut auf der einarmigen Floor Press auf"],
+      en: ["Extra forearm and core activation from the crush grip", "The floor limits the range of motion and is easier on the shoulder", "The two-arm variant builds on the single-arm floor press"]
     }
   },
   "Kettlebell Overhead Press": {
@@ -1296,6 +1314,7 @@ const BODY_REGION = {
   "Kettlebell Push Press": "upper",
   "Kettlebell Overhead Press": "upper",
   "Kettlebell Floor Press": "upper",
+  "Kettlebell Crush Grip Floor Press": "upper",
   "Push-Up": "upper",
   "Plank": "core",
   "Kettlebell Clean": "lower",
@@ -1441,26 +1460,21 @@ const SESSIONS_EINSTEIGER = {
       format: "sets",
       sets: 3,
       exercises: [{
-        n: "Kettlebell Goblet Squat",
-        b: 8,
-        u: "reps"
-      }, {
         n: "Kettlebell Romanian Deadlift",
         b: 8,
         u: "reps"
       }, {
-        n: "Plank",
-        b: 20,
-        u: "sec",
-        r: 5
+        n: "Kettlebell Goblet Squat",
+        b: 8,
+        u: "reps"
+      }, {
+        n: "Kettlebell Goblet Press",
+        b: 8,
+        u: "reps"
       }, {
         n: "Kettlebell Bent-Over Row",
-        b: 6,
+        b: 8,
         u: "reps_side"
-      }, {
-        n: "Push-Up",
-        b: 6,
-        u: "reps"
       }, {
         n: "Kettlebell Suitcase Carry",
         b: 20,
@@ -1477,25 +1491,16 @@ const SESSIONS_EINSTEIGER = {
         b: 8,
         u: "reps"
       }, {
-        n: "Kettlebell Single Arm Deadlift",
-        b: 6,
-        u: "reps_side"
-      }, {
-        n: "Plank",
-        b: 20,
-        u: "sec",
-        r: 5
-      }, {
         n: "Kettlebell Bent-Over Row",
         b: 8,
         u: "reps_side"
       }, {
-        n: "Kettlebell Goblet Press",
-        b: 5,
+        n: "Kettlebell Romanian Deadlift",
+        b: 8,
         u: "reps"
       }, {
-        n: "Push-Up",
-        b: 6,
+        n: "Kettlebell Crush Grip Floor Press",
+        b: 8,
         u: "reps"
       }, {
         n: "Kettlebell Suitcase Carry",
@@ -1509,33 +1514,33 @@ const SESSIONS_EINSTEIGER = {
       format: "sets",
       sets: 3,
       exercises: [{
-        n: "Kettlebell Goblet Squat",
+        n: "Kettlebell Goblet Press",
         b: 10,
         u: "reps"
       }, {
         n: "Kettlebell Romanian Deadlift",
-        b: 8,
+        b: 10,
         u: "reps"
       }, {
         n: "Plank",
-        b: 20,
+        b: 25,
         u: "sec",
         r: 5
       }, {
-        n: "Kettlebell Single Arm Deadlift",
-        b: 6,
-        u: "reps_side"
+        n: "Kettlebell Goblet Squat",
+        b: 10,
+        u: "reps"
       }, {
         n: "Kettlebell Bent-Over Row",
-        b: 8,
+        b: 10,
         u: "reps_side"
       }, {
-        n: "Kettlebell Goblet Press",
-        b: 6,
+        n: "Kettlebell Crush Grip Floor Press",
+        b: 10,
         u: "reps"
       }, {
         n: "Kettlebell Suitcase Carry",
-        b: 20,
+        b: 25,
         u: "m",
         r: 5
       }]
@@ -1549,30 +1554,25 @@ const SESSIONS_EINSTEIGER = {
         b: 10,
         u: "reps"
       }, {
+        n: "Kettlebell Crush Grip Floor Press",
+        b: 10,
+        u: "reps"
+      }, {
         n: "Kettlebell Romanian Deadlift",
         b: 10,
         u: "reps"
       }, {
-        n: "Plank",
-        b: 20,
-        u: "sec",
-        r: 5
-      }, {
         n: "Kettlebell Bent-Over Row",
-        b: 8,
+        b: 10,
         u: "reps_side"
       }, {
         n: "Kettlebell Goblet Press",
-        b: 6,
+        b: 10,
         u: "reps"
       }, {
-        n: "Push-Up",
-        b: 8,
-        u: "reps"
-      }, {
-        n: "Kettlebell Suitcase Carry",
-        b: 20,
-        u: "m",
+        n: "Plank",
+        b: 25,
+        u: "sec",
         r: 5
       }]
     },
@@ -1581,35 +1581,30 @@ const SESSIONS_EINSTEIGER = {
       format: "sets",
       sets: 3,
       exercises: [{
-        n: "Kettlebell Goblet Squat",
-        b: 12,
-        u: "reps"
-      }, {
-        n: "Kettlebell Single Arm Deadlift",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Plank",
-        b: 20,
-        u: "sec",
-        r: 5
-      }, {
         n: "Kettlebell Bent-Over Row",
         b: 10,
         u: "reps_side"
       }, {
-        n: "Kettlebell Goblet Press",
-        b: 6,
-        u: "reps"
-      }, {
-        n: "Push-Up",
-        b: 8,
+        n: "Kettlebell Goblet Squat",
+        b: 10,
         u: "reps"
       }, {
         n: "Kettlebell Suitcase Carry",
         b: 25,
         u: "m",
         r: 5
+      }, {
+        n: "Kettlebell Goblet Press",
+        b: 8,
+        u: "reps"
+      }, {
+        n: "Kettlebell Romanian Deadlift",
+        b: 10,
+        u: "reps"
+      }, {
+        n: "Kettlebell Crush Grip Floor Press",
+        b: 10,
+        u: "reps"
       }]
     },
     6: {
@@ -1617,169 +1612,147 @@ const SESSIONS_EINSTEIGER = {
       format: "sets",
       sets: 3,
       exercises: [{
-        n: "Kettlebell Goblet Squat",
-        b: 10,
-        u: "reps"
-      }, {
         n: "Kettlebell Romanian Deadlift",
         b: 10,
         u: "reps"
       }, {
-        n: "Plank",
-        b: 25,
-        u: "sec",
-        r: 5
-      }, {
-        n: "Kettlebell Bent-Over Row",
-        b: 8,
-        u: "reps_side"
-      }, {
         n: "Kettlebell Goblet Press",
-        b: 8,
+        b: 10,
         u: "reps"
       }, {
-        n: "Push-Up",
-        b: 8,
+        n: "Kettlebell Goblet Squat",
+        b: 10,
+        u: "reps"
+      }, {
+        n: "Kettlebell Bent-Over Row",
+        b: 10,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Crush Grip Floor Press",
+        b: 10,
         u: "reps"
       }, {
         n: "Kettlebell Suitcase Carry",
-        b: 25,
+        b: 30,
         u: "m",
+        r: 5
+      }, {
+        n: "Plank",
+        b: 30,
+        u: "sec",
         r: 5
       }]
     },
     7: {
-      block: "swingCleanLernen",
+      block: "swingLernen",
       format: "sets",
       sets: 3,
       exercises: [{
-        n: "Kettlebell Swing",
-        b: 6,
-        u: "reps"
-      }, {
-        n: "Kettlebell Clean",
-        b: 2,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Goblet Squat",
-        b: 8,
-        u: "reps"
-      }, {
-        n: "Plank",
-        b: 20,
-        u: "sec",
-        r: 5
-      }, {
-        n: "Kettlebell Bent-Over Row",
-        b: 6,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Goblet Press",
-        b: 5,
-        u: "reps"
-      }, {
-        n: "Kettlebell Suitcase Carry",
-        b: 20,
-        u: "m",
-        r: 5
-      }]
-    },
-    8: {
-      block: "swingCleanLernen",
-      format: "sets",
-      sets: 3,
-      exercises: [{
-        n: "Kettlebell Swing",
-        b: 8,
-        u: "reps"
-      }, {
-        n: "Kettlebell Clean",
-        b: 3,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Goblet Squat",
-        b: 8,
-        u: "reps"
-      }, {
         n: "Kettlebell Romanian Deadlift",
         b: 8,
         u: "reps"
       }, {
-        n: "Plank",
-        b: 20,
-        u: "sec",
-        r: 5
+        n: "Kettlebell Swing",
+        b: 8,
+        u: "reps"
+      }, {
+        n: "Kettlebell Goblet Squat",
+        b: 8,
+        u: "reps"
       }, {
         n: "Kettlebell Bent-Over Row",
         b: 8,
         u: "reps_side"
       }, {
+        n: "Plank",
+        b: 30,
+        u: "sec",
+        r: 5
+      }]
+    },
+    8: {
+      block: "swingLernen",
+      format: "sets",
+      sets: 3,
+      exercises: [{
+        n: "Kettlebell Goblet Squat",
+        b: 10,
+        u: "reps"
+      }, {
+        n: "Kettlebell Swing",
+        b: 8,
+        u: "reps"
+      }, {
+        n: "Kettlebell Bent-Over Row",
+        b: 10,
+        u: "reps_side"
+      }, {
         n: "Kettlebell Goblet Press",
-        b: 6,
+        b: 10,
+        u: "reps"
+      }, {
+        n: "Kettlebell Romanian Deadlift",
+        b: 10,
         u: "reps"
       }, {
         n: "Kettlebell Suitcase Carry",
-        b: 20,
+        b: 30,
         u: "m",
         r: 5
       }]
     },
     9: {
-      block: "integration",
+      block: "swingLernen",
       format: "sets",
       sets: 3,
       exercises: [{
+        n: "Kettlebell Crush Grip Floor Press",
+        b: 10,
+        u: "reps"
+      }, {
+        n: "Kettlebell Goblet Squat",
+        b: 10,
+        u: "reps"
+      }, {
         n: "Kettlebell Swing",
         b: 10,
         u: "reps"
       }, {
-        n: "Kettlebell Clean",
-        b: 4,
+        n: "Kettlebell Bent-Over Row",
+        b: 10,
         u: "reps_side"
       }, {
-        n: "Kettlebell Goblet Squat",
-        b: 8,
+        n: "Kettlebell Romanian Deadlift",
+        b: 10,
         u: "reps"
       }, {
         n: "Plank",
-        b: 20,
+        b: 30,
         u: "sec",
-        r: 5
-      }, {
-        n: "Kettlebell Romanian Deadlift",
-        b: 8,
-        u: "reps"
-      }, {
-        n: "Kettlebell Bent-Over Row",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Goblet Press",
-        b: 6,
-        u: "reps"
-      }, {
-        n: "Push-Up",
-        b: 8,
-        u: "reps"
-      }, {
-        n: "Kettlebell Suitcase Carry",
-        b: 20,
-        u: "m",
         r: 5
       }]
     },
     10: {
-      block: "verdichtung",
+      block: "ganzkoerper",
       format: "sets",
       sets: 3,
       exercises: [{
         n: "Kettlebell Swing",
-        b: 12,
+        b: 10,
         u: "reps"
       }, {
-        n: "Kettlebell Clean",
-        b: 4,
-        u: "reps_side"
+        n: "Kettlebell Goblet Press",
+        b: 10,
+        u: "reps"
+      }, {
+        n: "Kettlebell Romanian Deadlift",
+        b: 10,
+        u: "reps"
+      }, {
+        n: "Kettlebell Suitcase Carry",
+        b: 30,
+        u: "m",
+        r: 5
       }, {
         n: "Kettlebell Goblet Squat",
         b: 10,
@@ -1789,48 +1762,84 @@ const SESSIONS_EINSTEIGER = {
         b: 10,
         u: "reps_side"
       }, {
+        n: "Kettlebell Crush Grip Floor Press",
+        b: 10,
+        u: "reps"
+      }, {
         n: "Plank",
-        b: 25,
+        b: 30,
         u: "sec",
-        r: 5
-      }, {
-        n: "Kettlebell Goblet Press",
-        b: 8,
-        u: "reps"
-      }, {
-        n: "Push-Up",
-        b: 8,
-        u: "reps"
-      }, {
-        n: "Kettlebell Suitcase Carry",
-        b: 25,
-        u: "m",
         r: 5
       }]
     },
     11: {
-      block: "technikZeitdruck",
-      format: "emom",
-      rounds: 3,
+      block: "ganzkoerper",
+      format: "sets",
+      sets: 3,
       exercises: [{
+        n: "Kettlebell Goblet Squat",
+        b: 12,
+        u: "reps"
+      }, {
+        n: "Kettlebell Bent-Over Row",
+        b: 12,
+        u: "reps_side"
+      }, {
+        n: "Kettlebell Swing",
+        b: 12,
+        u: "reps"
+      }, {
+        n: "Kettlebell Crush Grip Floor Press",
+        b: 12,
+        u: "reps"
+      }, {
+        n: "Kettlebell Suitcase Carry",
+        b: 30,
+        u: "m",
+        r: 5
+      }, {
+        n: "Kettlebell Romanian Deadlift",
+        b: 12,
+        u: "reps"
+      }, {
+        n: "Plank",
+        b: 30,
+        u: "sec",
+        r: 5
+      }, {
+        n: "Kettlebell Goblet Press",
+        b: 12,
+        u: "reps"
+      }]
+    },
+    12: {
+      block: "grundlagenCheck",
+      format: "sets",
+      sets: 3,
+      exercises: [{
+        n: "Kettlebell Goblet Squat",
+        b: 10,
+        u: "reps"
+      }, {
         n: "Kettlebell Swing",
         b: 10,
         u: "reps"
       }, {
         n: "Kettlebell Bent-Over Row",
-        b: 8,
+        b: 10,
         u: "reps_side"
       }, {
-        n: "Kettlebell Clean",
-        b: 4,
-        u: "reps_side"
-      }, {
-        n: "Push-Up",
-        b: 8,
+        n: "Kettlebell Crush Grip Floor Press",
+        b: 10,
         u: "reps"
       }, {
-        n: "Kettlebell Goblet Squat",
-        b: 8,
+        n: "Kettlebell Suitcase Carry",
+        b: 30,
+        u: "m",
+        r: 5
+      }, {
+        n: "Kettlebell Goblet Press",
+        b: 10,
         u: "reps"
       }, {
         n: "Kettlebell Romanian Deadlift",
@@ -1838,38 +1847,9 @@ const SESSIONS_EINSTEIGER = {
         u: "reps"
       }, {
         n: "Plank",
-        b: 20,
+        b: 30,
         u: "sec",
         r: 5
-      }]
-    },
-    12: {
-      block: "grundlagenTest",
-      format: "circuit",
-      rounds: 2,
-      workSec: 30,
-      restSec: 30,
-      keepOrder: true,
-      exercises: [{
-        n: "Kettlebell Swing"
-      }, {
-        n: "Kettlebell Clean"
-      }, {
-        n: "Kettlebell Goblet Squat"
-      }, {
-        n: "Kettlebell Single Arm Deadlift"
-      }, {
-        n: "Plank"
-      }, {
-        n: "Kettlebell Romanian Deadlift"
-      }, {
-        n: "Kettlebell Bent-Over Row"
-      }, {
-        n: "Kettlebell Goblet Press"
-      }, {
-        n: "Push-Up"
-      }, {
-        n: "Kettlebell Suitcase Carry"
       }]
     }
   }
@@ -2600,48 +2580,36 @@ const SESSIONS_KURS = {
     }
   }
 };
-const EINSTEIGER_POOL = ["Kettlebell Romanian Deadlift", "Kettlebell Single Arm Deadlift", "Kettlebell Goblet Squat", "Kettlebell Bent-Over Row", "Kettlebell Goblet Press", "Kettlebell Suitcase Carry", "Push-Up", "Plank", "Kettlebell Swing", "Kettlebell Clean"];
+const EINSTEIGER_POOL = ["Kettlebell Romanian Deadlift", "Kettlebell Goblet Squat", "Kettlebell Bent-Over Row", "Kettlebell Goblet Press", "Kettlebell Crush Grip Floor Press", "Kettlebell Suitcase Carry", "Plank", "Kettlebell Swing"];
 const BLOCK_INFO_EINSTEIGER = {
   foundation: {
     note: {
-      de: "Die Grundbewegungen — Kniebeuge, Kreuzheben-Variante, Rudern, Drücken. Ganz ohne Swing und Clean, damit die Technik von Anfang an sauber aufgebaut wird.",
-      en: "The core movements — squat, a deadlift variant, rowing, pressing. Completely without swing or clean, so technique builds cleanly from day one."
+      de: "Die ersten vollständigen Trainingseinheiten. Die Grundbewegungen werden kennengelernt, und die Übungsreihenfolge beginnt sich bewusst zu verändern — so lernt man nicht nur einzelne Übungen, sondern auch, mehrere Bewegungen sauber miteinander zu verbinden.",
+      en: "The first complete training sessions. The core movements are introduced, and the exercise order already starts to vary deliberately — so you learn not just individual movements, but how to link several of them cleanly."
     }
   },
   buildup: {
     note: {
-      de: "Mehr Wiederholungen, mehr Sicherheit und die erste Ganzkörper-Kombination — weiterhin ganz ohne Swing und Clean.",
-      en: "More reps, more confidence, and the first full-body combination — still completely without swing or clean."
+      de: "Die Belastung steigt langsam, die Reihenfolge wechselt gezielt weiter — damit bekannte Bewegungen auch nach anderer Vorbelastung noch sauber gelingen.",
+      en: "The load increases gradually, and the order keeps shifting deliberately — so familiar movements stay clean even after a different kind of prior fatigue."
     }
   },
-  swingCleanLernen: {
+  swingLernen: {
     note: {
-      de: "Swing und Clean werden eingeführt — der Swing baut auf dem bereits bekannten Hüft-Hinge auf, der Clean führt die Rack-Position ein. Niedriges Volumen, kein Zeitdruck.",
-      en: "Swing and clean are introduced — the swing builds on the hip hinge you already know, the clean introduces the rack position. Low volume, no time pressure."
+      de: "Der Swing wird eingeführt — zunächst direkt nach dem bereits bekannten Romanian Deadlift, später auch nach anderer Belastung. Technik vor Tempo, Volumen bleibt niedrig.",
+      en: "The swing is introduced — first right after the already-familiar Romanian deadlift, later also after other kinds of fatigue. Technique over pace, volume stays low."
     }
   },
-  integration: {
+  ganzkoerper: {
     note: {
-      de: "Swing und Clean werden erstmals gemeinsam mit den Grundbewegungen in einer Einheit ausgeführt.",
-      en: "Swing and clean are performed together with the foundational movements in the same session for the first time."
+      de: "Alle Grundübungen werden zu vollständigen, umfangreicheren Ganzkörpereinheiten zusammengeführt.",
+      en: "All foundational movements are combined into complete, more extensive full-body sessions."
     }
   },
-  verdichtung: {
+  grundlagenCheck: {
     note: {
-      de: "Das gesamte System aus Grundbewegungen, Swing und Clean wird mit etwas höherem Volumen trainiert.",
-      en: "The whole system of foundational movements, swing and clean is trained with slightly higher volume."
-    }
-  },
-  technikZeitdruck: {
-    note: {
-      de: "Swing und Clean werden erstmals unter leichtem Zeitdruck technisch sauber gehalten — Geschwindigkeit ist nicht das Ziel, die Technik bestimmt das Tempo.",
-      en: "Swing and clean are kept technically clean under light time pressure for the first time — speed is not the goal, technique sets the pace."
-    }
-  },
-  grundlagenTest: {
-    note: {
-      de: "Grundlagen-Test im Zirkelformat: jede Übung kontrolliert für 30 Sekunden ausführen, keine Wiederholungs- oder Geschwindigkeits-Challenge — Technik vor Tempo, bevor es ins Beginner-Modul geht.",
-      en: "Foundation test in circuit format: perform each movement with control for 30 seconds, no rep count or speed challenge — technique over pace, before moving into the Beginner Module."
+      de: "Der Grundlagen-Check ist kein Wettkampf: Er zeigt, ob alle Grundübungen auch unter Belastung noch technisch sauber und kontrolliert ausgeführt werden können — nicht, wie viele Wiederholungen möglich sind.",
+      en: "The foundation check is not a competition: it shows whether every foundational movement can still be performed cleanly and under control under fatigue — not how many reps are possible."
     }
   }
 };
@@ -3818,14 +3786,12 @@ function KettlebellTracker() {
     kursAufbau: "stairs",
     kursVerdichtung: "loop",
     kursIntegration: "flag",
-    swingCleanLernen: "flame",
-    integration: "loop",
-    verdichtung: "stairs",
-    technikZeitdruck: "clock",
-    grundlagenTest: "flag"
+    swingLernen: "flame",
+    ganzkoerper: "loop",
+    grundlagenCheck: "flag"
   };
   const MODULE_BLOCK_ORDER = {
-    einsteiger: ["foundation", "buildup", "swingCleanLernen", "integration", "verdichtung", "technikZeitdruck", "grundlagenTest"],
+    einsteiger: ["foundation", "buildup", "swingLernen", "ganzkoerper", "grundlagenCheck"],
     kurs: ["kursBasis", "kursAufbau", "kursVerdichtung", "kursIntegration"]
   };
   const BLOCK_ORDER = MODULE_BLOCK_ORDER[activeModule] || MODULE_BLOCK_ORDER.kurs;
