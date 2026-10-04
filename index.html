@@ -436,7 +436,7 @@ const UI = {
     loading: "Lade Programm …",
     homeNoteChair: "Zuhause: normaler stabiler Stuhl statt Bank.",
     sideNote: "Schwache Seite zuerst, dann dieselbe Anzahl mit der starken Seite — nie mehr auf der starken Seite.",
-    warmupTitle: "Aufwärmen (~3 Min.)",
+    warmupTitle: "Aufwärmen (~4 Min.)",
     cooldownTitle: "Cool-down (~2-3 Min.)",
     finisherTitle: "Finisher",
     finisherIntro: min => `${min} Min. EMOM zum Abschluss`,
@@ -550,7 +550,7 @@ const UI = {
     loading: "Loading program …",
     homeNoteChair: "At home: a regular sturdy chair works instead of a bench.",
     sideNote: "Weaker side first, then match the same number on the stronger side — never more reps on the stronger side.",
-    warmupTitle: "Warm-up (~3 min)",
+    warmupTitle: "Warm-up (~4 min)",
     cooldownTitle: "Cool-down (~2-3 min)",
     finisherTitle: "Finisher",
     finisherIntro: min => `${min} min EMOM to finish`,
@@ -1377,14 +1377,44 @@ function reorderByRegion(list) {
 // TRAININGSPLAN-DATEN — Aufwärmen, Cool-down, Einheiten beider Module
 // ============================================================
 const WARMUP = [{
-  id: "warmup-kb-slingshot",
+  id: "warmup-arm-circles",
   n: {
-    de: "Kettlebell Slingshot",
-    en: "Kettlebell slingshot"
+    de: "Armkreisen",
+    en: "Arm circles"
   },
   d: {
-    de: "Kettlebell locker um den Körper herum von einer Hand zur anderen kreisen lassen, Rumpf bleibt stabil. Gewöhnt Körper und Griff an die Kettlebell. 8 Runden je Richtung.",
-    en: "Loosely circle the kettlebell around your body from hand to hand, core stays stable. Gets your body and grip used to the kettlebell. 8 rounds each direction."
+    de: "10 Kreise vorwärts, dann 10 rückwärts, locker und mit vollem Bewegungsradius. Lockert die Schultern für Rudern und Drücken.",
+    en: "10 circles forward, then 10 backward, loose and through a full range of motion. Loosens the shoulders for rowing and pressing."
+  }
+}, {
+  id: "warmup-hip-circles",
+  n: {
+    de: "Hüftkreisen",
+    en: "Hip circles"
+  },
+  d: {
+    de: "Hände in die Hüften gestützt, 10 große Kreise pro Richtung. Mobilisiert die Hüfte für Kniebeuge, Deadlift und Swing.",
+    en: "Hands on your hips, 10 big circles in each direction. Mobilizes the hip for the squat, deadlift and swing."
+  }
+}, {
+  id: "warmup-bodyweight-squat",
+  n: {
+    de: "Kniebeugen ohne Gewicht",
+    en: "Bodyweight squats"
+  },
+  d: {
+    de: "8 Kniebeugen ohne Gewicht, Oberkörper aufrecht, Knie folgen den Zehen. Bereitet gezielt auf den Goblet Squat vor.",
+    en: "8 bodyweight squats, torso upright, knees track the toes. Specifically preps the goblet squat."
+  }
+}, {
+  id: "warmup-kb-good-morning",
+  n: {
+    de: "Kettlebell Good Morning",
+    en: "Kettlebell good morning"
+  },
+  d: {
+    de: "Kettlebell leicht vor der Brust halten, Hüfte nach hinten schieben, leichte Kniebeugung, Rücken bleibt gerade. Bereitet auf die Hinge-Bewegungen der Einheit vor. 10 Wdh.",
+    en: "Hold the kettlebell lightly at the chest, push the hips back, slight knee bend, back stays straight. Preps for the session's hinge movements. 10 reps."
   }
 }, {
   id: "warmup-kb-halo",
@@ -1397,14 +1427,14 @@ const WARMUP = [{
     en: "Circle the kettlebell by the horns closely around the head, core stays stable. Specifically warms up the shoulders. 5 reps each direction."
   }
 }, {
-  id: "warmup-kb-good-morning",
+  id: "warmup-kb-slingshot",
   n: {
-    de: "Kettlebell Good Morning",
-    en: "Kettlebell good morning"
+    de: "Kettlebell Slingshot",
+    en: "Kettlebell slingshot"
   },
   d: {
-    de: "Kettlebell leicht vor der Brust halten, Hüfte nach hinten schieben, leichte Kniebeugung, Rücken bleibt gerade. Bereitet auf die Hinge-Bewegungen der Einheit vor. 10 Wdh.",
-    en: "Hold the kettlebell lightly at the chest, push the hips back, slight knee bend, back stays straight. Preps for the session's hinge movements. 10 reps."
+    de: "Kettlebell locker um den Körper herum von einer Hand zur anderen kreisen lassen, Rumpf bleibt stabil. Gewöhnt Körper und Griff an die Kettlebell. 8 Runden je Richtung.",
+    en: "Loosely circle the kettlebell around your body from hand to hand, core stays stable. Gets your body and grip used to the kettlebell. 8 rounds each direction."
   }
 }];
 
@@ -1778,19 +1808,19 @@ const SESSIONS_EINSTEIGER = {
       sets: 3,
       exercises: [{
         n: "Kettlebell Goblet Squat",
-        b: 12,
+        b: 10,
         u: "reps"
       }, {
         n: "Kettlebell Bent-Over Row",
-        b: 12,
+        b: 10,
         u: "reps_side"
       }, {
         n: "Kettlebell Swing",
-        b: 12,
+        b: 10,
         u: "reps"
       }, {
         n: "Kettlebell Crush Grip Floor Press",
-        b: 12,
+        b: 10,
         u: "reps"
       }, {
         n: "Kettlebell Suitcase Carry",
@@ -1799,17 +1829,17 @@ const SESSIONS_EINSTEIGER = {
         r: 5
       }, {
         n: "Kettlebell Romanian Deadlift",
-        b: 12,
+        b: 10,
+        u: "reps"
+      }, {
+        n: "Kettlebell Goblet Press",
+        b: 10,
         u: "reps"
       }, {
         n: "Plank",
         b: 30,
         u: "sec",
         r: 5
-      }, {
-        n: "Kettlebell Goblet Press",
-        b: 12,
-        u: "reps"
       }]
     },
     12: {
@@ -1818,36 +1848,36 @@ const SESSIONS_EINSTEIGER = {
       sets: 3,
       exercises: [{
         n: "Kettlebell Goblet Squat",
-        b: 10,
+        b: 12,
         u: "reps"
       }, {
         n: "Kettlebell Swing",
-        b: 10,
+        b: 12,
         u: "reps"
       }, {
         n: "Kettlebell Bent-Over Row",
-        b: 10,
+        b: 12,
         u: "reps_side"
       }, {
         n: "Kettlebell Crush Grip Floor Press",
-        b: 10,
+        b: 12,
         u: "reps"
       }, {
         n: "Kettlebell Suitcase Carry",
-        b: 30,
+        b: 40,
         u: "m",
         r: 5
       }, {
         n: "Kettlebell Goblet Press",
-        b: 10,
+        b: 12,
         u: "reps"
       }, {
         n: "Kettlebell Romanian Deadlift",
-        b: 10,
+        b: 12,
         u: "reps"
       }, {
         n: "Plank",
-        b: 30,
+        b: 40,
         u: "sec",
         r: 5
       }]
