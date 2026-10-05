@@ -3338,7 +3338,7 @@ function KettlebellTracker() {
   };
   const startNewCycle = () => {
     const next = JSON.parse(JSON.stringify(state));
-    next.modules[next.activeModule].sessions = makeEmptySessions();
+    next.modules[next.activeModule].sessions = makeEmptySessions(MODULE_TOTAL_SESSIONS[next.activeModule]);
     next.modules[next.activeModule].cycle = (state.modules[state.activeModule].cycle || 1) + 1;
     persist(next);
     setActiveSession(1);
