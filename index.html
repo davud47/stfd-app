@@ -5222,6 +5222,10 @@ function KettlebellTracker() {
       minHeight: "100vh"
     }
   }, /*#__PURE__*/React.createElement("style", null, `
+        /* App-Gefühl: kein Textmarkieren, kein Tap-Highlight, kein Fokusrahmen bei Klick */
+        * { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; }
+        input { -webkit-user-select: text; user-select: text; }
+        button:focus, [role="button"]:focus { outline: none; }
         .kb-tab { transition: background 0.15s, border-color 0.15s; }
         .kb-navitem { transition: background 0.15s, color 0.15s; }
         .kb-card { transition: transform 0.1s, border-color 0.15s; }
