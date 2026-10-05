@@ -7,6 +7,9 @@
 <link rel="manifest" href="manifest.json" />
 <link rel="icon" href="icon-192.png" />
 <link rel="apple-touch-icon" href="icon-192.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600&family=Inter:wght@400;500;600&display=swap" />
 <meta name="theme-color" content="#0A0A0A" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -2607,6 +2610,12 @@ function getSessionData(module, sessionNum, intensityKey, lang) {
   // Unbekanntes Format: der Plan enthält nur "sets", "circuit" und "emom".
   throw new Error(`Unbekanntes Einheiten-Format: ${session.format}`);
 }
+
+// Geschätzte Dauer einer Einheit in Minuten: bei Sätzen eine Minute pro
+// Übung und Runde, sonst die im Format berechnete Gesamtdauer.
+function sessionMinutes(sessionData) {
+  return sessionData.format === "sets" ? Math.round(sessionData.exercises.length * sessionData.sets) : sessionData.totalMinutes;
+}
 function getLibraryExercises(lang) {
   return Object.keys(CUES).map(n => ({
     name: n,
@@ -2627,6 +2636,11 @@ function getLibraryExercises(lang) {
 // STATE & PERSISTENZ
 // ============================================================
 const STORAGE_KEY = "kb10-single-tracker-v1";
+
+// Eigene Wiederholungswerte einer Einheit (vom Nutzer überschrieben) oder null.
+function customRepsOf(sessionState, exKey) {
+  return sessionState.custom && sessionState.custom[exKey] || null;
+}
 function makeEmptySessions(count) {
   const sessions = {};
   for (let s = 1; s <= count; s++) sessions[s] = {
@@ -3194,6 +3208,49 @@ function SetsTimer({
 }
 
 // ============================================================
+// ANZEIGE-KONSTANTEN — Icons und Reihenfolgen für die Oberfläche
+// ============================================================
+const FORMAT_ICON = {
+  sets: "bars",
+  circuit: "loop",
+  emom: "clock"
+};
+const REGION_ICON = {
+  lower: "legs",
+  upper: "arms",
+  core: "flame",
+  carry: "bag"
+};
+const BLOCK_ICON = {
+  hingeSquat: "target",
+  pushCarry: "stairs",
+  ersterSwing: "flame",
+  ganzkoerperSwing: "flag",
+  kursBasis: "target",
+  kursAufbau: "stairs",
+  kursVerdichtung: "loop",
+  kursIntegration: "flag"
+};
+const MODULE_BLOCK_ORDER = {
+  einsteiger: ["hingeSquat", "pushCarry", "ersterSwing", "ganzkoerperSwing"],
+  kurs: ["kursBasis", "kursAufbau", "kursVerdichtung", "kursIntegration"]
+};
+// Navigation: labelKey verweist auf einen Schlüssel in UI[lang].
+const NAV_ITEMS = [{
+  id: "dashboard",
+  labelKey: "navDashboard",
+  icon: "dashboard"
+}, {
+  id: "program",
+  labelKey: "navProgram",
+  icon: "dumbbell"
+}, {
+  id: "library",
+  labelKey: "navLibrary",
+  icon: "book"
+}];
+
+// ============================================================
 // HAUPTKOMPONENTE
 // ============================================================
 function KettlebellTracker() {
@@ -3304,43 +3361,50 @@ function KettlebellTracker() {
       console.error("Speichern fehlgeschlagen", e);
     }
   }, []);
-  const toggleCompleted = sessionNum => {
+
+  // Kopiert den Zustand, wendet die Änderung an und speichert das Ergebnis.
+  // mutate(next, moduleState) darf next direkt verändern.
+  const updateState = mutate => {
     const next = JSON.parse(JSON.stringify(state));
-    next.modules[next.activeModule].sessions[sessionNum].completed = !next.modules[next.activeModule].sessions[sessionNum].completed;
+    mutate(next, next.modules[next.activeModule]);
     persist(next);
   };
+  const toggleCompleted = sessionNum => {
+    updateState((next, mod) => {
+      mod.sessions[sessionNum].completed = !mod.sessions[sessionNum].completed;
+    });
+  };
   const saveCustomReps = (sessionNum, exKey) => {
-    const next = JSON.parse(JSON.stringify(state));
-    const s = next.modules[next.activeModule].sessions[sessionNum];
-    if (!s.custom) s.custom = {};
-    const val = repsDraft.trim();
-    if (val) s.custom[exKey] = val;else delete s.custom[exKey];
-    persist(next);
+    updateState((next, mod) => {
+      const session = mod.sessions[sessionNum];
+      if (!session.custom) session.custom = {};
+      const val = repsDraft.trim();
+      if (val) session.custom[exKey] = val;else delete session.custom[exKey];
+    });
     setEditingReps(null);
     setRepsDraft("");
   };
   const clearCustomReps = (sessionNum, exKey) => {
-    const next = JSON.parse(JSON.stringify(state));
-    const s = next.modules[next.activeModule].sessions[sessionNum];
-    if (s.custom) delete s.custom[exKey];
-    persist(next);
+    updateState((next, mod) => {
+      if (mod.sessions[sessionNum].custom) delete mod.sessions[sessionNum].custom[exKey];
+    });
   };
   const setIntensity = level => {
-    const next = JSON.parse(JSON.stringify(state));
-    next.modules[next.activeModule].intensity = level;
-    persist(next);
+    updateState((next, mod) => {
+      mod.intensity = level;
+    });
   };
   const setActiveModule = moduleId => {
-    const next = JSON.parse(JSON.stringify(state));
-    next.activeModule = moduleId;
-    persist(next);
+    updateState(next => {
+      next.activeModule = moduleId;
+    });
     setProgramView("list");
   };
   const startNewCycle = () => {
-    const next = JSON.parse(JSON.stringify(state));
-    next.modules[next.activeModule].sessions = makeEmptySessions(MODULE_TOTAL_SESSIONS[next.activeModule]);
-    next.modules[next.activeModule].cycle = (state.modules[state.activeModule].cycle || 1) + 1;
-    persist(next);
+    updateState((next, mod) => {
+      mod.sessions = makeEmptySessions(MODULE_TOTAL_SESSIONS[next.activeModule]);
+      mod.cycle = (mod.cycle || 1) + 1;
+    });
     setActiveSession(1);
   };
   const lang = "de";
@@ -3367,23 +3431,9 @@ function KettlebellTracker() {
     return Object.entries(moduleState.sessions).reduce((sum, [num, s]) => {
       if (!s.completed) return sum;
       const d = getSessionData(activeModule, Number(num), moduleState.intensity, lang);
-      const mins = d.format === "sets" ? Math.round(d.exercises.length * d.sets) : d.totalMinutes;
-      return sum + mins;
+      return sum + sessionMinutes(d);
     }, 0);
   }, [moduleState, activeModule, lang]);
-  const NAV_ITEMS = [{
-    id: "dashboard",
-    label: t.navDashboard,
-    icon: "dashboard"
-  }, {
-    id: "program",
-    label: t.navProgram,
-    icon: "dumbbell"
-  }, {
-    id: "library",
-    label: t.navLibrary,
-    icon: "book"
-  }];
   const goToSession = s => {
     setActiveSession(s);
     setProgramView("detail");
@@ -3391,22 +3441,21 @@ function KettlebellTracker() {
   const nextSessionNum = useMemo(() => {
     for (let s = 1; s <= totalSessions; s++) if (!moduleState.sessions[s].completed) return s;
     return totalSessions;
-  }, [moduleState]);
+  }, [moduleState, totalSessions]);
   const nextSessionData = useMemo(() => getSessionData(activeModule, nextSessionNum, moduleState.intensity, lang), [activeModule, nextSessionNum, moduleState.intensity, lang]);
   const sessionPreviews = useMemo(() => {
     const arr = [];
     for (let s = 1; s <= totalSessions; s++) {
       const d = getSessionData(activeModule, s, moduleState.intensity, lang);
-      const mins = d.format === "sets" ? Math.round(d.exercises.length * d.sets) : d.totalMinutes;
       arr.push({
         num: s,
         block: d.block,
         format: d.format,
-        mins
+        mins: sessionMinutes(d)
       });
     }
     return arr;
-  }, [activeModule, moduleState.intensity, moduleState.cycle]);
+  }, [activeModule, moduleState.intensity]);
   const filteredLibrary = useMemo(() => {
     return libraryExercises.filter(ex => {
       if (libraryFilter !== "all" && ex.region !== libraryFilter) return false;
@@ -3415,32 +3464,7 @@ function KettlebellTracker() {
     });
   }, [libraryExercises, libraryFilter, librarySearch]);
   const libraryDetailExercise = libraryDetailKey ? libraryExercises.find(ex => ex.key === libraryDetailKey) : null;
-  const FORMAT_ICON = {
-    sets: "bars",
-    circuit: "loop",
-    emom: "clock"
-  };
-  const REGION_ICON = {
-    lower: "legs",
-    upper: "arms",
-    core: "flame",
-    carry: "bag"
-  };
-  const BLOCK_ICON = {
-    hingeSquat: "target",
-    pushCarry: "stairs",
-    ersterSwing: "flame",
-    ganzkoerperSwing: "flag",
-    kursBasis: "target",
-    kursAufbau: "stairs",
-    kursVerdichtung: "loop",
-    kursIntegration: "flag"
-  };
-  const MODULE_BLOCK_ORDER = {
-    einsteiger: ["hingeSquat", "pushCarry", "ersterSwing", "ganzkoerperSwing"],
-    kurs: ["kursBasis", "kursAufbau", "kursVerdichtung", "kursIntegration"]
-  };
-  const BLOCK_ORDER = MODULE_BLOCK_ORDER[activeModule] || MODULE_BLOCK_ORDER.kurs;
+  const BLOCK_ORDER = MODULE_BLOCK_ORDER[activeModule];
   if (loading) {
     return /*#__PURE__*/React.createElement("div", {
       style: {
@@ -3460,7 +3484,6 @@ function KettlebellTracker() {
       minHeight: "100vh"
     }
   }, /*#__PURE__*/React.createElement("style", null, `
-        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600&family=Inter:wght@400;500;600&display=swap');
         .kb-tab { transition: background 0.15s, border-color 0.15s; }
         .kb-navitem { transition: background 0.15s, color 0.15s; }
         .kb-card { transition: transform 0.1s, border-color 0.15s; }
@@ -4239,7 +4262,7 @@ function KettlebellTracker() {
       fontWeight: 600,
       color: C.text
     }
-  }, displaySessionData.format === "sets" ? displaySessionData.exercises.length * displaySessionData.sets : displaySessionData.totalMinutes, " min")), /*#__PURE__*/React.createElement("div", {
+  }, sessionMinutes(displaySessionData), " min")), /*#__PURE__*/React.createElement("div", {
     style: {
       flex: 1,
       display: "flex",
@@ -4495,7 +4518,7 @@ function KettlebellTracker() {
     }
   }, displaySessionData.exercises.map((ex, i) => {
     const isOpen = expandedExercise === ex.key;
-    const compactStat = ex.reps ? displaySessionData.format === "sets" ? t.setsTimes(displaySessionData.sets, `${sessionState.custom && sessionState.custom[ex.key] || ex.repsValue}${ex.isSide ? ` ${t.perSideShort}` : UNIT_LABELS[lang][ex.unit] || ""}`) : ex.reps : null;
+    const compactStat = ex.reps ? displaySessionData.format === "sets" ? t.setsTimes(displaySessionData.sets, `${customRepsOf(sessionState, ex.key) || ex.repsValue}${ex.isSide ? ` ${t.perSideShort}` : UNIT_LABELS[lang][ex.unit] || ""}`) : ex.reps : null;
     return /*#__PURE__*/React.createElement("div", {
       key: ex.key,
       style: {
@@ -4592,7 +4615,7 @@ function KettlebellTracker() {
     }, t.save)) : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
       onClick: () => {
         setEditingReps(ex.key);
-        setRepsDraft(sessionState.custom && sessionState.custom[ex.key] || ex.reps);
+        setRepsDraft(customRepsOf(sessionState, ex.key) || ex.reps);
       },
       style: {
         background: "transparent",
@@ -4602,7 +4625,7 @@ function KettlebellTracker() {
         fontSize: 12,
         padding: 0
       }
-    }, "✎ ", t.customBadge), sessionState.custom && sessionState.custom[ex.key] && /*#__PURE__*/React.createElement("button", {
+    }, "✎ ", t.customBadge), customRepsOf(sessionState, ex.key) && /*#__PURE__*/React.createElement("button", {
       onClick: () => clearCustomReps(activeSession, ex.key),
       style: {
         background: "transparent",
@@ -4619,7 +4642,8 @@ function KettlebellTracker() {
         gap: 8,
         marginBottom: 10
       }
-    }, /*#__PURE__*/React.createElement("div", {
+    }, [t.sideLeftLabel, t.sideRightLabel].map(sideLabel => /*#__PURE__*/React.createElement("div", {
+      key: sideLabel,
       style: {
         flex: 1,
         borderRadius: 14,
@@ -4633,33 +4657,13 @@ function KettlebellTracker() {
         textTransform: "uppercase",
         letterSpacing: "0.03em"
       }
-    }, t.sideLeftLabel), /*#__PURE__*/React.createElement("div", {
+    }, sideLabel), /*#__PURE__*/React.createElement("div", {
       style: {
         fontSize: 14,
         fontWeight: 600,
         color: C.text
       }
-    }, sessionState.custom && sessionState.custom[ex.key] || `${ex.repsValue}${UNIT_LABELS[lang][ex.unit.replace("_side", "")]}`)), /*#__PURE__*/React.createElement("div", {
-      style: {
-        flex: 1,
-        borderRadius: 14,
-        background: C.panelAlt,
-        padding: "8px 10px"
-      }
-    }, /*#__PURE__*/React.createElement("div", {
-      style: {
-        fontSize: 10.5,
-        color: C.textMuted,
-        textTransform: "uppercase",
-        letterSpacing: "0.03em"
-      }
-    }, t.sideRightLabel), /*#__PURE__*/React.createElement("div", {
-      style: {
-        fontSize: 14,
-        fontWeight: 600,
-        color: C.text
-      }
-    }, sessionState.custom && sessionState.custom[ex.key] || `${ex.repsValue}${UNIT_LABELS[lang][ex.unit.replace("_side", "")]}`))), /*#__PURE__*/React.createElement("div", {
+    }, customRepsOf(sessionState, ex.key) || `${ex.repsValue}${UNIT_LABELS[lang][ex.unit.replace("_side", "")]}`)))), /*#__PURE__*/React.createElement("div", {
       style: {
         fontSize: 13,
         color: C.textSecondary,
@@ -5132,7 +5136,7 @@ function KettlebellTracker() {
     }
   }, NAV_ITEMS.map(({
     id,
-    label,
+    labelKey,
     icon
   }) => {
     const active = tab === id;
@@ -5162,7 +5166,7 @@ function KettlebellTracker() {
       name: icon,
       size: 17,
       strokeWidth: active ? 2.1 : 1.8
-    }), active && /*#__PURE__*/React.createElement("span", null, label));
+    }), active && /*#__PURE__*/React.createElement("span", null, t[labelKey]));
   })), activeTimer && activeTimer.type === "sets" && /*#__PURE__*/React.createElement(SetsTimer, {
     title: activeTimer.title,
     steps: activeTimer.steps,
