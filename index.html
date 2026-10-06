@@ -545,10 +545,10 @@ const UI = {
     weightGuideTitle: "Welches Gewicht?",
     weightGuideText: "Einstiegswerte: Frauen ca. 4–8 kg, Männer ca. 8–12 kg. Selbsttest: Wähle ein Gewicht, mit dem du die erste Übung 5x technisch sauber schaffst, ohne dass die Form einbricht — das ist dein Startgewicht. Steigere in 2-kg-Schritten, sobald du am oberen Ende des Wiederholungsbereichs noch sauber bleibst.",
     blockNames: {
-      hingeSquat: "Hinge & Squat",
-      swingCarry: "Swing & Carry",
-      hingeSwing: "Hinge & Swing",
-      ganzkoerper: "Ganzkörper",
+      fullBody: "Full Body",
+      swingFullBody: "Swing & Full Body",
+      hingePress: "Hinge & Press",
+      fullBodyCarry: "Full Body & Carry",
       kursBasis: "Basis",
       kursAufbau: "Aufbau",
       kursVerdichtung: "Verdichtung",
@@ -668,10 +668,10 @@ const UI = {
     weightGuideTitle: "What weight?",
     weightGuideText: "Starting point: women approx. 4–8 kg, men approx. 8–12 kg. Self-test: pick a weight you can do the first exercise 5 times with clean form, without it breaking down — that's your starting weight. Increase in 2 kg steps once you stay clean at the top of the rep range.",
     blockNames: {
-      hingeSquat: "Hinge & Squat",
-      swingCarry: "Swing & Carry",
-      hingeSwing: "Hinge & Swing",
-      ganzkoerper: "Full Body",
+      fullBody: "Full Body",
+      swingFullBody: "Swing & Full Body",
+      hingePress: "Hinge & Press",
+      fullBodyCarry: "Full Body & Carry",
       kursBasis: "Basics",
       kursAufbau: "Build-Up",
       kursVerdichtung: "Density",
@@ -1684,28 +1684,25 @@ const COOLDOWN = [{
 // Modul 1 — Einsteiger (kostenloses Probetraining, 4 Einheiten). Es zeigt, wie
 // die App funktioniert, und hilft einzuschätzen, ob Kettlebell-Training für die
 // Person das Richtige ist. Alle Übungen stammen aus den fünf Grundmustern
-// Hinge, Squat, Push, Pull und Carry. Der Swing kommt schon in Einheit 1 vor
-// (nach Romanian Deadlift und Kniebeuge), ab Einheit 2 steht er am Anfang der
-// Runde, solange man frisch ist.
+// Hinge, Squat, Push, Pull und Carry. Einheit 1 kommt ganz ohne Swing aus, der
+// Swing steht in Einheit 2 am Anfang der Runde, solange man frisch ist, und
+// kehrt danach in wechselnder Reihenfolge wieder. Jede Einheit funktioniert
+// als eigenständiges Ganzkörpertraining.
 // Es gibt einen einzigen Plan. Die Stufen (leicht/mittel/schwer) ändern nur die
 // Zahlen: `t` enthält pro Übung die drei Werte (siehe STEPS).
 // Jede Einheit hat einen eigenen Block-Schlüssel für Titel und Hinweistext.
 // Das Beginner-Modul (Kurs) besteht aus eigenständigen 12-Einheiten-Plänen.
 const SESSIONS_EINSTEIGER = {
   1: {
-    block: "hingeSquat",
+    block: "fullBody",
     format: "sets",
     sets: 3,
     exercises: [{
-      n: "Kettlebell Romanian Deadlift",
-      t: STEPS.reps,
-      u: "reps"
-    }, {
       n: "Kettlebell Goblet Squat",
       t: STEPS.reps,
       u: "reps"
     }, {
-      n: "Kettlebell Swing",
+      n: "Kettlebell Romanian Deadlift",
       t: STEPS.reps,
       u: "reps"
     }, {
@@ -1723,7 +1720,7 @@ const SESSIONS_EINSTEIGER = {
     }]
   },
   2: {
-    block: "swingCarry",
+    block: "swingFullBody",
     format: "sets",
     sets: 3,
     exercises: [{
@@ -1732,10 +1729,6 @@ const SESSIONS_EINSTEIGER = {
       u: "reps"
     }, {
       n: "Kettlebell Goblet Squat",
-      t: STEPS.reps,
-      u: "reps"
-    }, {
-      n: "Kettlebell Goblet Press",
       t: STEPS.reps,
       u: "reps"
     }, {
@@ -1753,11 +1746,15 @@ const SESSIONS_EINSTEIGER = {
     }]
   },
   3: {
-    block: "hingeSwing",
+    block: "hingePress",
     format: "sets",
     sets: 3,
     exercises: [{
-      n: "Kettlebell Swing",
+      n: "Kettlebell Romanian Deadlift",
+      t: STEPS.reps,
+      u: "reps"
+    }, {
+      n: "Kettlebell Goblet Press",
       t: STEPS.reps,
       u: "reps"
     }, {
@@ -1765,11 +1762,7 @@ const SESSIONS_EINSTEIGER = {
       t: STEPS.reps,
       u: "reps"
     }, {
-      n: "Kettlebell Romanian Deadlift",
-      t: STEPS.reps,
-      u: "reps"
-    }, {
-      n: "Kettlebell Goblet Press",
+      n: "Kettlebell Swing",
       t: STEPS.reps,
       u: "reps"
     }, {
@@ -1783,15 +1776,11 @@ const SESSIONS_EINSTEIGER = {
     }]
   },
   4: {
-    block: "ganzkoerper",
+    block: "fullBodyCarry",
     format: "sets",
     sets: 3,
     exercises: [{
       n: "Kettlebell Goblet Squat",
-      t: STEPS.reps,
-      u: "reps"
-    }, {
-      n: "Kettlebell Romanian Deadlift",
       t: STEPS.reps,
       u: "reps"
     }, {
@@ -1810,6 +1799,10 @@ const SESSIONS_EINSTEIGER = {
       n: "Kettlebell Suitcase Carry",
       t: STEPS.carry,
       u: "m_side"
+    }, {
+      n: "Kettlebell Goblet Press",
+      t: STEPS.reps,
+      u: "reps"
     }]
   }
 };
@@ -2540,28 +2533,28 @@ const SESSIONS_KURS = {
   }
 };
 const BLOCK_INFO_EINSTEIGER = {
-  hingeSquat: {
+  fullBody: {
     note: {
-      de: "Du lernst die wichtigsten Grundbewegungen kennen: Hüftbeuge (Hinge), Kniebeuge, Drücken, Ziehen und Rumpfstabilität. Der erste Swing kommt nach Romanian Deadlift und Kniebeuge. Die Bewegung kommt aus der Hüfte, die Arme führen nur. Technik vor Tempo: Wird die Technik schlechter, beende den Satz. Vorab: Bei Beschwerden an Rücken, Schulter oder Knie lass das bitte zuerst ärztlich abklären.",
-      en: "You get to know the most important foundational movements: the hip hinge, the squat, pressing, pulling and core stability. Your first swing comes after the Romanian deadlift and the squat. The movement comes from the hips, the arms only guide. Technique over pace: if your form gets worse, end the set. Beforehand: if you have back, shoulder or knee problems, please have them checked by a doctor first."
+      de: "Eine einfache Ganzkörpereinheit mit den grundlegenden Bewegungsmustern: Kniebeuge, Hip Hinge, Drücken, Ziehen und Rumpfstabilität. Sie funktioniert vollständig ohne Swing und eignet sich dadurch auch für einen ersten Kontakt mit dem Kettlebell-Training. Vorab: Bei Beschwerden an Rücken, Schulter oder Knie lass das bitte zuerst ärztlich abklären.",
+      en: "A simple full-body session with the foundational movement patterns: squat, hip hinge, pressing, pulling and core stability. It works entirely without the swing and is therefore also suited for a first contact with kettlebell training. Beforehand: if you have back, shoulder or knee problems, please have them checked by a doctor first."
     }
   },
-  swingCarry: {
+  swingFullBody: {
     note: {
-      de: "Jetzt steht der Swing am Anfang der Runde, solange du frisch bist. Dazu kommen Push-Up und Suitcase Carry. Technik vor Tempo: Wird die Technik schlechter, beende den Satz.",
-      en: "The swing now comes first in the round, while you are fresh. Push-up and suitcase carry are added. Technique over pace: if your form gets worse, end the set."
+      de: "Der Swing steht im Mittelpunkt und wird mit Kniebeuge, Ziehen, Drücken und Tragen kombiniert. Die Einheit verbindet eine dynamische Hüftbewegung mit einfachen Ganzkörperübungen. Technik vor Tempo: Wird die Technik schlechter, beende den Satz.",
+      en: "The swing is at the center and is combined with squat, pulling, pressing and carrying. The session pairs a dynamic hip movement with simple full-body exercises. Technique over pace: if your form gets worse, end the set."
     }
   },
-  hingeSwing: {
+  hingePress: {
     note: {
-      de: "Swing und Romanian Deadlift trainieren dieselbe Hüftbeuge, einmal schnell und einmal langsam. Dazu kommen Kniebeuge, Drücken, Ziehen und Plank.",
-      en: "Swing and Romanian deadlift train the same hip hinge, once fast and once slow. Squat, pressing, pulling and plank are added."
+      de: "Diese Einheit legt den Schwerpunkt auf die Hüftbewegung und das Drücken. Romanian Deadlift und Swing werden durch Squat, Press, Row und Plank zu einem vollständigen Ganzkörpertraining ergänzt.",
+      en: "This session focuses on the hip movement and pressing. Romanian deadlift and swing are rounded out by squat, press, row and plank into a complete full-body workout."
     }
   },
-  ganzkoerper: {
+  fullBodyCarry: {
     note: {
-      de: "Eine vollständige Ganzkörpereinheit mit Kniebeuge, Hüftbeuge, Swing, Ziehen, Push-Up und Tragen. Danach der Rückblick: Hat es dir Spaß gemacht? Hat sich die Technik sicher angefühlt? Gab es Beschwerden? Hast du Lust auf mehr?",
-      en: "A complete full-body session with squat, hinge, swing, pulling, push-up and carrying. Then look back: did you enjoy it? Did your technique feel secure? Were there any problems? Do you want more?"
+      de: "Eine vollständige Ganzkörpereinheit mit besonderem Fokus auf Bewegung unter fortlaufender Belastung. Squat, Pull, Swing, Push und Carry werden miteinander verbunden. Danach der Rückblick: Hat es dir Spaß gemacht? Hat sich die Technik sicher angefühlt? Gab es Beschwerden? Hast du Lust auf mehr?",
+      en: "A complete full-body session with a special focus on movement under continuous load. Squat, pull, swing, push and carry are tied together. Then look back: did you enjoy it? Did your technique feel secure? Were there any problems? Do you want more?"
     }
   }
 };
@@ -3506,17 +3499,17 @@ const REGION_ICON = {
   carry: "bag"
 };
 const BLOCK_ICON = {
-  hingeSquat: "target",
-  swingCarry: "flame",
-  hingeSwing: "stairs",
-  ganzkoerper: "flag",
+  fullBody: "target",
+  swingFullBody: "flame",
+  hingePress: "stairs",
+  fullBodyCarry: "flag",
   kursBasis: "target",
   kursAufbau: "stairs",
   kursVerdichtung: "loop",
   kursIntegration: "flag"
 };
 const MODULE_BLOCK_ORDER = {
-  einsteiger: ["hingeSquat", "swingCarry", "hingeSwing", "ganzkoerper"],
+  einsteiger: ["fullBody", "swingFullBody", "hingePress", "fullBodyCarry"],
   kurs: ["kursBasis", "kursAufbau", "kursVerdichtung", "kursIntegration"]
 };
 // Navigation: labelKey verweist auf einen Schlüssel in UI[lang].
