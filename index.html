@@ -482,6 +482,10 @@ const UI = {
     goToPlan: "Zum Trainingsplan",
     backToList: "Zurück zur Übersicht",
     backToLibrary: "Zurück zur Bibliothek",
+    backToSession: "Zurück zur Einheit",
+    openInLibrary: "Ausführliche Anleitung in der Bibliothek",
+    detailLearnTitle: "So lernst du es",
+    detailTipsTitle: "Atmung & Merksätze",
     cycleProgress: "Fortschritt",
     searchPlaceholder: "Übung suchen",
     filterAll: "Alle",
@@ -601,6 +605,10 @@ const UI = {
     goToPlan: "Go to training plan",
     backToList: "Back to overview",
     backToLibrary: "Back to library",
+    backToSession: "Back to session",
+    openInLibrary: "Full guide in the library",
+    detailLearnTitle: "How to learn it",
+    detailTipsTitle: "Breathing & cues",
     cycleProgress: "Progress",
     searchPlaceholder: "Search exercise",
     filterAll: "All",
@@ -817,8 +825,8 @@ const EXERCISE_DETAILS = {
       en: ["Set the kettlebell about 15–30 cm in front of your feet, arms and bell forming a triangle.", "Hinge at the hips, pulling the kettlebell back between the legs like a hike pass.", "Drive the hips forward explosively — the swing comes from this extension, not the arms.", "The kettlebell floats up to chest height, shoulders stay relaxed rather than shrugged.", "Let the kettlebell fall back before hinging again.", "Repeat as one continuous rhythm, not two separate movements."]
     },
     mistakes: {
-      de: ["Am oberen Punkt nach hinten lehnen, statt aufrecht zu bleiben.", "Mit Schultern/Armen anheben statt aus der Hüfte.", "Rücken rundet sich, während die Kettlebell zwischen die Beine wandert.", "Kettlebell schwingt über Brusthöhe hinaus."],
-      en: ["Leaning backward at the top instead of staying tall.", "Lifting with the shoulders/arms instead of the hips.", "Rounding the back as the kettlebell travels between the legs.", "Swinging the kettlebell above chest height."]
+      de: ["Am oberen Punkt nach hinten lehnen, statt aufrecht zu bleiben.", "Mit Schultern/Armen anheben statt aus der Hüfte.", "Rücken rundet sich, während die Kettlebell zwischen die Beine wandert.", "Kettlebell schwingt über Brusthöhe hinaus.", "Zu tief in die Knie gehen, sodass der Swing zur Kniebeuge wird.", "Blick nach unten auf die Kettlebell statt nach vorne."],
+      en: ["Leaning backward at the top instead of staying tall.", "Lifting with the shoulders/arms instead of the hips.", "Rounding the back as the kettlebell travels between the legs.", "Swinging the kettlebell above chest height.", "Bending too deep into the knees so the swing turns into a squat.", "Looking down at the kettlebell instead of ahead."]
     },
     muscles: {
       de: ["Gesäßmuskulatur", "Hintere Oberschenkel", "Rückenstrecker", "Rumpf", "Breiter Rückenmuskel", "Unterarme/Griff"],
@@ -1367,6 +1375,91 @@ const EXERCISE_DETAILS = {
     benefits: {
       de: ["Trainiert Rotationskontrolle im Rumpf mit zusätzlichem Widerstand", "Fordert die schrägen Bauchmuskeln stärker als die reine Körpergewichtsvariante"],
       en: ["Trains rotational core control with added resistance", "Challenges the obliques more than the bodyweight-only version"]
+    }
+  }
+};
+
+// Zusätzliche Lernhilfen pro Übung: "learn" = Schritt für Schritt lernen bzw. Vorstufen,
+// "tips" = Atmung und Merksätze. Beides erscheint nur in der Bibliothek.
+const EXERCISE_EXTRAS = {
+  "Kettlebell Swing": {
+    learn: {
+      de: ["Zuerst die Hüftbeuge ohne Gewicht: Hände an die Hüftfalten, Gesäß nach hinten schieben, Knie nur leicht gebeugt, Rücken lang. Dann aufrichten, indem du die Hüfte nach vorne schiebst.", "Danach der Romanian Deadlift mit der Kettlebell. Es ist derselbe Bewegungsablauf, nur langsam. Er ist die Grundlage des Swings.", "Dann der Hike-Pass: Kettlebell kippen und wie bei einem Football-Snap zwischen die Beine ziehen, die Unterarme berühren die Oberschenkel. Aus dieser Position richtest du dich schnell auf, ohne mit den Armen zu ziehen.", "Zum Schluss lässt du die Kettlebell aus dem Hike-Pass bis auf Brusthöhe schwingen. Starte mit wenigen Wiederholungen pro Satz und beende den Satz, sobald die Technik nachlässt.", "Wähle zu Beginn lieber ein leichteres Gewicht. Die Hüfte soll die Kettlebell bewegen, nicht die Arme."],
+      en: ["First the hip hinge without weight: hands at your hip creases, push the hips back, knees only slightly bent, back long. Then stand up by driving the hips forward.", "Next the Romanian deadlift with the kettlebell. It is the same movement, only slow. It is the foundation of the swing.", "Then the hike pass: tilt the kettlebell and pull it between your legs like a football snap, forearms touching the thighs. From there you stand up quickly without pulling with the arms.", "Finally let the kettlebell swing from the hike pass up to chest height. Start with few reps per set and end the set as soon as your form slips.", "Rather start with a lighter weight. The hips should move the kettlebell, not the arms."]
+    },
+    tips: {
+      de: ["Atmung: Beim Zurückschwingen einatmen, beim Aufrichten kräftig ausatmen.", "Die Hüfte macht die Arbeit, die Arme sind nur Seile.", "Oben stehst du gerade wie ein Brett: Gesäß fest, Knie gestreckt, Rippen unten.", "Blick nach vorne auf einen festen Punkt, nicht auf die Kettlebell.", "Lass die Kettlebell oben nicht festhalten, sie fällt von selbst zurück.", "Nach dem letzten Swing lässt du sie auspendeln und stellst sie ab, bevor du pausierst. Bei Schmerzen im unteren Rücken brichst du ab."],
+      en: ["Breathing: breathe in as the bell swings back, breathe out forcefully as you stand up.", "The hips do the work, the arms are just ropes.", "At the top you stand tall like a plank: glutes tight, knees straight, ribs down.", "Look ahead at a fixed point, not at the kettlebell.", "Do not hold the kettlebell up at the top, it falls back on its own.", "After the last swing let it swing out and set it down before you rest. Stop if you feel pain in the lower back."]
+    }
+  },
+  "Kettlebell Romanian Deadlift": {
+    learn: {
+      de: ["Übe die Bewegung zuerst ohne Gewicht oder mit einem Besenstiel am Rücken. Besenstiel, Hinterkopf, oberer Rücken und Steißbein berühren dabei die ganze Zeit den Stab.", "Stell dir vor, du schließt mit dem Gesäß eine Kofferraumklappe hinter dir.", "Geh so tief, wie dein Rücken gerade bleibt. Das ist meist bis knapp unter die Knie."],
+      en: ["Practice the movement first without weight or with a broomstick along your back. The stick keeps touching the back of the head, upper back and tailbone the whole time.", "Imagine closing a car trunk behind you with your hips.", "Go only as low as your back stays straight. That is usually to just below the knees."]
+    },
+    tips: {
+      de: ["Atmung: Beim Absenken einatmen und den Bauch anspannen, beim Aufrichten ausatmen.", "Die Knie bleiben fast gleich gebeugt, nur die Hüfte bewegt sich.", "Die Kettlebell streift die Beine auf dem ganzen Weg.", "Du spürst die Dehnung hinten in den Oberschenkeln, nicht im unteren Rücken."],
+      en: ["Breathing: breathe in while lowering and brace the abs, breathe out while standing up.", "The knees stay at about the same bend, only the hips move.", "The kettlebell brushes the legs all the way.", "You feel the stretch in the back of the thighs, not in the lower back."]
+    }
+  },
+  "Kettlebell Goblet Squat": {
+    learn: {
+      de: ["Heben die Fersen ab, stelle die Füße etwas weiter auseinander und drehe die Zehen mehr nach außen. Hilft das nicht, leg die Fersen auf ein flaches Brett.", "Die Kettlebell vor der Brust dient als Gegengewicht und hilft dir, aufrecht zu bleiben.", "Geh anfangs nur so tief, wie die Technik sauber bleibt. Die Tiefe kommt mit der Zeit.", "Zum Üben halte unten eine Sekunde, so lernst du die Position zu kontrollieren."],
+      en: ["If the heels lift, set your feet a bit wider and turn the toes out more. If that does not help, put the heels on a flat board.", "The kettlebell at your chest acts as a counterweight and helps you stay upright.", "At first go only as deep as your form stays clean. Depth comes with time.", "To practice, pause for one second at the bottom, it teaches you to control the position."]
+    },
+    tips: {
+      de: ["Atmung: Beim Absenken einatmen, beim Hochkommen ausatmen.", "Setz dich zwischen die Fersen, nicht nach hinten.", "Brust hoch, Ellbogen innen zwischen den Knien.", "Die Knie folgen den Zehen und fallen nicht nach innen."],
+      en: ["Breathing: breathe in while lowering, breathe out while standing up.", "Sit down between your heels, not backward.", "Chest up, elbows inside between the knees.", "The knees follow the toes and do not cave in."]
+    }
+  },
+  "Kettlebell Goblet Press": {
+    learn: {
+      de: ["Halte die Kettlebell erst nur in der Goblet-Position und spanne Gesäß und Bauch an. Aus einer festen Basis drückt es sich leichter.", "Drücke die Kettlebell in einem leichten Bogen nah am Gesicht vorbei nach oben, nicht weit nach vorne.", "Gehst du ins Hohlkreuz, ist das Gewicht zu schwer oder der Rumpf zu locker."],
+      en: ["First just hold the kettlebell in the goblet position and brace glutes and abs. It is easier to press from a solid base.", "Press the kettlebell up in a slight arc close past your face, not far forward.", "If you arch your lower back, the weight is too heavy or the core is too loose."]
+    },
+    tips: {
+      de: ["Atmung: Vor dem Drücken einatmen und den Rumpf anspannen, beim Drücken ausatmen.", "Rippen runter, Gesäß fest.", "Oben sind die Ellbogen gestreckt und der Kopf steht zwischen den Armen."],
+      en: ["Breathing: breathe in and brace before pressing, breathe out while pressing.", "Ribs down, glutes tight.", "At the top the elbows are straight and the head sits between the arms."]
+    }
+  },
+  "Kettlebell Bent-Over Row": {
+    learn: {
+      de: ["Stütze dich mit der freien Hand am Oberschenkel oder an einer Bank ab. So bleibt der Rücken ruhig.", "Wähle ein Gewicht, bei dem du die Schulterblätter bewusst bewegen kannst.", "Mache auf beiden Seiten gleich viele Wiederholungen und beginne mit der schwächeren Seite."],
+      en: ["Support yourself with the free hand on your thigh or a bench. That keeps the back still.", "Choose a weight where you can move the shoulder blades deliberately.", "Do the same number of reps on both sides and start with the weaker side."]
+    },
+    tips: {
+      de: ["Atmung: Beim Ziehen ausatmen, beim Absenken einatmen.", "Zieh den Ellbogen zur Hosentasche, nicht zur Schulter.", "Der Rücken ist lang wie eine Tischplatte.", "Erst das Schulterblatt zurückziehen, dann den Ellbogen beugen."],
+      en: ["Breathing: breathe out while pulling, breathe in while lowering.", "Pull the elbow to your back pocket, not to the shoulder.", "The back is long like a tabletop.", "Pull the shoulder blade back first, then bend the elbow."]
+    }
+  },
+  "Push-Up": {
+    learn: {
+      de: ["Zu schwer? Stütze die Hände erhöht auf Tisch, Bank oder Sofa ab. Je höher die Hände, desto leichter.", "Alternativ auf den Knien: Der Körper bleibt eine gerade Linie vom Kopf bis zu den Knien.", "Sobald es sauber klappt, gehst du mit den Händen Stufe für Stufe tiefer, bis du am Boden bist.", "Zusätzlich hilft langsames Absenken über etwa drei Sekunden."],
+      en: ["Too hard? Place your hands on a table, bench or sofa. The higher the hands, the easier it is.", "Alternatively on your knees: the body stays a straight line from head to knees.", "Once it works cleanly, lower your hands step by step until you are on the floor.", "Slowly lowering over about three seconds helps as well."]
+    },
+    tips: {
+      de: ["Atmung: Beim Absenken einatmen, beim Hochdrücken ausatmen.", "Gesäß und Bauch fest, du bist ein Brett.", "Die Ellbogen zeigen schräg nach hinten, wie ein Pfeil und nicht wie ein T."],
+      en: ["Breathing: breathe in while lowering, breathe out while pushing up.", "Glutes and abs tight, you are a plank.", "The elbows point diagonally backward, like an arrow and not like a T."]
+    }
+  },
+  "Plank": {
+    learn: {
+      de: ["Zu schwer? Geh auf die Knie oder stütze die Unterarme auf eine erhöhte Fläche.", "Steigere die Zeit in kleinen Schritten, zum Beispiel um 5 bis 10 Sekunden.", "Wird die Haltung schlechter, beende den Satz. Mehrere saubere kurze Sätze sind besser als ein langer, der zerfällt."],
+      en: ["Too hard? Go onto your knees or rest the forearms on an elevated surface.", "Increase the time in small steps, for example by 5 to 10 seconds.", "If your position gets worse, end the set. Several clean short sets are better than one long one that falls apart."]
+    },
+    tips: {
+      de: ["Atmung: Ruhig weiteratmen und nicht die Luft anhalten.", "Ellbogen unter den Schultern, Gesäß und Bauch fest.", "Drücke die Ellbogen gedanklich Richtung Füße, das spannt den Rumpf zusätzlich an."],
+      en: ["Breathing: keep breathing calmly, do not hold your breath.", "Elbows under the shoulders, glutes and abs tight.", "Mentally pull the elbows toward the feet, it braces the core even more."]
+    }
+  },
+  "Kettlebell Suitcase Carry": {
+    learn: {
+      de: ["Wähle ein Gewicht, bei dem du aufrecht bleibst und die Schulter nicht zur Seite gezogen wird.", "Beginne mit kurzen Strecken. Du kannst das Gewicht auch erst nur halten und dann losgehen.", "Hast du wenig Platz, gehe eine kürzere Strecke hin und zurück."],
+      en: ["Choose a weight where you stay upright and the shoulder is not pulled to the side.", "Start with short distances. You can also just hold the weight first and then start walking.", "If you have little space, walk a shorter distance there and back."]
+    },
+    tips: {
+      de: ["Atmung: Ruhig weiteratmen, der Rumpf bleibt fest.", "Brustkorb hoch, Schulter nach hinten und unten.", "Stell dir vor, du stehst mit dem Rücken an einer Wand und kippst nicht zur Seite.", "Den Griff nicht verkrampfen."],
+      en: ["Breathing: keep breathing calmly, the core stays braced.", "Chest up, shoulder back and down.", "Imagine standing with your back against a wall, you do not lean to the side.", "Do not clench the grip."]
     }
   }
 };
@@ -2774,7 +2867,9 @@ function getLibraryExercises(lang) {
       steps: EXERCISE_DETAILS[n].steps[lang],
       mistakes: EXERCISE_DETAILS[n].mistakes[lang],
       muscles: EXERCISE_DETAILS[n].muscles[lang],
-      benefits: EXERCISE_DETAILS[n].benefits[lang]
+      benefits: EXERCISE_DETAILS[n].benefits[lang],
+      learn: EXERCISE_EXTRAS[n] ? EXERCISE_EXTRAS[n].learn[lang] : null,
+      tips: EXERCISE_EXTRAS[n] ? EXERCISE_EXTRAS[n].tips[lang] : null
     } : null
   }));
 }
@@ -4170,6 +4265,7 @@ function SessionDetailView({
   C,
   activeModule,
   activeSession,
+  openLibraryExercise,
   clearCustomReps,
   cooldownOpen,
   displaySessionData,
@@ -4681,7 +4777,22 @@ function SessionDetailView({
         color: C.textSecondary,
         lineHeight: 1.5
       }
-    }, ex.cue), ex.sideNote && /*#__PURE__*/React.createElement("div", {
+    }, ex.cue), /*#__PURE__*/React.createElement("button", {
+      onClick: () => openLibraryExercise(ex.key),
+      style: {
+        background: "transparent",
+        border: "none",
+        color: C.brass,
+        fontSize: 12.5,
+        fontWeight: 600,
+        cursor: "pointer",
+        padding: 0,
+        marginTop: 10,
+        display: "flex",
+        alignItems: "center",
+        gap: 6
+      }
+    }, t.openInLibrary, " →"), ex.sideNote && /*#__PURE__*/React.createElement("div", {
       style: {
         fontSize: 12,
         color: C.brass,
@@ -4931,6 +5042,7 @@ function LibraryGridView({
 // Bibliothek-Tab, Detail: eine Übung mit Ausführung, Fehlern, Muskeln und Nutzen.
 function LibraryDetailView({
   C,
+  fromSession,
   libraryDetailExercise,
   t
 }) {
@@ -4951,7 +5063,7 @@ function LibraryDetailView({
   }, /*#__PURE__*/React.createElement(Icon, {
     name: "arrowLeft",
     size: 14
-  }), " ", t.backToLibrary), /*#__PURE__*/React.createElement("div", {
+  }), " ", fromSession ? t.backToSession : t.backToLibrary), /*#__PURE__*/React.createElement("div", {
     style: eyebrowStyle(C.brass, {
       marginBottom: 6
     })
@@ -5049,7 +5161,34 @@ function LibraryDetailView({
       color: C.textSecondary,
       lineHeight: 1.5
     }
-  }, s))))), /*#__PURE__*/React.createElement("div", {
+  }, s))))), libraryDetailExercise.details.learn && /*#__PURE__*/React.createElement("div", {
+    style: cardStyle(C, {
+      padding: "16px 18px",
+      marginBottom: 16
+    })
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 600,
+      fontSize: 14,
+      color: C.brass,
+      marginBottom: 10
+    }
+  }, t.detailLearnTitle), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 8
+    }
+  }, libraryDetailExercise.details.learn.map((m, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    style: {
+      fontSize: 13,
+      color: C.textSecondary,
+      lineHeight: 1.5,
+      display: "flex",
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("span", null, "→"), /*#__PURE__*/React.createElement("span", null, m))))), /*#__PURE__*/React.createElement("div", {
     style: cardStyle(C, {
       padding: "16px 18px",
       marginBottom: 16
@@ -5076,7 +5215,34 @@ function LibraryDetailView({
       display: "flex",
       gap: 8
     }
-  }, /*#__PURE__*/React.createElement("span", null, "⚠"), /*#__PURE__*/React.createElement("span", null, m))))), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("span", null, "⚠"), /*#__PURE__*/React.createElement("span", null, m))))), libraryDetailExercise.details.tips && /*#__PURE__*/React.createElement("div", {
+    style: cardStyle(C, {
+      padding: "16px 18px",
+      marginBottom: 16
+    })
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 600,
+      fontSize: 14,
+      color: C.brass,
+      marginBottom: 10
+    }
+  }, t.detailTipsTitle), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 8
+    }
+  }, libraryDetailExercise.details.tips.map((m, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    style: {
+      fontSize: 13,
+      color: C.textSecondary,
+      lineHeight: 1.5,
+      display: "flex",
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("span", null, "✓"), /*#__PURE__*/React.createElement("span", null, m))))), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       gap: 10,
@@ -5202,6 +5368,7 @@ function KettlebellTracker() {
   const [programView, setProgramView] = useState("list");
   const [libraryView, setLibraryView] = useState("grid");
   const [libraryDetailKey, setLibraryDetailKey] = useState(null);
+  const [libraryFromSession, setLibraryFromSession] = useState(false);
   const [libraryFilter, setLibraryFilter] = useState("all");
   const [librarySearch, setLibrarySearch] = useState("");
   const [warmupOpen, setWarmupOpen] = useState(false);
@@ -5241,6 +5408,10 @@ function KettlebellTracker() {
       }
       if (libraryView === "detail") {
         setLibraryView("grid");
+        if (libraryFromSession) {
+          setLibraryFromSession(false);
+          setTab("program");
+        }
         return;
       }
       if (programView === "detail") {
@@ -5250,7 +5421,7 @@ function KettlebellTracker() {
     };
     window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);
-  }, [activeTimer, libraryView, programView]);
+  }, [activeTimer, libraryView, libraryFromSession, programView]);
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -5382,6 +5553,15 @@ function KettlebellTracker() {
       return sum + sessionMinutes(d);
     }, 0);
   }, [moduleState, activeModule, lang]);
+
+  // Öffnet die Bibliotheks-Anleitung einer Übung aus der Einheit heraus; "Zurück"
+  // führt wieder in die Einheit.
+  const openLibraryExercise = exKey => {
+    setLibraryDetailKey(exKey);
+    setLibraryFromSession(true);
+    setLibraryView("detail");
+    setTab("library");
+  };
   const goToSession = s => {
     setActiveSession(s);
     setProgramView("detail");
@@ -5505,6 +5685,7 @@ function KettlebellTracker() {
     C: C,
     activeModule: activeModule,
     activeSession: activeSession,
+    openLibraryExercise: openLibraryExercise,
     clearCustomReps: clearCustomReps,
     cooldownOpen: cooldownOpen,
     displaySessionData: displaySessionData,
@@ -5533,13 +5714,17 @@ function KettlebellTracker() {
     libraryExercises: libraryExercises,
     libraryFilter: libraryFilter,
     librarySearch: librarySearch,
-    setLibraryDetailKey: setLibraryDetailKey,
+    setLibraryDetailKey: key => {
+      setLibraryFromSession(false);
+      setLibraryDetailKey(key);
+    },
     setLibraryFilter: setLibraryFilter,
     setLibrarySearch: setLibrarySearch,
     setLibraryView: setLibraryView,
     t: t
   }), tab === "library" && libraryView === "detail" && libraryDetailExercise && /*#__PURE__*/React.createElement(LibraryDetailView, {
     C: C,
+    fromSession: libraryFromSession,
     libraryDetailExercise: libraryDetailExercise,
     t: t
   })), /*#__PURE__*/React.createElement(BottomNav, {
