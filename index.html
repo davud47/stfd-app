@@ -694,6 +694,10 @@ const CUES = {
     de: "Breiter Stand, Zehen leicht nach außen, Oberkörper bleibt aufrecht. Beansprucht vor allem die Gesäßmuskulatur.",
     en: "Wide stance, toes turned slightly out, torso stays upright. Targets mainly the glutes."
   },
+  "Kettlebell Deadlift": {
+    de: "Kettlebell zwischen den Füßen am Boden, Hüfte nach hinten schieben, Rücken gerade, dann den Boden wegdrücken und die Hüfte nach vorne strecken. Die Grundform der Hüftbeuge, kräftigt Gesäß und hintere Oberschenkel.",
+    en: "Kettlebell on the floor between the feet, push the hips back, back straight, then push the floor away and drive the hips forward. The basic form of the hip hinge, builds glutes and hamstrings."
+  },
   "Kettlebell Romanian Deadlift": {
     de: "Leichte Kniebeugung, Hüfte weit nach hinten schieben, langsame kontrollierte Dehnung. Beansprucht Gesäß und hintere Oberschenkelmuskulatur.",
     en: "Slight knee bend, push the hips far back for a slow, controlled stretch. Targets the glutes and hamstrings."
@@ -889,6 +893,24 @@ const EXERCISE_DETAILS = {
     benefits: {
       de: ["Beidhändige Variante des Kreuzhebens, gut zur Ergänzung des Single Arm Deadlift", "Der breite Stand spricht die Hüftadduktoren gezielt mit an", "Baut Kraft für den beidarmigen Swing auf"],
       en: ["A two-handed deadlift variant, a good complement to the single arm deadlift", "The wide stance also engages the hip adductors directly", "Builds strength toward the two-hand swing"]
+    }
+  },
+  "Kettlebell Deadlift": {
+    steps: {
+      de: ["Kettlebell mittig zwischen die Füße stellen, etwa auf Höhe der Knöchel. Füße hüftbreit.", "Hüfte nach hinten schieben und den Oberkörper nach vorne neigen, bis du den Griff mit beiden Händen erreichst. Rücken bleibt lang, Schultern nach hinten und unten.", "Spanne Rumpf und Gesäß an und baue Spannung auf, bevor die Kettlebell sich bewegt.", "Drücke die Füße in den Boden und strecke Hüfte und Knie, bis du aufrecht stehst. Gesäß oben kurz anspannen.", "Auf demselben Weg kontrolliert zurück: erst die Hüfte nach hinten, dann die Kettlebell abstellen."],
+      en: ["Set the kettlebell centered between the feet, about at ankle level. Feet hip-width apart.", "Push the hips back and lean the torso forward until you reach the handle with both hands. Back stays long, shoulders back and down.", "Brace the core and glutes and build tension before the kettlebell moves.", "Press the feet into the floor and extend hips and knees until you stand tall. Briefly squeeze the glutes at the top.", "Return the same way under control: hips back first, then set the kettlebell down."]
+    },
+    mistakes: {
+      de: ["Rücken rundet sich beim Greifen oder Anheben.", "Kettlebell steht zu weit vor den Füßen.", "Die Hüfte steigt zuerst, während der Oberkörper unten bleibt.", "Oben ins Hohlkreuz überstrecken statt aufrecht zu stehen.", "Kettlebell wird ruckartig mit den Armen gezogen."],
+      en: ["The back rounds while gripping or lifting.", "The kettlebell sits too far in front of the feet.", "The hips rise first while the torso stays low.", "Overextending into the lower back at the top instead of standing tall.", "The kettlebell is yanked up with the arms."]
+    },
+    muscles: {
+      de: ["Gesäßmuskulatur", "Hintere Oberschenkel", "Rückenstrecker", "Rumpf", "Oberer Rücken", "Unterarme/Griff"],
+      en: ["Glutes", "Hamstrings", "Erector spinae", "Core", "Upper back", "Forearms/grip"]
+    },
+    benefits: {
+      de: ["Lehrt die Hüftbeuge, die Grundlage für den Swing", "Kräftigt die gesamte hintere Kette", "Sicher, weil es ohne Schwung abläuft", "Das Gewicht lässt sich einfach steigern"],
+      en: ["Teaches the hip hinge, the foundation of the swing", "Strengthens the entire posterior chain", "Safe because there is no momentum", "The weight is easy to progress"]
     }
   },
   "Kettlebell Romanian Deadlift": {
@@ -1384,12 +1406,22 @@ const EXERCISE_DETAILS = {
 const EXERCISE_EXTRAS = {
   "Kettlebell Swing": {
     learn: {
-      de: ["Zuerst die Hüftbeuge ohne Gewicht: Hände an die Hüftfalten, Gesäß nach hinten schieben, Knie nur leicht gebeugt, Rücken lang. Dann aufrichten, indem du die Hüfte nach vorne schiebst.", "Danach der Romanian Deadlift mit der Kettlebell. Es ist derselbe Bewegungsablauf, nur langsam. Er ist die Grundlage des Swings.", "Dann der Hike-Pass: Kettlebell kippen und wie bei einem Football-Snap zwischen die Beine ziehen, die Unterarme berühren die Oberschenkel. Aus dieser Position richtest du dich schnell auf, ohne mit den Armen zu ziehen.", "Zum Schluss lässt du die Kettlebell aus dem Hike-Pass bis auf Brusthöhe schwingen. Starte mit wenigen Wiederholungen pro Satz und beende den Satz, sobald die Technik nachlässt.", "Wähle zu Beginn lieber ein leichteres Gewicht. Die Hüfte soll die Kettlebell bewegen, nicht die Arme."],
-      en: ["First the hip hinge without weight: hands at your hip creases, push the hips back, knees only slightly bent, back long. Then stand up by driving the hips forward.", "Next the Romanian deadlift with the kettlebell. It is the same movement, only slow. It is the foundation of the swing.", "Then the hike pass: tilt the kettlebell and pull it between your legs like a football snap, forearms touching the thighs. From there you stand up quickly without pulling with the arms.", "Finally let the kettlebell swing from the hike pass up to chest height. Start with few reps per set and end the set as soon as your form slips.", "Rather start with a lighter weight. The hips should move the kettlebell, not the arms."]
+      de: ["Zuerst die Hüftbeuge ohne Gewicht: Hände an die Hüftfalten, Gesäß nach hinten schieben, Knie nur leicht gebeugt, Rücken lang. Dann aufrichten, indem du die Hüfte nach vorne schiebst.", "Danach der Deadlift mit der Kettlebell vom Boden. Er übt dieselbe Hüftbeuge, nur langsam. Er ist die Grundlage des Swings.", "Dann der Hike-Pass: Kettlebell kippen und wie bei einem Football-Snap zwischen die Beine ziehen, die Unterarme berühren die Oberschenkel. Aus dieser Position richtest du dich schnell auf, ohne mit den Armen zu ziehen.", "Zum Schluss lässt du die Kettlebell aus dem Hike-Pass bis auf Brusthöhe schwingen. Starte mit wenigen Wiederholungen pro Satz und beende den Satz, sobald die Technik nachlässt.", "Wähle zu Beginn lieber ein leichteres Gewicht. Die Hüfte soll die Kettlebell bewegen, nicht die Arme."],
+      en: ["First the hip hinge without weight: hands at your hip creases, push the hips back, knees only slightly bent, back long. Then stand up by driving the hips forward.", "Next the deadlift with the kettlebell from the floor. It trains the same hip hinge, only slow. It is the foundation of the swing.", "Then the hike pass: tilt the kettlebell and pull it between your legs like a football snap, forearms touching the thighs. From there you stand up quickly without pulling with the arms.", "Finally let the kettlebell swing from the hike pass up to chest height. Start with few reps per set and end the set as soon as your form slips.", "Rather start with a lighter weight. The hips should move the kettlebell, not the arms."]
     },
     tips: {
       de: ["Atmung: Beim Zurückschwingen einatmen, beim Aufrichten kräftig ausatmen.", "Die Hüfte macht die Arbeit, die Arme sind nur Seile.", "Oben stehst du gerade wie ein Brett: Gesäß fest, Knie gestreckt, Rippen unten.", "Blick nach vorne auf einen festen Punkt, nicht auf die Kettlebell.", "Lass die Kettlebell oben nicht festhalten, sie fällt von selbst zurück.", "Nach dem letzten Swing lässt du sie auspendeln und stellst sie ab, bevor du pausierst. Bei Schmerzen im unteren Rücken brichst du ab."],
       en: ["Breathing: breathe in as the bell swings back, breathe out forcefully as you stand up.", "The hips do the work, the arms are just ropes.", "At the top you stand tall like a plank: glutes tight, knees straight, ribs down.", "Look ahead at a fixed point, not at the kettlebell.", "Do not hold the kettlebell up at the top, it falls back on its own.", "After the last swing let it swing out and set it down before you rest. Stop if you feel pain in the lower back."]
+    }
+  },
+  "Kettlebell Deadlift": {
+    learn: {
+      de: ["Übe die Hüftbeuge zuerst ohne Gewicht: Hände an die Hüftfalten, Gesäß nach hinten schieben, Knie nur leicht gebeugt, Rücken lang.", "Kommst du nicht tief genug oder rundet sich der Rücken, stelle die Kettlebell auf einen Block oder ein paar Bücher. Dadurch wird der Weg kürzer.", "Klappt das sauber, stellst du die Kettlebell auf den Boden.", "Der Deadlift ist die Grundlage für den Swing. Wer ihn sicher beherrscht, hat die Hüftbeuge schon gelernt."],
+      en: ["Practice the hip hinge without weight first: hands at your hip creases, push the hips back, knees only slightly bent, back long.", "If you cannot get low enough or the back rounds, set the kettlebell on a block or a few books. That shortens the distance.", "Once that works cleanly, set the kettlebell on the floor.", "The deadlift is the foundation for the swing. If you master it, you have already learned the hip hinge."]
+    },
+    tips: {
+      de: ["Atmung: Vor dem Anheben einatmen und den Bauch fest anspannen, beim Aufrichten ausatmen.", "Drück den Boden weg, statt an der Kettlebell zu ziehen.", "Der Rücken bleibt lang wie ein Brett, der Blick geht schräg nach vorne auf den Boden.", "Oben stehst du aufrecht, ohne ins Hohlkreuz zu gehen.", "Beim Absetzen schiebst du zuerst die Hüfte nach hinten."],
+      en: ["Breathing: breathe in and brace the abs hard before lifting, breathe out while standing up.", "Push the floor away instead of pulling on the kettlebell.", "The back stays long like a plank, the gaze goes diagonally forward to the floor.", "At the top you stand tall without arching the lower back.", "When setting down, push the hips back first."]
     }
   },
   "Kettlebell Romanian Deadlift": {
@@ -1467,6 +1499,7 @@ const BODY_REGION = {
   "Kettlebell Goblet Squat": "lower",
   "Kettlebell Sumo Deadlift": "lower",
   "Kettlebell Romanian Deadlift": "lower",
+  "Kettlebell Deadlift": "lower",
   "Kettlebell Swing": "lower",
   "Kettlebell Bent-Over Row": "upper",
   "Kettlebell Front Raise": "upper",
@@ -1702,7 +1735,7 @@ const SESSIONS_EINSTEIGER = {
       t: STEPS.reps,
       u: "reps"
     }, {
-      n: "Kettlebell Romanian Deadlift",
+      n: "Kettlebell Deadlift",
       t: STEPS.reps,
       u: "reps"
     }, {
@@ -1750,7 +1783,7 @@ const SESSIONS_EINSTEIGER = {
     format: "sets",
     sets: 3,
     exercises: [{
-      n: "Kettlebell Romanian Deadlift",
+      n: "Kettlebell Deadlift",
       t: STEPS.reps,
       u: "reps"
     }, {
@@ -2547,8 +2580,8 @@ const BLOCK_INFO_EINSTEIGER = {
   },
   hingePress: {
     note: {
-      de: "Diese Einheit legt den Schwerpunkt auf die Hüftbewegung und das Drücken. Romanian Deadlift und Swing werden durch Squat, Press, Row und Plank zu einem vollständigen Ganzkörpertraining ergänzt.",
-      en: "This session focuses on the hip movement and pressing. Romanian deadlift and swing are rounded out by squat, press, row and plank into a complete full-body workout."
+      de: "Diese Einheit legt den Schwerpunkt auf die Hüftbewegung und das Drücken. Deadlift und Swing werden durch Squat, Press, Row und Plank zu einem vollständigen Ganzkörpertraining ergänzt.",
+      en: "This session focuses on the hip movement and pressing. Deadlift and swing are rounded out by squat, press, row and plank into a complete full-body workout."
     }
   },
   fullBodyCarry: {
