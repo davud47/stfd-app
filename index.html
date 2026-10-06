@@ -329,19 +329,50 @@ const MODULE_TOTAL_SESSIONS = {
 //    Kettlebell-Training passt.
 //  - Kurs / Beginner-Modul (Stufen "normal" und "schwer"): 12 Einheiten, die
 //    ab Einheit 1 auf dem Niveau der gewählten Stufe starten.
-// Wählbare Stufen pro Modul: Einsteiger kennt nur "leicht" (kein Umschalter),
-// das Beginner-Modul bietet "normal" und "schwer".
+// Wählbare Stufen pro Modul: Einsteiger bietet "leicht", "mittel" und "schwer"
+// (mehr Wiederholungen bzw. längere Dauer), das Beginner-Modul "normal" und "schwer".
 const MODULE_INTENSITY_KEYS = {
-  einsteiger: ["leicht"],
+  einsteiger: ["leicht", "mittel", "schwer"],
   kurs: ["normal", "schwer"]
 };
 
-// Arbeits-/Pausenzeit (Sekunden) pro Zirkel-Station, nach Stufe gestaffelt.
-const CIRCUIT_RATIO = {
+// Einsteiger: Index der Stufe in den Wiederholungs-Tabellen (STEPS).
+const TIER_INDEX = {
+  leicht: 0,
+  mittel: 1,
+  schwer: 2
+};
+
+// Einsteiger: Wiederholungen bzw. Dauer pro Stufe (leicht / mittel / schwer).
+const STEPS = {
+  reps: [8, 10, 12],
+  pushUp: [10, 15, 20],
+  hold: [20, 30, 40],
+  // Sekunden
+  carry: [20, 30, 40] // Meter pro Seite
+};
+
+// Einsteiger, Zeit-Variante: Arbeits-/Pausenzeit (Sekunden) pro Station.
+const EINSTEIGER_TIME_RATIO = {
   leicht: {
+    work: 30,
+    rest: 30
+  },
+  mittel: {
     work: 40,
     rest: 20
   },
+  schwer: {
+    work: 45,
+    rest: 15
+  }
+};
+
+// Einsteiger, Wiederholungs-Variante: Pause (Sekunden) zwischen den Runden.
+const EINSTEIGER_REST_SEC = 120;
+
+// Arbeits-/Pausenzeit (Sekunden) pro Zirkel-Station, nach Stufe gestaffelt.
+const CIRCUIT_RATIO = {
   normal: {
     work: 30,
     rest: 30
@@ -355,7 +386,6 @@ const CIRCUIT_RATIO = {
 // Pause (Sekunden) zwischen den Runden einer "sets"-Einheit, nach Stufe gestaffelt.
 // Jede Runde geht einmal durch alle Übungen, erst danach folgt die Pause.
 const SETS_REST_BY_TIER = {
-  leicht: 120,
   normal: 90,
   schwer: 60
 };
@@ -365,14 +395,16 @@ const UNIT_LABELS = {
     reps_side: " pro Seite",
     sec: " Sek.",
     sec_side: " Sek. pro Seite",
-    m: " m"
+    m: " m",
+    m_side: " m pro Seite"
   },
   en: {
     reps: " reps",
     reps_side: " per side",
     sec: " sec",
     sec_side: " sec per side",
-    m: " m"
+    m: " m",
+    m_side: " m per side"
   }
 };
 const SIDE_WORDS = {
@@ -388,8 +420,8 @@ const SIDE_WORDS = {
 
 // Bei Seiten-Übungen beide Seiten explizit ausschreiben statt nur "pro Seite".
 function formatReps(value, unit, lang) {
-  if (unit === "reps_side" || unit === "sec_side") {
-    const baseUnit = unit === "reps_side" ? UNIT_LABELS[lang].reps : UNIT_LABELS[lang].sec;
+  if (unit.endsWith("_side")) {
+    const baseUnit = UNIT_LABELS[lang][unit.replace("_side", "")];
     const w = SIDE_WORDS[lang];
     return `${value}${baseUnit} ${w.left} · ${value}${baseUnit} ${w.right}`;
   }
@@ -409,11 +441,24 @@ const UI = {
     minutesTrained: "Minuten trainiert",
     intensity: "Intensität",
     intensityNote: "Normal und Schwer verwenden dieselben Grundübungen — Schwer erhöht die Belastung, je nach Einheit durch einen zusätzlichen Satz, mehr Wiederholungen, längere Arbeitszeit, kürzere Pausen, EMOM-Zeitvorgaben oder zusätzliche Abschlussarbeit. Schwer bedeutet nicht, dass die Technik schlechter werden darf — wenn die Bewegung nicht mehr sauber bleibt, ist Normal die richtige Wahl.",
+    intensityNoteEinsteiger: "Starte mit Leicht. Schaffst du alle Wiederholungen sicher und sauber, gehe eine Stufe höher. Schaffst du auf Schwer alles sicher, nimm eine schwerere Kettlebell und beginne wieder bei Leicht. Einzelne Übungen kannst du in der Übung selbst anpassen, die App merkt sich deine Werte.",
     intensityLabels: {
-      leicht: "Einsteiger",
+      leicht: "Leicht",
+      mittel: "Mittel",
       normal: "Normal",
       schwer: "Schwer"
     },
+    modeLabel: "Trainingsart",
+    modeLabels: {
+      reps: "Wiederholungen",
+      time: "Zeit"
+    },
+    modeNote: {
+      reps: "Du machst die vorgegebene Zahl an Wiederholungen und pausierst zwischen den Runden.",
+      time: "Du arbeitest pro Übung eine feste Zeit und pausierst danach kurz (Leicht 30/30, Mittel 40/20, Schwer 45/15 Sekunden). Mache nur so viele saubere Wiederholungen, wie die Technik erlaubt."
+    },
+    sideSwitchNote: "Zur Hälfte der Zeit die Seite wechseln (Signalton).",
+    warmupTitleEinsteiger: "Aufwärmen (~5-7 Min.)",
     moduleLabels: {
       einsteiger: "Einsteiger",
       kurs: "Beginner-Modul"
@@ -425,6 +470,8 @@ const UI = {
     setsRounds: "Sätze / Runden",
     durationLabel: "Dauer dieser Einheit",
     durationStandard: "Standard",
+    roundsLabel: "Runden",
+    roundsChoice: (n, m) => `${n} Runden · ${m} Min.`,
     durationMin: m => `${m} Min.`,
     save: "Speichern",
     libraryHeader: "Bibliothek",
@@ -488,16 +535,16 @@ const UI = {
     },
     startNewCycle: "Nächsten Zyklus starten",
     continueToKurs: "Weiter zum Trainingsplan",
-    customBadge: "eigene Werte",
-    customPlaceholder: "z. B. 15 Wdh.",
+    customBadge: "eigener Wert (wird gemerkt)",
+    customPlaceholder: "z. B. 12",
     customReset: "Zurücksetzen",
     weightGuideTitle: "Welches Gewicht?",
     weightGuideText: "Einstiegswerte: Frauen ca. 4–8 kg, Männer ca. 8–12 kg. Selbsttest: Wähle ein Gewicht, mit dem du die erste Übung 5x technisch sauber schaffst, ohne dass die Form einbricht — das ist dein Startgewicht. Steigere in 2-kg-Schritten, sobald du am oberen Ende des Wiederholungsbereichs noch sauber bleibst.",
     blockNames: {
       hingeSquat: "Hinge & Squat",
-      pushCarry: "Push & Carry",
-      ersterSwing: "Erster Swing",
-      ganzkoerperSwing: "Ganzkörper + Swing",
+      swingCarry: "Swing & Carry",
+      hingeSwing: "Hinge & Swing",
+      ganzkoerper: "Ganzkörper",
       kursBasis: "Basis",
       kursAufbau: "Aufbau",
       kursVerdichtung: "Verdichtung",
@@ -513,11 +560,24 @@ const UI = {
     minutesTrained: "minutes trained",
     intensity: "Intensity",
     intensityNote: "Normal and Hard use the same core exercises — Hard raises the workload, depending on the session through an extra set, more reps, longer work time, shorter rest, EMOM time limits, or extra finishing work. Hard doesn't mean your technique is allowed to slip — if the movement stops being clean, Normal is the right choice.",
+    intensityNoteEinsteiger: "Start with Light. Once you can do every rep safely and cleanly, move up one level. If Hard feels secure, take a heavier kettlebell and start again at Light. You can adjust single exercises inside the exercise; the app remembers your values.",
     intensityLabels: {
-      leicht: "Beginner",
+      leicht: "Light",
+      mittel: "Medium",
       normal: "Normal",
       schwer: "Hard"
     },
+    modeLabel: "Training mode",
+    modeLabels: {
+      reps: "Reps",
+      time: "Time"
+    },
+    modeNote: {
+      reps: "You do the given number of reps and rest between rounds.",
+      time: "You work for a fixed time per exercise, then rest briefly (Light 30/30, Medium 40/20, Hard 45/15 seconds). Only do as many clean reps as your form allows."
+    },
+    sideSwitchNote: "Switch sides at half time (signal tone).",
+    warmupTitleEinsteiger: "Warm-up (~5-7 min)",
     moduleLabels: {
       einsteiger: "Beginner",
       kurs: "Beginner Module"
@@ -529,6 +589,8 @@ const UI = {
     setsRounds: "sets / rounds",
     durationLabel: "Duration of this session",
     durationStandard: "Standard",
+    roundsLabel: "Rounds",
+    roundsChoice: (n, m) => `${n} rounds · ${m} min`,
     durationMin: m => `${m} min`,
     save: "Save",
     libraryHeader: "Library",
@@ -592,16 +654,16 @@ const UI = {
     },
     startNewCycle: "Start next cycle",
     continueToKurs: "Continue to the training plan",
-    customBadge: "custom",
-    customPlaceholder: "e.g. 15 reps",
+    customBadge: "own value (remembered)",
+    customPlaceholder: "e.g. 12",
     customReset: "Reset",
     weightGuideTitle: "What weight?",
     weightGuideText: "Starting point: women approx. 4–8 kg, men approx. 8–12 kg. Self-test: pick a weight you can do the first exercise 5 times with clean form, without it breaking down — that's your starting weight. Increase in 2 kg steps once you stay clean at the top of the rep range.",
     blockNames: {
       hingeSquat: "Hinge & Squat",
-      pushCarry: "Push & Carry",
-      ersterSwing: "First Swing",
-      ganzkoerperSwing: "Full Body + Swing",
+      swingCarry: "Swing & Carry",
+      hingeSwing: "Hinge & Swing",
+      ganzkoerper: "Full Body",
       kursBasis: "Basics",
       kursAufbau: "Build-Up",
       kursVerdichtung: "Density",
@@ -1446,6 +1508,53 @@ const WARMUP = [{
   }
 }];
 
+// Warm-up des Einsteiger-Moduls (~5-7 Min.): wärmt auf, ohne zu ermüden.
+const WARMUP_EINSTEIGER = [{
+  id: "warmup-kb-slingshot",
+  n: {
+    de: "Kettlebell Slingshot",
+    en: "Kettlebell slingshot"
+  },
+  d: {
+    de: "Kettlebell locker um den Körper herum von einer Hand zur anderen kreisen lassen, Rumpf bleibt stabil. Gewöhnt Körper und Griff an die Kettlebell. 8 Wdh. pro Richtung.",
+    en: "Loosely circle the kettlebell around your body from hand to hand, core stays stable. Gets your body and grip used to the kettlebell. 8 reps each direction."
+  }
+}, {
+  id: "warmup-kb-halo",
+  n: {
+    de: "Kettlebell Halo",
+    en: "Kettlebell halo"
+  },
+  d: {
+    de: "Kettlebell an den Hörnern nah am Kopf vorbei kreisen lassen, Rumpf bleibt stabil. Wärmt gezielt die Schultern auf. 8 Wdh. pro Richtung.",
+    en: "Circle the kettlebell by the horns closely around the head, core stays stable. Specifically warms up the shoulders. 8 reps each direction."
+  }
+}, {
+  id: "warmup-kb-good-morning",
+  n: {
+    de: "Good Morning",
+    en: "Good morning"
+  },
+  d: {
+    de: "Hände an den Hinterkopf oder die Kettlebell vor der Brust, Hüfte nach hinten schieben, leichte Kniebeugung, Rücken bleibt gerade. Bereitet auf die Hinge-Bewegungen vor. 8 Wdh.",
+    en: "Hands behind the head or the kettlebell at the chest, push the hips back, slight knee bend, back stays straight. Preps the hinge movements. 8 reps."
+  }
+}, {
+  id: "warmup-bodyweight-squat",
+  n: {
+    de: "Kniebeugen",
+    en: "Squats"
+  },
+  d: {
+    de: "Kniebeugen ohne Gewicht, Oberkörper aufrecht, Knie folgen den Zehen. Bereitet gezielt auf den Goblet Squat vor. 8 Wdh.",
+    en: "Bodyweight squats, torso upright, knees track the toes. Specifically preps the goblet squat. 8 reps."
+  }
+}];
+const WARMUP_BY_MODULE = {
+  einsteiger: WARMUP_EINSTEIGER,
+  kurs: WARMUP
+};
+
 // Cool-down (~2-3 Min.) — bewusst leicht, alles im Stehen ausführbar.
 const COOLDOWN = [{
   id: "cooldown-calf-stretch",
@@ -1479,125 +1588,136 @@ const COOLDOWN = [{
   }
 }];
 
-// Modul 1 — Einsteiger (kostenloser Schnupperkurs, 4 Einheiten). Er soll kurz
-// zeigen, wie die App funktioniert, und helfen einzuschätzen, ob Kettlebell-
-// Training für die Person das Richtige ist. Alle Übungen sind bewusst aus dem
-// Grundstock: Hinge, Squat, Push, Pull, Carry — der Swing kommt ab Einheit 3
-// mit wenigen Wiederholungen dazu (direkt nach dem Romanian Deadlift), in
-// Einheit 4 steht er am Anfang der Runde. Technik geht vor Tempo und Volumen.
-// Jede Einheit hat einen eigenen Block-Schlüssel, damit sie in der App einen
-// eigenen Titel und Hinweistext bekommt. Normal/Schwer (Kurs-Modul) sind
-// eigenständige 12-Einheiten-Pläne für sportliche bzw. erfahrene Personen.
+// Modul 1 — Einsteiger (kostenloses Probetraining, 4 Einheiten). Es zeigt, wie
+// die App funktioniert, und hilft einzuschätzen, ob Kettlebell-Training für die
+// Person das Richtige ist. Alle Übungen stammen aus den fünf Grundmustern
+// Hinge, Squat, Push, Pull und Carry. Der Swing kommt schon in Einheit 1 vor
+// (nach Romanian Deadlift und Kniebeuge), ab Einheit 2 steht er am Anfang der
+// Runde, solange man frisch ist.
+// Es gibt einen einzigen Plan. Die Stufen (leicht/mittel/schwer) ändern nur die
+// Zahlen: `t` enthält pro Übung die drei Werte (siehe STEPS).
+// Jede Einheit hat einen eigenen Block-Schlüssel für Titel und Hinweistext.
+// Das Beginner-Modul (Kurs) besteht aus eigenständigen 12-Einheiten-Plänen.
 const SESSIONS_EINSTEIGER = {
-  leicht: {
-    1: {
-      block: "hingeSquat",
-      format: "sets",
-      sets: 3,
-      exercises: [{
-        n: "Kettlebell Romanian Deadlift",
-        b: 8,
-        u: "reps"
-      }, {
-        n: "Kettlebell Goblet Squat",
-        b: 8,
-        u: "reps"
-      }, {
-        n: "Kettlebell Bent-Over Row",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Plank",
-        b: 20,
-        u: "sec",
-        r: 5
-      }]
-    },
-    2: {
-      block: "pushCarry",
-      format: "sets",
-      sets: 3,
-      exercises: [{
-        n: "Kettlebell Goblet Squat",
-        b: 8,
-        u: "reps"
-      }, {
-        n: "Kettlebell Goblet Press",
-        b: 8,
-        u: "reps"
-      }, {
-        n: "Kettlebell Romanian Deadlift",
-        b: 8,
-        u: "reps"
-      }, {
-        n: "Kettlebell Bent-Over Row",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Suitcase Carry",
-        b: 20,
-        u: "m",
-        r: 5
-      }]
-    },
-    3: {
-      block: "ersterSwing",
-      format: "sets",
-      sets: 3,
-      exercises: [{
-        n: "Kettlebell Romanian Deadlift",
-        b: 8,
-        u: "reps"
-      }, {
-        n: "Kettlebell Swing",
-        b: 6,
-        u: "reps"
-      }, {
-        n: "Kettlebell Goblet Squat",
-        b: 8,
-        u: "reps"
-      }, {
-        n: "Kettlebell Goblet Press",
-        b: 8,
-        u: "reps"
-      }, {
-        n: "Kettlebell Bent-Over Row",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Plank",
-        b: 25,
-        u: "sec",
-        r: 5
-      }]
-    },
-    4: {
-      block: "ganzkoerperSwing",
-      format: "sets",
-      sets: 3,
-      exercises: [{
-        n: "Kettlebell Swing",
-        b: 8,
-        u: "reps"
-      }, {
-        n: "Kettlebell Goblet Squat",
-        b: 8,
-        u: "reps"
-      }, {
-        n: "Kettlebell Goblet Press",
-        b: 8,
-        u: "reps"
-      }, {
-        n: "Kettlebell Bent-Over Row",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Suitcase Carry",
-        b: 25,
-        u: "m",
-        r: 5
-      }]
-    }
+  1: {
+    block: "hingeSquat",
+    format: "sets",
+    sets: 3,
+    exercises: [{
+      n: "Kettlebell Romanian Deadlift",
+      t: STEPS.reps,
+      u: "reps"
+    }, {
+      n: "Kettlebell Goblet Squat",
+      t: STEPS.reps,
+      u: "reps"
+    }, {
+      n: "Kettlebell Swing",
+      t: STEPS.reps,
+      u: "reps"
+    }, {
+      n: "Kettlebell Goblet Press",
+      t: STEPS.reps,
+      u: "reps"
+    }, {
+      n: "Kettlebell Bent-Over Row",
+      t: STEPS.reps,
+      u: "reps_side"
+    }, {
+      n: "Plank",
+      t: STEPS.hold,
+      u: "sec"
+    }]
+  },
+  2: {
+    block: "swingCarry",
+    format: "sets",
+    sets: 3,
+    exercises: [{
+      n: "Kettlebell Swing",
+      t: STEPS.reps,
+      u: "reps"
+    }, {
+      n: "Kettlebell Goblet Squat",
+      t: STEPS.reps,
+      u: "reps"
+    }, {
+      n: "Kettlebell Goblet Press",
+      t: STEPS.reps,
+      u: "reps"
+    }, {
+      n: "Kettlebell Bent-Over Row",
+      t: STEPS.reps,
+      u: "reps_side"
+    }, {
+      n: "Push-Up",
+      t: STEPS.pushUp,
+      u: "reps"
+    }, {
+      n: "Kettlebell Suitcase Carry",
+      t: STEPS.carry,
+      u: "m_side"
+    }]
+  },
+  3: {
+    block: "hingeSwing",
+    format: "sets",
+    sets: 3,
+    exercises: [{
+      n: "Kettlebell Swing",
+      t: STEPS.reps,
+      u: "reps"
+    }, {
+      n: "Kettlebell Goblet Squat",
+      t: STEPS.reps,
+      u: "reps"
+    }, {
+      n: "Kettlebell Romanian Deadlift",
+      t: STEPS.reps,
+      u: "reps"
+    }, {
+      n: "Kettlebell Goblet Press",
+      t: STEPS.reps,
+      u: "reps"
+    }, {
+      n: "Kettlebell Bent-Over Row",
+      t: STEPS.reps,
+      u: "reps_side"
+    }, {
+      n: "Plank",
+      t: STEPS.hold,
+      u: "sec"
+    }]
+  },
+  4: {
+    block: "ganzkoerper",
+    format: "sets",
+    sets: 3,
+    exercises: [{
+      n: "Kettlebell Goblet Squat",
+      t: STEPS.reps,
+      u: "reps"
+    }, {
+      n: "Kettlebell Romanian Deadlift",
+      t: STEPS.reps,
+      u: "reps"
+    }, {
+      n: "Kettlebell Bent-Over Row",
+      t: STEPS.reps,
+      u: "reps_side"
+    }, {
+      n: "Kettlebell Swing",
+      t: STEPS.reps,
+      u: "reps"
+    }, {
+      n: "Push-Up",
+      t: STEPS.pushUp,
+      u: "reps"
+    }, {
+      n: "Kettlebell Suitcase Carry",
+      t: STEPS.carry,
+      u: "m_side"
+    }]
   }
 };
 const SESSIONS_KURS = {
@@ -2329,26 +2449,26 @@ const SESSIONS_KURS = {
 const BLOCK_INFO_EINSTEIGER = {
   hingeSquat: {
     note: {
-      de: "Du lernst die beiden wichtigsten Bewegungen für den Unterkörper kennen: Hüftbeuge (Hinge) und Kniebeuge. Dazu kommen eine einfache Zugbewegung und Rumpfstabilität. Kein Swing, der Fokus liegt auf den Grundlagen. Vorab: Bei Beschwerden an Rücken, Schulter oder Knie lass das bitte zuerst ärztlich abklären.",
-      en: "You get to know the two most important movements for the lower body: the hip hinge and the squat. A simple pulling movement and core stability are added. No swing yet, the focus is on the basics. First: if you have back, shoulder or knee problems, please have them checked by a doctor first."
+      de: "Du lernst die wichtigsten Grundbewegungen kennen: Hüftbeuge (Hinge), Kniebeuge, Drücken, Ziehen und Rumpfstabilität. Der erste Swing kommt nach Romanian Deadlift und Kniebeuge. Die Bewegung kommt aus der Hüfte, die Arme führen nur. Technik vor Tempo: Wird die Technik schlechter, beende den Satz. Vorab: Bei Beschwerden an Rücken, Schulter oder Knie lass das bitte zuerst ärztlich abklären.",
+      en: "You get to know the most important foundational movements: the hip hinge, the squat, pressing, pulling and core stability. Your first swing comes after the Romanian deadlift and the squat. The movement comes from the hips, the arms only guide. Technique over pace: if your form gets worse, end the set. Beforehand: if you have back, shoulder or knee problems, please have them checked by a doctor first."
     }
   },
-  pushCarry: {
+  swingCarry: {
     note: {
-      de: "Jetzt kommen Drücken und Tragen dazu. Damit hast du alle Grundbewegungen einmal in einer Ganzkörpereinheit: Squat, Hinge, Push, Pull und Carry.",
-      en: "Now pressing and carrying are added. That gives you every foundational movement in one full-body session: squat, hinge, push, pull and carry."
+      de: "Jetzt steht der Swing am Anfang der Runde, solange du frisch bist. Dazu kommen Push-Up und Suitcase Carry. Technik vor Tempo: Wird die Technik schlechter, beende den Satz.",
+      en: "The swing now comes first in the round, while you are fresh. Push-up and suitcase carry are added. Technique over pace: if your form gets worse, end the set."
     }
   },
-  ersterSwing: {
+  hingeSwing: {
     note: {
-      de: "Der erste Swing, direkt nach dem Romanian Deadlift, mit wenigen Wiederholungen. Die Bewegung kommt aus der Hüfte, die Arme führen nur. Technik vor Tempo: Wird die Technik schlechter, beende den Satz.",
-      en: "Your first swing, right after the Romanian deadlift, with only a few reps. The movement comes from the hips, the arms only guide. Technique over pace: if your form gets worse, end the set."
+      de: "Swing und Romanian Deadlift trainieren dieselbe Hüftbeuge, einmal schnell und einmal langsam. Dazu kommen Kniebeuge, Drücken, Ziehen und Plank.",
+      en: "Swing and Romanian deadlift train the same hip hinge, once fast and once slow. Squat, pressing, pulling and plank are added."
     }
   },
-  ganzkoerperSwing: {
+  ganzkoerper: {
     note: {
-      de: "Eine vollständige Ganzkörpereinheit mit Swing am Anfang, wenn du noch frisch bist. Danach der Rückblick: Hat es dir Spaß gemacht? Hat sich die Technik sicher angefühlt? Gab es Beschwerden? Hast du Lust auf mehr?",
-      en: "A complete full-body session with the swing first, while you are still fresh. Then look back: did you enjoy it? Did your technique feel secure? Were there any problems? Do you want more?"
+      de: "Eine vollständige Ganzkörpereinheit mit Kniebeuge, Hüftbeuge, Swing, Ziehen, Push-Up und Tragen. Danach der Rückblick: Hat es dir Spaß gemacht? Hat sich die Technik sicher angefühlt? Gab es Beschwerden? Hast du Lust auf mehr?",
+      en: "A complete full-body session with squat, hinge, swing, pulling, push-up and carrying. Then look back: did you enjoy it? Did your technique feel secure? Were there any problems? Do you want more?"
     }
   }
 };
@@ -2445,7 +2565,8 @@ function buildIntervalSequence(exercises, rounds, workSec, restSec, restLabel) {
       seq.push({
         label: ex.name,
         seconds: workSec,
-        type: "work"
+        type: "work",
+        halfway: !!ex.switchSide
       });
       const isVeryLast = r === rounds - 1 && i === exercises.length - 1;
       if (!isVeryLast) seq.push({
@@ -2517,17 +2638,44 @@ function applyDurationChoice(sessionData, count, t) {
 // ============================================================
 // PROGRAMM-LOGIK — Einheit/Bibliothek aus den Trainingsplan-Daten ableiten
 // ============================================================
-function getSessionData(module, sessionNum, intensityKey, lang) {
+function getSessionData(module, sessionNum, intensityKey, lang, mode = "reps") {
   const t = UI[lang];
   const isEinsteiger = module === "einsteiger";
-  const tierKey = isEinsteiger ? "leicht" : intensityKey;
-  const SESSIONS_BY_TIER = isEinsteiger ? SESSIONS_EINSTEIGER : SESSIONS_KURS;
-  const SESSIONS = SESSIONS_BY_TIER[tierKey] || SESSIONS_BY_TIER.normal;
-  const session = SESSIONS[sessionNum];
+  const tierKey = intensityKey;
+  const session = isEinsteiger ? SESSIONS_EINSTEIGER[sessionNum] : (SESSIONS_KURS[tierKey] || SESSIONS_KURS.normal)[sessionNum];
+
+  // Einsteiger, Zeit-Variante: dieselben Übungen in der Plan-Reihenfolge als
+  // Zirkel mit fester Arbeits-/Pausenzeit pro Station.
+  if (isEinsteiger && mode === "time") {
+    const ratio = EINSTEIGER_TIME_RATIO[tierKey] || EINSTEIGER_TIME_RATIO.leicht;
+    const exercises = session.exercises.map(e => {
+      const switchSide = e.u.endsWith("_side");
+      return {
+        name: e.n,
+        key: slug(e.n),
+        cue: CUES[e.n][lang],
+        homeNote: HOME_NOTE_EXERCISES[e.n] ? t[HOME_NOTE_EXERCISES[e.n]] : null,
+        sideNote: switchSide ? t.sideSwitchNote : null,
+        switchSide
+      };
+    });
+    const rounds = session.sets;
+    const totalMinutes = Math.round(rounds * exercises.length * (ratio.work + ratio.rest) / 60);
+    return {
+      session,
+      block: session.block,
+      format: "circuit",
+      rounds,
+      workSec: ratio.work,
+      restSec: ratio.rest,
+      totalMinutes,
+      exercises
+    };
+  }
   if (session.format === "sets") {
     let exercises = session.exercises.map(e => {
       const roundTo = e.r || 1;
-      const value = Math.max(roundTo, Math.round(e.b / roundTo) * roundTo);
+      const value = isEinsteiger ? e.t[TIER_INDEX[tierKey] ?? 0] : Math.max(roundTo, Math.round(e.b / roundTo) * roundTo);
       const homeKey = HOME_NOTE_EXERCISES[e.n];
       return {
         name: e.n,
@@ -2541,7 +2689,7 @@ function getSessionData(module, sessionNum, intensityKey, lang) {
         reps: formatReps(value, e.u, lang)
       };
     });
-    const restBetween = SETS_REST_BY_TIER[tierKey] || SETS_REST_BY_TIER.normal;
+    const restBetween = isEinsteiger ? EINSTEIGER_REST_SEC : SETS_REST_BY_TIER[tierKey] || SETS_REST_BY_TIER.normal;
     return {
       session,
       block: session.block,
@@ -2636,16 +2784,29 @@ function getLibraryExercises(lang) {
 // ============================================================
 const STORAGE_KEY = "kb10-single-tracker-v1";
 
-// Eigene Wiederholungswerte einer Einheit (vom Nutzer überschrieben) oder null.
-function customRepsOf(sessionState, exKey) {
-  return sessionState.custom && sessionState.custom[exKey] || null;
+// Legt die vom Nutzer gespeicherten Werte pro Übung (modulweit gemerkt) über
+// die Werte der gewählten Stufe. Zirkel-Einheiten haben keine Wiederholungen.
+function applyCustomReps(sessionData, custom, lang) {
+  if (!custom || !sessionData.exercises.some(ex => custom[ex.key] && ex.unit)) return sessionData;
+  const exercises = sessionData.exercises.map(ex => {
+    const value = ex.unit && custom[ex.key];
+    return value ? {
+      ...ex,
+      repsValue: value,
+      reps: formatReps(value, ex.unit, lang),
+      isCustom: true
+    } : ex;
+  });
+  return {
+    ...sessionData,
+    exercises
+  };
 }
 function makeEmptySessions(count) {
   const sessions = {};
   for (let s = 1; s <= count; s++) sessions[s] = {
     completed: false,
-    checked: {},
-    custom: {}
+    checked: {}
   };
   return sessions;
 }
@@ -2655,12 +2816,15 @@ function emptyState() {
       einsteiger: {
         sessions: makeEmptySessions(MODULE_TOTAL_SESSIONS.einsteiger),
         cycle: 1,
-        intensity: "leicht"
+        intensity: "leicht",
+        mode: "reps",
+        custom: {}
       },
       kurs: {
         sessions: makeEmptySessions(MODULE_TOTAL_SESSIONS.kurs),
         cycle: 1,
-        intensity: "normal"
+        intensity: "normal",
+        custom: {}
       }
     },
     activeModule: "einsteiger"
@@ -2675,13 +2839,13 @@ function fillMissingSessions(moduleState, count) {
   for (let s = 1; s <= count; s++) {
     if (!sessions[s]) sessions[s] = {
       completed: false,
-      checked: {},
-      custom: {}
+      checked: {}
     };
   }
   return {
     ...moduleState,
-    sessions
+    sessions,
+    custom: moduleState.custom || {}
   };
 }
 
@@ -2807,7 +2971,7 @@ function TimerOverlay({
     const id = setInterval(() => {
       setRemaining(r => {
         const seg = sequence[segIndex];
-        if (seg && seg.type === "work" && HALFWAY_CHIME_EXERCISES.has(seg.label) && seg.seconds >= 10) {
+        if (seg && seg.type === "work" && (HALFWAY_CHIME_EXERCISES.has(seg.label) || seg.halfway) && seg.seconds >= 10) {
           const half = Math.round(seg.seconds / 2);
           if (r - 1 === half) playHalfwayChime();
         }
@@ -3248,16 +3412,16 @@ const REGION_ICON = {
 };
 const BLOCK_ICON = {
   hingeSquat: "target",
-  pushCarry: "stairs",
-  ersterSwing: "flame",
-  ganzkoerperSwing: "flag",
+  swingCarry: "flame",
+  hingeSwing: "stairs",
+  ganzkoerper: "flag",
   kursBasis: "target",
   kursAufbau: "stairs",
   kursVerdichtung: "loop",
   kursIntegration: "flag"
 };
 const MODULE_BLOCK_ORDER = {
-  einsteiger: ["hingeSquat", "pushCarry", "ersterSwing", "ganzkoerperSwing"],
+  einsteiger: ["hingeSquat", "swingCarry", "hingeSwing", "ganzkoerper"],
   kurs: ["kursBasis", "kursAufbau", "kursVerdichtung", "kursIntegration"]
 };
 // Navigation: labelKey verweist auf einen Schlüssel in UI[lang].
@@ -3761,6 +3925,7 @@ function PlanListView({
   nextSessionNum,
   sessionPreviews,
   setIntensity,
+  setMode,
   t,
   totalSessions,
   totalSessionsComplete
@@ -3802,7 +3967,44 @@ function PlanListView({
       lineHeight: 1.5,
       marginBottom: 18
     }
-  }, t.intensityNote)), /*#__PURE__*/React.createElement("div", {
+  }, activeModule === "einsteiger" ? t.intensityNoteEinsteiger : t.intensityNote)), activeModule === "einsteiger" && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      color: C.textSecondary,
+      marginBottom: 10
+    }
+  }, t.modeLabel), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 6,
+      marginBottom: 6
+    }
+  }, ["reps", "time"].map(key => {
+    const active = (moduleState.mode || "reps") === key;
+    return /*#__PURE__*/React.createElement("button", {
+      key: key,
+      className: "kb-tab",
+      onClick: () => setMode(key),
+      style: {
+        borderRadius: 12,
+        flex: 1,
+        padding: "10px 8px",
+        background: active ? C.brass : C.panel,
+        color: active ? C.onBrass : C.textSecondary,
+        border: `1px solid ${active ? C.brass : C.border}`,
+        fontSize: 13,
+        fontWeight: 500,
+        cursor: "pointer"
+      }
+    }, t.modeLabels[key]);
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 12,
+      color: C.textMuted,
+      lineHeight: 1.5,
+      marginBottom: 18
+    }
+  }, t.modeNote[moduleState.mode === "time" ? "time" : "reps"])), /*#__PURE__*/React.createElement("div", {
     style: eyebrowStyle(C.textMuted, {
       marginBottom: 4
     })
@@ -3966,6 +4168,7 @@ function PlanListView({
 function SessionDetailView({
   BLOCK_INFO,
   C,
+  activeModule,
   activeSession,
   clearCustomReps,
   cooldownOpen,
@@ -4142,7 +4345,7 @@ function SessionDetailView({
       color: C.textMuted,
       marginBottom: 8
     }
-  }, t.durationLabel), /*#__PURE__*/React.createElement("div", {
+  }, activeModule === "einsteiger" ? t.roundsLabel : t.durationLabel), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       gap: 8,
@@ -4151,7 +4354,7 @@ function SessionDetailView({
   }, DURATION_CHOICES.map(count => {
     const isStandard = count === sessionData.sets || count === sessionData.rounds;
     const isActive = durationChoice === count || durationChoice === null && isStandard;
-    const minutes = count * displaySessionData.exercises.length;
+    const minutes = displaySessionData.format === "circuit" ? Math.round(count * displaySessionData.exercises.length * (displaySessionData.workSec + displaySessionData.restSec) / 60) : count * displaySessionData.exercises.length;
     return /*#__PURE__*/React.createElement("button", {
       key: count,
       onClick: () => setDurationChoice(count),
@@ -4165,7 +4368,7 @@ function SessionDetailView({
         background: isActive ? C.brass : "transparent",
         color: isActive ? C.onBrass : C.textSecondary
       }
-    }, t.durationMin(minutes), isStandard ? ` · ${t.durationStandard}` : "");
+    }, activeModule === "einsteiger" ? t.roundsChoice(count, minutes) : t.durationMin(minutes), isStandard ? ` · ${t.durationStandard}` : "");
   })))), /*#__PURE__*/React.createElement("div", {
     style: {
       borderRadius: 24,
@@ -4210,7 +4413,7 @@ function SessionDetailView({
       fontSize: 14,
       color: C.brass
     }
-  }, t.warmupTitle), /*#__PURE__*/React.createElement("span", {
+  }, activeModule === "einsteiger" ? t.warmupTitleEinsteiger : t.warmupTitle), /*#__PURE__*/React.createElement("span", {
     style: {
       fontSize: 13,
       color: C.textMuted
@@ -4222,7 +4425,7 @@ function SessionDetailView({
       gap: 8,
       marginTop: 8
     }
-  }, WARMUP.map(w => /*#__PURE__*/React.createElement("div", {
+  }, WARMUP_BY_MODULE[activeModule].map(w => /*#__PURE__*/React.createElement("div", {
     key: w.id,
     style: cardStyle(C, {
       padding: "10px 12px"
@@ -4331,7 +4534,7 @@ function SessionDetailView({
     }
   }, displaySessionData.exercises.map((ex, i) => {
     const isOpen = expandedExercise === ex.key;
-    const compactStat = ex.reps ? displaySessionData.format === "sets" ? t.setsTimes(displaySessionData.sets, `${customRepsOf(sessionState, ex.key) || ex.repsValue}${ex.isSide ? ` ${t.perSideShort}` : UNIT_LABELS[lang][ex.unit] || ""}`) : ex.reps : null;
+    const compactStat = ex.reps ? displaySessionData.format === "sets" ? t.setsTimes(displaySessionData.sets, `${ex.repsValue}${UNIT_LABELS[lang][ex.unit.replace("_side", "")] || ""}${ex.isSide ? ` ${t.perSideShort}` : ""}`) : ex.reps : null;
     return /*#__PURE__*/React.createElement("div", {
       key: ex.key,
       style: cardStyle(C, {
@@ -4412,7 +4615,7 @@ function SessionDetailView({
         width: 110
       }
     }), /*#__PURE__*/React.createElement("button", {
-      onClick: () => saveCustomReps(activeSession, ex.key),
+      onClick: () => saveCustomReps(ex.key),
       style: {
         background: C.brass,
         border: "none",
@@ -4424,7 +4627,7 @@ function SessionDetailView({
     }, t.save)) : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
       onClick: () => {
         setEditingReps(ex.key);
-        setRepsDraft(customRepsOf(sessionState, ex.key) || ex.reps);
+        setRepsDraft(String(ex.repsValue));
       },
       style: {
         background: "transparent",
@@ -4434,8 +4637,8 @@ function SessionDetailView({
         fontSize: 12,
         padding: 0
       }
-    }, "✎ ", t.customBadge), customRepsOf(sessionState, ex.key) && /*#__PURE__*/React.createElement("button", {
-      onClick: () => clearCustomReps(activeSession, ex.key),
+    }, "✎ ", t.customBadge), ex.isCustom && /*#__PURE__*/React.createElement("button", {
+      onClick: () => clearCustomReps(ex.key),
       style: {
         background: "transparent",
         border: "none",
@@ -4472,7 +4675,7 @@ function SessionDetailView({
         fontWeight: 600,
         color: C.text
       }
-    }, customRepsOf(sessionState, ex.key) || `${ex.repsValue}${UNIT_LABELS[lang][ex.unit.replace("_side", "")]}`)))), /*#__PURE__*/React.createElement("div", {
+    }, `${ex.repsValue}${UNIT_LABELS[lang][ex.unit.replace("_side", "")]}`)))), /*#__PURE__*/React.createElement("div", {
       style: {
         fontSize: 13,
         color: C.textSecondary,
@@ -5112,24 +5315,31 @@ function KettlebellTracker() {
       mod.sessions[sessionNum].completed = !mod.sessions[sessionNum].completed;
     });
   };
-  const saveCustomReps = (sessionNum, exKey) => {
+
+  // Eigene Wiederholungen/Dauer pro Übung: gelten für alle Einheiten des Moduls
+  // und überschreiben die Werte der gewählten Stufe, bis sie zurückgesetzt werden.
+  const saveCustomReps = exKey => {
+    const value = parseInt(repsDraft, 10);
     updateState((next, mod) => {
-      const session = mod.sessions[sessionNum];
-      if (!session.custom) session.custom = {};
-      const val = repsDraft.trim();
-      if (val) session.custom[exKey] = val;else delete session.custom[exKey];
+      if (!mod.custom) mod.custom = {};
+      if (value > 0 && value <= 999) mod.custom[exKey] = value;else delete mod.custom[exKey];
     });
     setEditingReps(null);
     setRepsDraft("");
   };
-  const clearCustomReps = (sessionNum, exKey) => {
+  const clearCustomReps = exKey => {
     updateState((next, mod) => {
-      if (mod.sessions[sessionNum].custom) delete mod.sessions[sessionNum].custom[exKey];
+      if (mod.custom) delete mod.custom[exKey];
     });
   };
   const setIntensity = level => {
     updateState((next, mod) => {
       mod.intensity = level;
+    });
+  };
+  const setMode = mode => {
+    updateState((next, mod) => {
+      mod.mode = mode;
     });
   };
   const setActiveModule = moduleId => {
@@ -5154,7 +5364,7 @@ function KettlebellTracker() {
   const totalSessions = MODULE_TOTAL_SESSIONS[activeModule];
   const isEinsteigerModule = activeModule === "einsteiger";
   const BLOCK_INFO = isEinsteigerModule ? BLOCK_INFO_EINSTEIGER : BLOCK_INFO_KURS;
-  const sessionData = useMemo(() => getSessionData(activeModule, activeSession, moduleState.intensity, lang), [activeModule, activeSession, moduleState.intensity, lang]);
+  const sessionData = useMemo(() => getSessionData(activeModule, activeSession, moduleState.intensity, lang, moduleState.mode), [activeModule, activeSession, moduleState.intensity, moduleState.mode, lang]);
   const sessionState = moduleState.sessions[activeSession];
   const libraryExercises = useMemo(() => getLibraryExercises(lang), [lang]);
 
@@ -5162,13 +5372,13 @@ function KettlebellTracker() {
   // Wechsel zu einer anderen Einheit/Modul/Stufe zurückgesetzt (kein globaler Wert).
   useEffect(() => {
     setDurationChoice(null);
-  }, [activeModule, activeSession, moduleState.intensity]);
-  const displaySessionData = useMemo(() => applyDurationChoice(sessionData, durationChoice, t), [sessionData, durationChoice, t]);
+  }, [activeModule, activeSession, moduleState.intensity, moduleState.mode]);
+  const displaySessionData = useMemo(() => applyCustomReps(applyDurationChoice(sessionData, durationChoice, t), moduleState.custom, lang), [sessionData, durationChoice, t, moduleState.custom, lang]);
   const totalSessionsComplete = useMemo(() => Object.values(moduleState.sessions).filter(s => s.completed).length, [moduleState]);
   const minutesTrained = useMemo(() => {
     return Object.entries(moduleState.sessions).reduce((sum, [num, s]) => {
       if (!s.completed) return sum;
-      const d = getSessionData(activeModule, Number(num), moduleState.intensity, lang);
+      const d = getSessionData(activeModule, Number(num), moduleState.intensity, lang, moduleState.mode);
       return sum + sessionMinutes(d);
     }, 0);
   }, [moduleState, activeModule, lang]);
@@ -5180,11 +5390,11 @@ function KettlebellTracker() {
     for (let s = 1; s <= totalSessions; s++) if (!moduleState.sessions[s].completed) return s;
     return totalSessions;
   }, [moduleState, totalSessions]);
-  const nextSessionData = useMemo(() => getSessionData(activeModule, nextSessionNum, moduleState.intensity, lang), [activeModule, nextSessionNum, moduleState.intensity, lang]);
+  const nextSessionData = useMemo(() => getSessionData(activeModule, nextSessionNum, moduleState.intensity, lang, moduleState.mode), [activeModule, nextSessionNum, moduleState.intensity, moduleState.mode, lang]);
   const sessionPreviews = useMemo(() => {
     const arr = [];
     for (let s = 1; s <= totalSessions; s++) {
-      const d = getSessionData(activeModule, s, moduleState.intensity, lang);
+      const d = getSessionData(activeModule, s, moduleState.intensity, lang, moduleState.mode);
       arr.push({
         num: s,
         block: d.block,
@@ -5193,7 +5403,7 @@ function KettlebellTracker() {
       });
     }
     return arr;
-  }, [activeModule, moduleState.intensity]);
+  }, [activeModule, moduleState.intensity, moduleState.mode]);
   const filteredLibrary = useMemo(() => {
     return libraryExercises.filter(ex => {
       if (libraryFilter !== "all" && ex.region !== libraryFilter) return false;
@@ -5286,12 +5496,14 @@ function KettlebellTracker() {
     nextSessionNum: nextSessionNum,
     sessionPreviews: sessionPreviews,
     setIntensity: setIntensity,
+    setMode: setMode,
     t: t,
     totalSessions: totalSessions,
     totalSessionsComplete: totalSessionsComplete
   }), tab === "program" && programView === "detail" && /*#__PURE__*/React.createElement(SessionDetailView, {
     BLOCK_INFO: BLOCK_INFO,
     C: C,
+    activeModule: activeModule,
     activeSession: activeSession,
     clearCustomReps: clearCustomReps,
     cooldownOpen: cooldownOpen,
