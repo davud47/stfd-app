@@ -77,25 +77,6 @@ const THEMES = {
     navBg: "rgba(10, 10, 10, 0.85)",
     shadow: "0 8px 24px rgba(0,0,0,0.5)",
     overlayBg: "rgba(10,10,10,0.96)"
-  },
-  light: {
-    bg: "#FAF7F2",
-    panel: "#FFFFFF",
-    panelAlt: "#F3EDE3",
-    border: "#E6DDCE",
-    borderStrong: "#D2C4AC",
-    brass: "#B07E33",
-    brassSoft: "#D9B87E",
-    text: "#241E15",
-    textSecondary: "#6E6151",
-    textMuted: "#9C8E78",
-    success: "#4F7A48",
-    successBg: "#E5EFE0",
-    onBrass: "#FFFFFF",
-    onSuccess: "#FFFFFF",
-    navBg: "rgba(255, 255, 255, 0.85)",
-    shadow: "0 8px 24px rgba(120,100,70,0.18)",
-    overlayBg: "rgba(250,247,242,0.96)"
   }
 };
 
@@ -213,18 +194,6 @@ function Icon({
       }), /*#__PURE__*/React.createElement("path", {
         d: "M12 7.5V12l3 2.3"
       }));
-    case "flag":
-      return /*#__PURE__*/React.createElement("svg", common, /*#__PURE__*/React.createElement("path", {
-        d: "M5.5 2.5v19"
-      }), /*#__PURE__*/React.createElement("path", {
-        d: "M5.5 4h12l-2.3 4.3L17.5 12h-12"
-      }));
-    case "stairs":
-      return /*#__PURE__*/React.createElement("svg", common, /*#__PURE__*/React.createElement("path", {
-        d: "M4 20h3.5v-4H11v-4h3.5v-4H18"
-      }), /*#__PURE__*/React.createElement("path", {
-        d: "M4 20V4"
-      }));
     case "bars":
       return /*#__PURE__*/React.createElement("svg", common, /*#__PURE__*/React.createElement("rect", {
         x: "4",
@@ -254,6 +223,26 @@ function Icon({
         d: "M4.5 12h14"
       }), /*#__PURE__*/React.createElement("path", {
         d: "M13 6l6.5 6-6.5 6"
+      }));
+    case "lightbulb":
+      return /*#__PURE__*/React.createElement("svg", common, /*#__PURE__*/React.createElement("path", {
+        d: "M9 18h6"
+      }), /*#__PURE__*/React.createElement("path", {
+        d: "M10 21h4"
+      }), /*#__PURE__*/React.createElement("path", {
+        d: "M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"
+      }));
+    case "warning":
+      return /*#__PURE__*/React.createElement("svg", common, /*#__PURE__*/React.createElement("path", {
+        d: "M12 3 2.5 20h19L12 3z"
+      }), /*#__PURE__*/React.createElement("path", {
+        d: "M12 10v4"
+      }), /*#__PURE__*/React.createElement("path", {
+        d: "M12 17.2v.01"
+      }));
+    case "pulse":
+      return /*#__PURE__*/React.createElement("svg", common, /*#__PURE__*/React.createElement("path", {
+        d: "M3 12h4l2.5-6 4 12 2.5-6H21"
       }));
     case "arrowLeft":
       return /*#__PURE__*/React.createElement("svg", common, /*#__PURE__*/React.createElement("path", {
@@ -293,20 +282,6 @@ function Icon({
         fill: color,
         stroke: "none"
       }));
-    case "calendar":
-      return /*#__PURE__*/React.createElement("svg", common, /*#__PURE__*/React.createElement("rect", {
-        x: "3.5",
-        y: "5",
-        width: "17",
-        height: "15.5",
-        rx: "2.5"
-      }), /*#__PURE__*/React.createElement("path", {
-        d: "M3.5 9.5h17"
-      }), /*#__PURE__*/React.createElement("path", {
-        d: "M8 3v4"
-      }), /*#__PURE__*/React.createElement("path", {
-        d: "M16 3v4"
-      }));
     default:
       return null;
   }
@@ -319,42 +294,26 @@ const LOGO_DATA_URI = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfQAAAH0CAY
 // KONFIGURATION — Module, Stufen, Pausen, Formatierung
 // ============================================================
 const MODULE_TOTAL_SESSIONS = {
-  einsteiger: 4,
   kurs: 12
 };
 
-// Module und Stufen: Jede Stufe ist ein eigenständiger Trainingsplan, kein
-// Multiplikator auf ein gemeinsames Grundgerüst.
-//  - Einsteiger (Stufe "leicht"): kostenloser Schnupperkurs mit 4 Einheiten.
-//    Er zeigt, wie die App funktioniert, und hilft einzuschätzen, ob
-//    Kettlebell-Training passt.
-//  - Kurs / Beginner-Modul (Stufen "normal" und "schwer"): 12 Einheiten, die
-//    ab Einheit 1 auf dem Niveau der gewählten Stufe starten.
-// Wählbare Stufen pro Modul: Einsteiger bietet "leicht", "mittel" und "schwer"
-// (mehr Wiederholungen bzw. längere Dauer), das Beginner-Modul "normal" und "schwer".
+// Module und Stufen: Das Beginner-Modul besteht aus 12 eigenständigen Workouts
+// (kein Aufbauplan); jedes kann in beliebiger Reihenfolge trainiert werden.
+// Die Stufen "leicht", "mittel" und "schwer" ändern Wiederholungen,
+// Arbeitszeit und Pausen.
 const MODULE_INTENSITY_KEYS = {
-  einsteiger: ["leicht", "mittel", "schwer"],
-  kurs: ["normal", "schwer"]
+  kurs: ["leicht", "mittel", "schwer"]
 };
 
-// Einsteiger: Index der Stufe in den Wiederholungs-Tabellen (STEPS).
+// Index der Stufe in den Dreier-Listen der Einheiten.
 const TIER_INDEX = {
   leicht: 0,
   mittel: 1,
   schwer: 2
 };
 
-// Einsteiger: Wiederholungen bzw. Dauer pro Stufe (leicht / mittel / schwer).
-const STEPS = {
-  reps: [8, 10, 12],
-  pushUp: [10, 15, 20],
-  hold: [20, 30, 40],
-  // Sekunden
-  carry: [20, 30, 40] // Meter pro Seite
-};
-
-// Einsteiger, Zeit-Variante: Arbeits-/Pausenzeit (Sekunden) pro Station.
-const EINSTEIGER_TIME_RATIO = {
+// Zeit-Variante: Arbeits-/Pausenzeit (Sekunden) pro Station.
+const TIME_RATIO = {
   leicht: {
     work: 30,
     rest: 30
@@ -367,28 +326,6 @@ const EINSTEIGER_TIME_RATIO = {
     work: 45,
     rest: 15
   }
-};
-
-// Einsteiger, Wiederholungs-Variante: Pause (Sekunden) zwischen den Runden.
-const EINSTEIGER_REST_SEC = 120;
-
-// Arbeits-/Pausenzeit (Sekunden) pro Zirkel-Station, nach Stufe gestaffelt.
-const CIRCUIT_RATIO = {
-  normal: {
-    work: 30,
-    rest: 30
-  },
-  schwer: {
-    work: 40,
-    rest: 20
-  }
-};
-
-// Pause (Sekunden) zwischen den Runden einer "sets"-Einheit, nach Stufe gestaffelt.
-// Jede Runde geht einmal durch alle Übungen, erst danach folgt die Pause.
-const SETS_REST_BY_TIER = {
-  normal: 90,
-  schwer: 60
 };
 const UNIT_LABELS = {
   de: {
@@ -441,8 +378,6 @@ const UI = {
     sessionsDone: "Einheiten abgeschlossen",
     minutesTrained: "Minuten trainiert",
     intensity: "Intensität",
-    intensityNote: "Normal und Schwer verwenden dieselben Grundübungen — Schwer erhöht die Belastung, je nach Einheit durch einen zusätzlichen Satz, mehr Wiederholungen, längere Arbeitszeit, kürzere Pausen, EMOM-Zeitvorgaben oder zusätzliche Abschlussarbeit. Schwer bedeutet nicht, dass die Technik schlechter werden darf — wenn die Bewegung nicht mehr sauber bleibt, ist Normal die richtige Wahl.",
-    intensityNoteEinsteiger: "Starte mit Leicht. Schaffst du alle Wiederholungen sicher und sauber, gehe eine Stufe höher. Schaffst du auf Schwer alles sicher, nimm eine schwerere Kettlebell und beginne wieder bei Leicht. Einzelne Übungen kannst du in der Übung selbst anpassen, die App merkt sich deine Werte.",
     intensityLabels: {
       leicht: "Leicht",
       mittel: "Mittel",
@@ -454,40 +389,26 @@ const UI = {
       reps: "Wiederholungen",
       time: "Zeit"
     },
-    modeNote: {
-      reps: "Du machst die vorgegebene Zahl an Wiederholungen und pausierst zwischen den Runden.",
-      time: "Du arbeitest pro Übung eine feste Zeit und pausierst danach kurz (Leicht 30/30, Mittel 40/20, Schwer 45/15 Sekunden). Mache nur so viele saubere Wiederholungen, wie die Technik erlaubt."
-    },
     sideSwitchNote: "Zur Hälfte der Zeit die Seite wechseln (Signalton).",
-    warmupTitleEinsteiger: "Aufwärmen (~5-7 Min.)",
+    warmupTitle: "Aufwärmen (~5-7 Min.)",
     moduleLabels: {
-      einsteiger: "Einsteiger",
       kurs: "Beginner-Modul"
     },
     moduleSubtitle: {
-      einsteiger: "Kostenlos · Grundlagen",
-      kurs: "Alle Übungen · Normal & Schwer"
+      kurs: "12 Workouts · Leicht bis Schwer"
     },
     setsRounds: "Sätze / Runden",
-    durationLabel: "Dauer dieser Einheit",
     durationStandard: "Standard",
     roundsLabel: "Runden",
     roundsChoice: (n, m) => `${n} Runden · ${m} Min.`,
-    durationMin: m => `${m} Min.`,
     save: "Speichern",
     libraryHeader: "Bibliothek",
     libraryNote: "Alle Übungen der Kurse an einem Ort.",
     planHeader: "Dein Trainingsplan",
-    readyFor: label => `Bereit für ${label}?`,
     startSession: "Training starten",
-    goToPlan: "Zum Trainingsplan",
     backToList: "Zurück zur Übersicht",
-    backToLibrary: "Zurück zur Bibliothek",
     backToSession: "Zurück zur Einheit",
     openInLibrary: "Ausführliche Anleitung in der Bibliothek",
-    detailLearnTitle: "So lernst du es",
-    detailTipsTitle: "Atmung & Merksätze",
-    cycleProgress: "Fortschritt",
     searchPlaceholder: "Übung suchen",
     filterAll: "Alle",
     filterLower: "Beine",
@@ -503,8 +424,8 @@ const UI = {
     sideLeftLabel: "Seite 1: Links",
     sideRightLabel: "Seite 2: Rechts",
     detailStepsTitle: "So geht's",
-    detailMistakesTitle: "Häufige Fehler",
-    detailMusclesTitle: "Beanspruchte Muskeln",
+    detailMistakesTitle: "Typische Technikfehler",
+    detailMusclesTitle: "Beanspruchte Muskulatur",
     detailBenefitsTitle: "Vorteile",
     session: "Einheit",
     sessionsPlural: "Einheiten",
@@ -512,9 +433,7 @@ const UI = {
     emomLabel: (rounds, exCount, totalMin) => `EMOM — ${rounds} Runden à 1 Min. pro Übung (${totalMin} Min. gesamt)`,
     circuitFormat: (work, rest, rounds, min) => `${work} Sek. Arbeit / ${rest} Sek. Pause, ${rounds} Runden (${min} Min. gesamt)`,
     loading: "Lade Programm …",
-    homeNoteChair: "Zuhause: normaler stabiler Stuhl statt Bank.",
     sideNote: "Schwache Seite zuerst, dann dieselbe Anzahl mit der starken Seite — nie mehr auf der starken Seite.",
-    warmupTitle: "Aufwärmen (~4 Min.)",
     cooldownTitle: "Cool-down (~2-3 Min.)",
     circuitTitle: "Zirkel-Format",
     emomTitle: "EMOM-Format",
@@ -529,11 +448,37 @@ const UI = {
     timerSetLabel: (n, total) => `Satz ${n}/${total}`,
     setProgressLabel: "Satzfortschritt",
     timerDoneStartRest: "Fertig — Pause starten",
+    timerFinish: "Fertig — Training beenden",
     timerDoneNextExercise: "Fertig — weiter",
     circuitTimerBtn: "Zirkel-Timer starten",
     emomTimerBtn: "EMOM-Timer starten",
     cycleLabel: n => `Zyklus ${n}`,
     dashTitle: "Dein Fortschritt",
+    metaLevels: {
+      e: "Einsteiger",
+      m: "Mittel",
+      f: "Fortgeschritten"
+    },
+    metaPatterns: {
+      hip: "Hüfte",
+      knee: "Knie",
+      press: "Drücken",
+      pull: "Ziehen",
+      carry: "Tragen",
+      core: "Rumpf",
+      lunge: "Ausfallschritt",
+      shoulder: "Schulter"
+    },
+    metaScopes: {
+      full: "Ganzkörper",
+      lower: "Unterkörper",
+      upper: "Oberkörper",
+      core: "Rumpf"
+    },
+    techGuide: "Technik-Guide",
+    libraryTitle: "Übungsbibliothek",
+    stepsWord: "Schritte",
+    coachTip: "Coach-Tipp",
     backToModules: "Module",
     modulesProgress: (d, n) => `${d} / ${n} Einheiten`,
     moduleCurrent: "Aktuell",
@@ -560,26 +505,24 @@ const UI = {
     setsWord: "Sätze",
     intensityWord: "Intensität",
     cycleDoneTitle: "Zyklus abgeschlossen! 🎉",
-    cycleDoneText: (n, module) => {
-      if (module === "einsteiger") return `Alle ${n} Einheiten geschafft! Wie hat es sich angefühlt? Hat es Spaß gemacht, war die Technik sicher, gab es Beschwerden? Wenn du Lust auf mehr hast, geht es weiter mit dem eigentlichen Trainingsplan im Beginner-Modul. Du kannst den Schnupperkurs auch jederzeit erneut durchlaufen.`;
-      return `Alle ${n} Einheiten geschafft. Starte den nächsten Zyklus — entweder mit höherem Gewicht (wenn das letzte Gewicht gut ging) oder bei gleichem Gewicht mit mehr Dichte: kürzere Pausen, mehr Runden.`;
-    },
+    cycleDoneText: n => `Alle ${n} Einheiten geschafft. Starte den nächsten Zyklus — entweder mit höherem Gewicht (wenn das letzte Gewicht gut ging) oder bei gleichem Gewicht mit mehr Dichte: kürzere Pausen, mehr Runden.`,
     startNewCycle: "Nächsten Zyklus starten",
-    continueToKurs: "Weiter zum Trainingsplan",
     customBadge: "eigener Wert (wird gemerkt)",
     customPlaceholder: "z. B. 12",
     customReset: "Zurücksetzen",
-    weightGuideTitle: "Welches Gewicht?",
-    weightGuideText: "Einstiegswerte: Frauen ca. 4–8 kg, Männer ca. 8–12 kg. Selbsttest: Wähle ein Gewicht, mit dem du die erste Übung 5x technisch sauber schaffst, ohne dass die Form einbricht — das ist dein Startgewicht. Steigere in 2-kg-Schritten, sobald du am oberen Ende des Wiederholungsbereichs noch sauber bleibst.",
     blockNames: {
-      fullBody: "Full Body",
-      swingFullBody: "Swing & Full Body",
-      hingePress: "Hinge & Press",
-      fullBodyCarry: "Full Body & Carry",
-      kursBasis: "Basis",
-      kursAufbau: "Aufbau",
-      kursVerdichtung: "Verdichtung",
-      kursIntegration: "Integration"
+      strength1: "Full Body Strength",
+      swingFull: "Swing + Full Body",
+      circuit1: "Full Body Circuit",
+      emom1: "EMOM",
+      superset: "Strength + Superset",
+      conditioning: "Full Body Conditioning",
+      swingFocus: "Swing Focus",
+      chipper: "Chipper",
+      strength2: "Full Body Strength",
+      emom2: "EMOM / Density",
+      circuit2: "Full Body Circuit",
+      challenge: "Challenge"
     }
   },
   en: {
@@ -590,8 +533,6 @@ const UI = {
     sessionsDone: "sessions completed",
     minutesTrained: "minutes trained",
     intensity: "Intensity",
-    intensityNote: "Normal and Hard use the same core exercises — Hard raises the workload, depending on the session through an extra set, more reps, longer work time, shorter rest, EMOM time limits, or extra finishing work. Hard doesn't mean your technique is allowed to slip — if the movement stops being clean, Normal is the right choice.",
-    intensityNoteEinsteiger: "Start with Light. Once you can do every rep safely and cleanly, move up one level. If Hard feels secure, take a heavier kettlebell and start again at Light. You can adjust single exercises inside the exercise; the app remembers your values.",
     intensityLabels: {
       leicht: "Light",
       mittel: "Medium",
@@ -603,40 +544,26 @@ const UI = {
       reps: "Reps",
       time: "Time"
     },
-    modeNote: {
-      reps: "You do the given number of reps and rest between rounds.",
-      time: "You work for a fixed time per exercise, then rest briefly (Light 30/30, Medium 40/20, Hard 45/15 seconds). Only do as many clean reps as your form allows."
-    },
     sideSwitchNote: "Switch sides at half time (signal tone).",
-    warmupTitleEinsteiger: "Warm-up (~5-7 min)",
+    warmupTitle: "Warm-up (~5-7 min)",
     moduleLabels: {
-      einsteiger: "Beginner",
       kurs: "Beginner Module"
     },
     moduleSubtitle: {
-      einsteiger: "Free · Fundamentals",
-      kurs: "All exercises · Normal & Hard"
+      kurs: "12 workouts · Light to Hard"
     },
     setsRounds: "sets / rounds",
-    durationLabel: "Duration of this session",
     durationStandard: "Standard",
     roundsLabel: "Rounds",
     roundsChoice: (n, m) => `${n} rounds · ${m} min`,
-    durationMin: m => `${m} min`,
     save: "Save",
     libraryHeader: "Library",
     libraryNote: "Every exercise from the courses in one place.",
     planHeader: "Your Training Plan",
-    readyFor: label => `Ready for ${label}?`,
     startSession: "Start training",
-    goToPlan: "Go to training plan",
     backToList: "Back to overview",
-    backToLibrary: "Back to library",
     backToSession: "Back to session",
     openInLibrary: "Full guide in the library",
-    detailLearnTitle: "How to learn it",
-    detailTipsTitle: "Breathing & cues",
-    cycleProgress: "Progress",
     searchPlaceholder: "Search exercise",
     filterAll: "All",
     filterLower: "Legs",
@@ -652,7 +579,7 @@ const UI = {
     sideLeftLabel: "Side 1: Left",
     sideRightLabel: "Side 2: Right",
     detailStepsTitle: "How to do it",
-    detailMistakesTitle: "Common mistakes",
+    detailMistakesTitle: "Typical technique mistakes",
     detailMusclesTitle: "Muscles worked",
     detailBenefitsTitle: "Benefits",
     session: "Session",
@@ -661,9 +588,7 @@ const UI = {
     emomLabel: (rounds, exCount, totalMin) => `EMOM — ${rounds} rounds of 1 min per exercise (${totalMin} min total)`,
     circuitFormat: (work, rest, rounds, min) => `${work} sec work / ${rest} sec rest, ${rounds} rounds (${min} min total)`,
     loading: "Loading program …",
-    homeNoteChair: "At home: a regular sturdy chair works instead of a bench.",
     sideNote: "Weaker side first, then match the same number on the stronger side — never more reps on the stronger side.",
-    warmupTitle: "Warm-up (~4 min)",
     cooldownTitle: "Cool-down (~2-3 min)",
     circuitTitle: "Circuit format",
     emomTitle: "EMOM format",
@@ -678,11 +603,37 @@ const UI = {
     timerSetLabel: (n, total) => `Set ${n}/${total}`,
     setProgressLabel: "Set progress",
     timerDoneStartRest: "Done — start rest",
+    timerFinish: "Done — finish workout",
     timerDoneNextExercise: "Done — next",
     circuitTimerBtn: "Start circuit timer",
     emomTimerBtn: "Start EMOM timer",
     cycleLabel: n => `Cycle ${n}`,
     dashTitle: "Your progress",
+    metaLevels: {
+      e: "Beginner",
+      m: "Intermediate",
+      f: "Advanced"
+    },
+    metaPatterns: {
+      hip: "Hip",
+      knee: "Knee",
+      press: "Press",
+      pull: "Pull",
+      carry: "Carry",
+      core: "Core",
+      lunge: "Lunge",
+      shoulder: "Shoulder"
+    },
+    metaScopes: {
+      full: "Full body",
+      lower: "Lower body",
+      upper: "Upper body",
+      core: "Core"
+    },
+    techGuide: "Technique guide",
+    libraryTitle: "Exercise library",
+    stepsWord: "steps",
+    coachTip: "Coach tip",
     backToModules: "Modules",
     modulesProgress: (d, n) => `${d} / ${n} sessions`,
     moduleCurrent: "Current",
@@ -709,26 +660,24 @@ const UI = {
     setsWord: "Sets",
     intensityWord: "Intensity",
     cycleDoneTitle: "Cycle complete! 🎉",
-    cycleDoneText: (n, module) => {
-      if (module === "einsteiger") return `All ${n} sessions done! How did it feel? Was it fun, did your technique feel secure, were there any problems? If you want more, move on to the actual training plan in the Beginner Module. You can also repeat this intro course any time.`;
-      return `All ${n} sessions done. Start the next cycle — either with heavier weight (if the last weight felt good) or, at the same weight, with more density: shorter rests, more rounds.`;
-    },
+    cycleDoneText: n => `All ${n} sessions done. Start the next cycle — either with heavier weight (if the last weight felt good) or, at the same weight, with more density: shorter rests, more rounds.`,
     startNewCycle: "Start next cycle",
-    continueToKurs: "Continue to the training plan",
     customBadge: "own value (remembered)",
     customPlaceholder: "e.g. 12",
     customReset: "Reset",
-    weightGuideTitle: "What weight?",
-    weightGuideText: "Starting point: women approx. 4–8 kg, men approx. 8–12 kg. Self-test: pick a weight you can do the first exercise 5 times with clean form, without it breaking down — that's your starting weight. Increase in 2 kg steps once you stay clean at the top of the rep range.",
     blockNames: {
-      fullBody: "Full Body",
-      swingFullBody: "Swing & Full Body",
-      hingePress: "Hinge & Press",
-      fullBodyCarry: "Full Body & Carry",
-      kursBasis: "Basics",
-      kursAufbau: "Build-Up",
-      kursVerdichtung: "Density",
-      kursIntegration: "Integration"
+      strength1: "Full Body Strength",
+      swingFull: "Swing + Full Body",
+      circuit1: "Full Body Circuit",
+      emom1: "EMOM",
+      superset: "Strength + Superset",
+      conditioning: "Full Body Conditioning",
+      swingFocus: "Swing Focus",
+      chipper: "Chipper",
+      strength2: "Full Body Strength",
+      emom2: "EMOM / Density",
+      circuit2: "Full Body Circuit",
+      challenge: "Challenge"
     }
   }
 };
@@ -743,29 +692,13 @@ const CUES = {
     de: "Kettlebell an den Hörnern vor der Brust halten, Oberkörper bleibt aufrecht. Beansprucht vor allem die vordere Oberschenkelmuskulatur.",
     en: "Hold the kettlebell by the horns at chest height, torso stays upright. Targets mainly the quadriceps."
   },
-  "Kettlebell Sumo Deadlift": {
-    de: "Breiter Stand, Zehen leicht nach außen, Oberkörper bleibt aufrecht. Beansprucht vor allem die Gesäßmuskulatur.",
-    en: "Wide stance, toes turned slightly out, torso stays upright. Targets mainly the glutes."
+  "Kettlebell Goblet Reverse Lunge": {
+    de: "Kettlebell beidhändig an den Hörnern vor der Brust halten, abwechselnd einen Schritt zurück machen und das hintere Knie kontrolliert knapp über den Boden senken. Der Oberkörper bleibt aufrecht. Kontrollierter für das Knie als der Vorwärtsschritt und ohne Rack-Position.",
+    en: "Hold the kettlebell by the horns at your chest, step back alternately and lower the back knee under control to just above the floor. Your torso stays upright. Easier on the knee than a forward lunge and no rack position needed."
   },
   "Kettlebell Deadlift": {
     de: "Kettlebell zwischen den Füßen am Boden, Hüfte nach hinten schieben, Rücken gerade, dann den Boden wegdrücken und die Hüfte nach vorne strecken. Die Grundform der Hüftbeuge, kräftigt Gesäß und hintere Oberschenkel.",
     en: "Kettlebell on the floor between the feet, push the hips back, back straight, then push the floor away and drive the hips forward. The basic form of the hip hinge, builds glutes and hamstrings."
-  },
-  "Kettlebell Romanian Deadlift": {
-    de: "Leichte Kniebeugung, Hüfte weit nach hinten schieben, langsame kontrollierte Dehnung. Beansprucht Gesäß und hintere Oberschenkelmuskulatur.",
-    en: "Slight knee bend, push the hips far back for a slow, controlled stretch. Targets the glutes and hamstrings."
-  },
-  "Kettlebell Front Raise": {
-    de: "Kontrolliert bis Schulterhöhe heben, kein Schwung aus dem Rücken. Isoliert die vordere Schulter.",
-    en: "Raise with control to shoulder height, no swinging from the back. Isolates the front of the shoulder."
-  },
-  "Kettlebell Floor Press": {
-    de: "Rückenlage, Ellbogen auf dem Boden abgestützt, Kettlebell von dort nach oben drücken. Schonende, liegende Alternative zum klassischen Bankdrücken.",
-    en: "Lying on your back, elbow supported on the floor, press the kettlebell up from there. A shoulder-friendly, floor-based alternative to the bench press."
-  },
-  "Kettlebell Crush Grip Floor Press": {
-    de: "Rückenlage, zwei Kettlebells seitlich gegeneinander gepresst halten, beidarmig aus der Ellbogenablage nach oben drücken. Der Crush Grip (Zusammenpressen der Gewichte) aktiviert zusätzlich Unterarme und Rumpf.",
-    en: "Lying on your back, pressing two kettlebells together from the sides, press both up from the elbows resting on the floor. The crush grip (pressing the weights together) also activates the forearms and core."
   },
   "Kettlebell Swing": {
     de: "Hüftstreckung erzeugt den Schwung, kein Anheben mit den Armen — die Kettlebell schwebt nur bis Brusthöhe, nicht höher. Die definierende Kettlebell-Übung — explosive Hüftstreckung für Gesäß und hintere Oberschenkel.",
@@ -775,29 +708,17 @@ const CUES = {
     de: "Rücken flach, Ellbogen eng am Körper führen. Isoliert Rücken und Bizeps mit vollem Bewegungsradius.",
     en: "Flat back, keep the elbow close to your body. Isolates the back and biceps through a full range of motion."
   },
-  "Kettlebell Push Press": {
-    de: "Kurzer Beinschwung gibt den Impuls, dann Arm strecken. Beansprucht Schulter und Trizeps.",
-    en: "A short leg dip creates the drive, then the arm finishes the press. Targets the shoulder and triceps."
-  },
-  "Kettlebell Overhead Press": {
-    de: "Kettlebell in Schulterhöhe, eine Seite nach der anderen ohne Schwung nach oben drücken. Isoliert Schulter und Trizeps einseitig.",
-    en: "Kettlebell at shoulder height, press straight up one side at a time without momentum. Isolates the shoulder and triceps on one side."
-  },
-  "Kettlebell Curl": {
-    de: "Ellbogen fixiert, sauber curlen ohne Schwung. Direktes Bizepstraining im Stehen.",
-    en: "Elbows fixed, curl cleanly without swinging. Direct standing bicep work."
-  },
   "Kettlebell Goblet Curl": {
     de: "Beide Hände am Griff, gleichzeitig beidarmig curlen. Beidarmiges Bizepstraining mit nur einer Kettlebell.",
     en: "Both hands on the handle, curl both arms at once. Two-armed bicep work using a single kettlebell."
   },
   "Kettlebell Goblet Press": {
-    de: "Kettlebell beidhändig an den Hörnern aus der Brusthöhe über den Kopf drücken, Rippen bleiben unten, kein Hohlkreuz. Beidhändige Drückvariante, einfacher zu kontrollieren als die einarmige Version.",
-    en: "Press the kettlebell overhead with both hands on the horns from chest height, ribs stay down, no arching the lower back. A two-handed pressing variation, easier to control than the single-arm version."
+    de: "Kettlebell beidhändig an den Hörnern aus der Brusthöhe über den Kopf drücken, Rippen bleiben unten, kein Hohlkreuz. Beidhändige Drückvariante, gut zu kontrollieren.",
+    en: "Press the kettlebell overhead with both hands on the horns from chest height, ribs stay down, no arching the lower back. A two-handed pressing variation that is easy to control."
   },
-  "Kettlebell Shrug": {
-    de: "Kontrolliert hochziehen, kurz oben halten, langsam absenken. Isoliert gezielt den oberen Trapezmuskel.",
-    en: "Pull up with control, pause briefly at the top, lower slowly. Isolates the upper traps directly."
+  "Kettlebell Close-Grip Floor Press": {
+    de: "In Rückenlage die Kettlebell mit beiden Händen eng am Griff halten und von der Brust nach oben drücken. Die Oberarme setzen kurz auf dem Boden auf, das begrenzt den Bewegungsradius und schont die Schultern.",
+    en: "Lying on your back, hold the kettlebell close with both hands on the handle and press it up from your chest. Your upper arms touch the floor briefly, which limits the range of motion and is easy on the shoulders."
   },
   "Plank": {
     de: "Unterarme und Zehenspitzen am Boden, Körper bildet eine gerade Linie von Kopf bis Ferse. Beansprucht die gesamte Rumpfmuskulatur.",
@@ -807,22 +728,6 @@ const CUES = {
     de: "Hände unter den Schultern, Körper bildet eine gerade Linie. Brust kontrolliert Richtung Boden senken, dann drücken. Beansprucht Brust, Schultern und Trizeps.",
     en: "Hands under shoulders, body forms a straight line. Lower your chest toward the floor with control, then press back up. Targets chest, shoulders and triceps."
   },
-  "Kettlebell Clean": {
-    de: "Kettlebell vom Boden in einer fließenden Bewegung bis in die Rack-Position an der Schulter führen, Handgelenk dreht sich mit, kein Anschlagen am Unterarm. Beansprucht Gesäß, Rücken und Unterarme.",
-    en: "Bring the kettlebell from the floor to the rack position at the shoulder in one flowing motion, the wrist rotates through, no banging against the forearm. Targets the glutes, back and forearms."
-  },
-  "Kettlebell Sumo High Pull": {
-    de: "Aus der breiten Sumo-Haltung die Kettlebell mit Schwung bis auf Schlüsselbeinhöhe ziehen, Ellbogen hoch und außen. Zügige, dynamische Bewegung.",
-    en: "From the wide sumo stance, pull the kettlebell up to collarbone height with momentum, elbow high and out to the side. A quick, dynamic movement."
-  },
-  "Kettlebell Racked Reverse Lunge": {
-    de: "Kettlebell in der Rack-Position an der Schulter halten, ein Bein großen Schritt nach hinten, hinteres Knie sinkt Richtung Boden. Beansprucht Gesäß und vordere Oberschenkelmuskulatur einseitig.",
-    en: "Hold the kettlebell in the rack position at the shoulder, step one leg far back, back knee lowers toward the floor. Targets the glutes and quads on one side."
-  },
-  "Kettlebell Suitcase Row": {
-    de: "Kettlebell seitlich am Körper wie einen Koffer halten, aus dieser Position zur Hüfte hochziehen. Isoliert Rücken und Bizeps ohne Rotation im Rumpf.",
-    en: "Hold the kettlebell at the side like a suitcase, pull it up to the hip from this position. Isolates the back and biceps without rotating the torso."
-  },
   "Kettlebell Halo": {
     de: "Kettlebell an den Hörnern nah am Kopf vorbei kreisen lassen, Rumpf bleibt stabil, keine Ausweichbewegung. Als Trainingsübung mit mehr Wiederholungen: kräftigt gezielt die Schulterstabilität.",
     en: "Circle the kettlebell by the horns closely around the head, core stays stable, no compensating movement. As a training exercise with more reps: builds shoulder stability directly."
@@ -831,29 +736,13 @@ const CUES = {
     de: "Kettlebell im Nacken oder vor der Brust halten, Hüfte nach hinten schieben, leichte Kniebeugung, Rücken bleibt gerade. Als Trainingsübung mit mehr Wiederholungen: kräftigt gezielt die hintere Kette.",
     en: "Hold the kettlebell behind the neck or at the chest, push the hips back, slight knee bend, back stays straight. As a training exercise with more reps: builds the posterior chain directly."
   },
-  "Kettlebell Single-Leg Deadlift": {
-    de: "Auf einem Bein stehend, Kettlebell in der gegenüberliegenden Hand, Oberkörper nach vorne kippen während das freie Bein nach hinten streckt. Trainiert Balance und die hintere Kette einseitig.",
-    en: "Standing on one leg, kettlebell in the opposite hand, tip the torso forward as the free leg extends back. Trains balance and the posterior chain on one side."
-  },
   "Kettlebell Slingshot": {
     de: "Kettlebell locker um den Körper herum von einer Hand zur anderen kreisen lassen, Rumpf bleibt stabil und aufrecht. Gewöhnt Körper und Griff an die Kettlebell, gute erste Übung zum Kennenlernen des Geräts.",
     en: "Loosely circle the kettlebell around your body from hand to hand, core stays stable and upright. Gets your body and grip used to the kettlebell — a good first exercise for getting to know the tool."
   },
-  "Kettlebell Single Arm Deadlift": {
-    de: "Kettlebell mittig zwischen den Füßen, Hüfte nach hinten schieben, mit einer Hand greifen und über die Hüftstreckung aufstehen, nicht mit dem Arm ziehen. Einarmige Grundversion des Kreuzhebens, guter Einstieg ins Hüft-Hinge-Muster.",
-    en: "Kettlebell centered between your feet, push the hips back, grip with one hand and stand up by extending the hips, not pulling with the arm. A single-arm base version of the deadlift, a good entry into the hip-hinge pattern."
-  },
   "Kettlebell Squat and Press": {
     de: "Kniebeuge mit der Kettlebell beidhändig in der Goblet-Position vor der Brust, direkt im Anschluss aus dem Aufstehen heraus mit beiden Händen über den Kopf drücken. Ganzkörper-Kombination.",
     en: "Squat while holding the kettlebell with both hands in the goblet position at chest height, then press it overhead with both hands as you stand up. A full-body combination."
-  },
-  "Kettlebell Racked Squat": {
-    de: "Kettlebell in der Rack-Position an der Schulter halten, Oberkörper bleibt trotz der einseitigen Last aufrecht. Fordert Rumpfstabilität stärker als die beidhändige Goblet-Variante.",
-    en: "Hold the kettlebell in the rack position at the shoulder, torso stays upright despite the one-sided load. Challenges core stability more than the two-handed goblet version."
-  },
-  "Kettlebell Bob and Weave": {
-    de: "Kettlebell in der Rack-Position halten, mit einer seitlichen Ausweichbewegung wie beim Boxen von einer Seite zur anderen wechseln. Dynamische Übung für Rumpf und Beine.",
-    en: "Hold the kettlebell in the rack position, shift side to side with a boxing-style dodging motion. A dynamic movement for the core and legs."
   },
   "Kettlebell Suitcase Carry": {
     de: "Ein Kettlebell seitlich am Körper tragen wie einen Koffer, Oberkörper bleibt aufrecht ohne zur Seite zu kippen, kurze kontrollierte Schritte. Auf halber Strecke die Seite wechseln. Einseitige Belastung, kräftigt Griff und seitliche Rumpfstabilität im Gehen.",
@@ -867,9 +756,6 @@ const CUES = {
     de: "Sitzend, Oberkörper leicht zurückgelehnt, Kettlebell mit beiden Händen vor dem Körper halten und kontrolliert von Seite zu Seite rotieren. Das Zusatzgewicht fordert die schrägen Bauchmuskeln stärker als die reine Körpergewichtsvariante.",
     en: "Seated, torso leaned back slightly, hold the kettlebell with both hands in front of the body and rotate side to side with control. The added weight challenges the obliques more than the bodyweight-only version."
   }
-};
-const HOME_NOTE_EXERCISES = {
-  "Kettlebell Overhead Press": "homeNoteChair"
 };
 
 // Vertiefte Übungsinfos (Ablauf, häufige Fehler, Muskeln, Vorteile) — eigenständig
@@ -894,24 +780,6 @@ const EXERCISE_DETAILS = {
       en: ["Builds explosive hip power", "Trains the entire posterior chain", "Very effective for conditioning", "Strengthens core stability", "Needs little space and one tool"]
     }
   },
-  "Kettlebell Clean": {
-    steps: {
-      de: ["Wie beim Swing in die Hüfte hinein beugen, Kettlebell mit einer Hand greifen und nach hinten ziehen.", "Aus der Hüftstreckung heraus die Kettlebell nach oben führen, Ellbogen bleibt nah am Körper.", "Während die Kettlebell steigt, die Hand rechtzeitig um den Griff herumführen — nicht erst ganz oben.", "Kettlebell landet weich in der Rack-Position, liegt am Unterarm und Oberarm an.", "Handgelenk bleibt neutral, Ellbogen nah am Rumpf, Oberkörper aufrecht.", "Zum Ablegen: Ellbogen leicht vom Körper lösen, Handgelenk zurückdrehen lassen, mit der Hüfte abfangen."],
-      en: ["Hinge at the hips as in the swing, grip with one hand and pull the kettlebell back.", "Drive from the hip extension to bring the kettlebell up, elbow stays close to the body.", "As the kettlebell rises, guide your hand around the handle in time — not only once it's already up.", "The kettlebell lands softly in the rack position, resting against forearm and upper arm.", "Wrist stays neutral, elbow close to the torso, upper body upright.", "To lower it: release the elbow slightly from the body, let the wrist rotate back, catch it with the hips."]
-    },
-    mistakes: {
-      de: ["Kettlebell wird in großem Bogen nach vorne geworfen statt eng am Körper geführt.", "Mit dem Arm hochgezogen statt aus der Hüfte.", "Hand wird zu spät um den Griff geführt — Kettlebell schlägt aufs Handgelenk.", "Zu fester Griff verhindert die nötige Handdrehung.", "Handgelenk knickt nach hinten ab."],
-      en: ["The kettlebell is cast forward in a wide arc instead of staying close to the body.", "Pulled up with the arm instead of the hips.", "Hand enters the handle too late — the kettlebell bangs the wrist.", "Gripping too tightly prevents the needed hand rotation.", "Wrist bends backward."]
-    },
-    muscles: {
-      de: ["Gesäßmuskulatur", "Hintere Oberschenkel", "Rumpf", "Oberer Rücken/breiter Rückenmuskel", "Schultern", "Unterarme/Griff"],
-      en: ["Glutes", "Hamstrings", "Core", "Upper back/lats", "Shoulders", "Forearms/grip"]
-    },
-    benefits: {
-      de: ["Effiziente Art, die Kettlebell für Press/Squat-Kombinationen in Position zu bringen", "Trainiert dieselbe Hüftstreckung wie der Swing, mit zusätzlicher Koordination", "Verbessert Griffkraft und Handgelenksstabilität", "Grundlage für viele weiterführende Kombi-Bewegungen"],
-      en: ["Efficient way to get the kettlebell into position for press/squat combos", "Trains the same hip extension as the swing, with added coordination", "Improves grip strength and wrist stability", "Foundation for many further combination movements"]
-    }
-  },
   "Kettlebell Goblet Squat": {
     steps: {
       de: ["Kettlebell an den Hörnern greifen, dicht vor die Brust halten.", "Füße etwa schulterbreit, Zehen leicht nach außen gedreht.", "In die Kniebeuge absenken, Hüfte nach hinten schieben statt nach vorne.", "Ellbogen zwischen die Knie führen, Oberkörper bleibt aufrecht.", "Bis zur komfortabel tiefsten Position absenken, ohne die Fersen abzuheben.", "Über die Fersen zurück nach oben drücken, Hüfte und Knie strecken sich gleichzeitig."],
@@ -930,22 +798,22 @@ const EXERCISE_DETAILS = {
       en: ["Naturally encourages an upright posture", "Easier on the spine than a barbell back squat", "Often allows greater controlled depth", "More accessible for beginners than barbell variations", "Builds leg strength and core stability together"]
     }
   },
-  "Kettlebell Sumo Deadlift": {
+  "Kettlebell Goblet Reverse Lunge": {
     steps: {
-      de: ["Kettlebell mittig auf dem Boden platzieren, breiter Stand, Zehen leicht nach außen gedreht.", "Mit beiden Händen am Griff fassen, Hüfte nach hinten schieben, Rücken bleibt gerade.", "Über die Fersen aufstehen, Hüfte und Knie strecken sich gleichzeitig.", "Oben kurz die Gesäßmuskulatur anspannen, dann kontrolliert wieder absenken."],
-      en: ["Place the kettlebell centered on the floor, wide stance, toes turned out slightly.", "Grip the handle with both hands, push the hips back, back stays straight.", "Stand up through the heels, hips and knees extending together.", "Briefly squeeze the glutes at the top, then lower back down under control."]
+      de: ["Kettlebell an den Hörnern vor der Brust halten, Ellbogen eng am Körper, aufrecht stehen.", "Mit einem Bein einen großen Schritt nach hinten machen.", "Das hintere Knie kontrolliert senken, bis es knapp über dem Boden ist. Das Gewicht bleibt auf der vorderen Ferse.", "Über die vordere Ferse zurück in den Stand drücken.", "Alle Wiederholungen einer Seite machen, dann das Bein wechseln."],
+      en: ["Hold the kettlebell by the horns at your chest, elbows close to your body, standing tall.", "Take a big step back with one leg.", "Lower the back knee under control until it hovers just above the floor. Your weight stays on the front heel.", "Drive back up through the front heel into standing.", "Do all reps on one side, then switch legs."]
     },
     mistakes: {
-      de: ["Rücken rundet sich beim Greifen der Kettlebell.", "Knie fallen nach innen statt der Fußstellung zu folgen.", "Bewegung wird eher zur Kniebeuge als zum Hüft-Hinge."],
-      en: ["The back rounds while gripping the kettlebell.", "The knees cave inward instead of tracking the stance.", "The movement turns into a squat rather than a hip hinge."]
+      de: ["Das Knie des vorderen Beins fällt nach innen.", "Der Oberkörper kippt nach vorne.", "Der Schritt ist zu klein, das vordere Knie schiebt weit über die Zehen.", "Das hintere Knie knallt auf den Boden."],
+      en: ["The front knee collapses inward.", "The torso tips forward.", "The step is too short and the front knee travels far past the toes.", "The back knee slams into the floor."]
     },
     muscles: {
-      de: ["Gesäßmuskulatur", "Hüftadduktoren", "Hintere Oberschenkel", "Rückenstrecker"],
-      en: ["Glutes", "Hip adductors", "Hamstrings", "Erector spinae"]
+      de: ["Gesäßmuskulatur", "Oberschenkelvorderseite", "Hintere Oberschenkel", "Wadenmuskulatur", "Rumpf"],
+      en: ["Glutes", "Quadriceps", "Hamstrings", "Calves", "Core"]
     },
     benefits: {
-      de: ["Beidhändige Variante des Kreuzhebens, gut zur Ergänzung des Single Arm Deadlift", "Der breite Stand spricht die Hüftadduktoren gezielt mit an", "Baut Kraft für den beidarmigen Swing auf"],
-      en: ["A two-handed deadlift variant, a good complement to the single arm deadlift", "The wide stance also engages the hip adductors directly", "Builds strength toward the two-hand swing"]
+      de: ["Trainiert jedes Bein einzeln und gleicht Kraftunterschiede aus", "Schonender fürs Knie als der Vorwärtsschritt", "Verbessert Gleichgewicht und Stabilität", "Einsteigerfreundlich, weil keine Rack-Position nötig ist"],
+      en: ["Trains each leg on its own and evens out strength differences", "Easier on the knee than a forward lunge", "Improves balance and stability", "Beginner friendly because no rack position is needed"]
     }
   },
   "Kettlebell Deadlift": {
@@ -966,100 +834,10 @@ const EXERCISE_DETAILS = {
       en: ["Teaches the hip hinge, the foundation of the swing", "Strengthens the entire posterior chain", "Safe because there is no momentum", "The weight is easy to progress"]
     }
   },
-  "Kettlebell Romanian Deadlift": {
-    steps: {
-      de: ["Kettlebell mit beiden Händen vor dem Körper halten, Füße hüftbreit.", "Leichte Kniebeugung, dann die Hüfte weit nach hinten schieben, Rücken bleibt gerade.", "Kettlebell nah am Körper bis knapp unter die Kniehöhe absenken, langsam und kontrolliert.", "Über die Hüftstreckung wieder nach oben kommen, Gesäß oben kurz anspannen."],
-      en: ["Hold the kettlebell with both hands in front of the body, feet hip-width apart.", "Slight knee bend, then push the hips far back, back stays straight.", "Lower the kettlebell close to the body to just below knee height, slowly and under control.", "Return to standing by extending the hips, briefly squeezing the glutes at the top."]
-    },
-    mistakes: {
-      de: ["Bewegung kommt aus den Knien statt aus der Hüfte.", "Rücken rundet sich in der tiefsten Position.", "Kettlebell wandert beim Absenken zu weit vom Körper weg."],
-      en: ["The movement comes from the knees instead of the hips.", "The back rounds at the bottom of the movement.", "The kettlebell drifts too far from the body while lowering."]
-    },
-    muscles: {
-      de: ["Hintere Oberschenkel", "Gesäßmuskulatur", "Rückenstrecker"],
-      en: ["Hamstrings", "Glutes", "Erector spinae"]
-    },
-    benefits: {
-      de: ["Vertieft das Hüft-Hinge-Muster aus Good Morning und Single Arm Deadlift", "Betont die Dehnung der hinteren Oberschenkelmuskulatur unter Spannung", "Beidhändig, dadurch gut zum Einstieg in längere Bewegungsbahnen"],
-      en: ["Deepens the hip-hinge pattern from the good morning and single arm deadlift", "Emphasizes a controlled stretch through the hamstrings under tension", "Two-handed, making it a good entry into a longer range of motion"]
-    }
-  },
-  "Kettlebell Front Raise": {
-    steps: {
-      de: ["Kettlebell mit einer Hand am Griff vor dem Körper halten, Arm leicht gebeugt.", "Kontrolliert bis auf Schulterhöhe nach vorne oben heben, kein Schwung aus dem Rücken.", "Oben kurz halten, dann langsam wieder absenken."],
-      en: ["Hold the kettlebell in one hand in front of the body, arm slightly bent.", "Raise it forward and up to shoulder height with control, no swinging from the back.", "Pause briefly at the top, then lower slowly."]
-    },
-    mistakes: {
-      de: ["Schwung aus dem unteren Rücken statt reiner Schulterarbeit.", "Zu schweres Gewicht führt zu unkontrolliertem Abwärtsfallen.", "Schulter zieht sich Richtung Ohr hoch."],
-      en: ["Momentum from the lower back instead of pure shoulder work.", "Too heavy a weight causes an uncontrolled drop on the way down.", "The shoulder shrugs up toward the ear."]
-    },
-    muscles: {
-      de: ["Vordere Schulter (Deltamuskel)", "Rumpf (stabilisierend)"],
-      en: ["Front deltoid", "Core (stabilizing)"]
-    },
-    benefits: {
-      de: ["Einfache Isolationsübung für die vordere Schulter", "Guter Ausgleich zu den Zugbewegungen wie Bent-Over Row", "Braucht kein Überkopf-Verriegeln, dadurch niedrigeres technisches Einstiegsniveau als der Overhead Press"],
-      en: ["A simple isolation move for the front shoulder", "A good counterbalance to pulling movements like the bent-over row", "Needs no overhead lockout, making it a lower technical entry point than the overhead press"]
-    }
-  },
-  "Kettlebell Floor Press": {
-    steps: {
-      de: ["Rückenlage, Beine aufgestellt, Kettlebell mit einer Hand am Griff, Ellbogen auf dem Boden abgestützt.", "Rumpf leicht anspannen, dann die Kettlebell nach oben drücken bis der Arm gestreckt ist.", "Kontrolliert absenken, bis der Ellbogen wieder sanft den Boden berührt."],
-      en: ["Lying on your back, knees bent, kettlebell in one hand, elbow supported on the floor.", "Brace the core lightly, then press the kettlebell up until the arm is fully extended.", "Lower with control until the elbow gently touches the floor again."]
-    },
-    mistakes: {
-      de: ["Ellbogen schlägt hart auf dem Boden auf statt sanft aufzusetzen.", "Handgelenk knickt unter der Last ab.", "Rumpf hebt beim Drücken mit an."],
-      en: ["The elbow slams onto the floor instead of touching down gently.", "The wrist bends under the load.", "The core lifts along with the press."]
-    },
-    muscles: {
-      de: ["Trizeps", "Vordere Schulter", "Brustmuskulatur"],
-      en: ["Triceps", "Front deltoid", "Chest"]
-    },
-    benefits: {
-      de: ["Der Boden begrenzt die Bewegungsbahn und schont die Schulter", "Guter Einstieg ins Drücken, risikoärmer als eine stehende Press-Variante", "Lässt sich gut mit wenig Aufwand in eine Einheit einbauen"],
-      en: ["The floor limits the range of motion and is easier on the shoulder", "A good entry into pressing, lower-risk than a standing press variant", "Easy to slot into a session with minimal setup"]
-    }
-  },
-  "Kettlebell Crush Grip Floor Press": {
-    steps: {
-      de: ["Rückenlage, Beine aufgestellt, zwei Kettlebells seitlich mit beiden Händen gegeneinander pressen.", "Ellbogen auf dem Boden abstützen, Rumpf leicht anspannen.", "Beide Kettlebells gleichzeitig nach oben drücken, dabei den Druck zwischen den Gewichten halten, dann kontrolliert absenken."],
-      en: ["Lying on your back, knees bent, pressing two kettlebells together from the sides with both hands.", "Elbows supported on the floor, brace the core lightly.", "Press both kettlebells up at the same time while keeping them pressed together, then lower with control."]
-    },
-    mistakes: {
-      de: ["Der Druck zwischen den Kettlebells lässt während der Bewegung nach.", "Ellbogen schlagen hart auf dem Boden auf statt sanft aufzusetzen.", "Eine Seite drückt schneller als die andere."],
-      en: ["The pressure between the kettlebells drops off during the movement.", "The elbows slam onto the floor instead of touching down gently.", "One side presses faster than the other."]
-    },
-    muscles: {
-      de: ["Trizeps", "Vordere Schulter", "Brustmuskulatur", "Unterarme", "Rumpf"],
-      en: ["Triceps", "Front deltoid", "Chest", "Forearms", "Core"]
-    },
-    benefits: {
-      de: ["Zusätzliche Unterarm- und Rumpfaktivierung durch den Crush Grip", "Der Boden begrenzt die Bewegungsbahn und schont die Schulter", "Beidarmige Variante baut auf der einarmigen Floor Press auf"],
-      en: ["Extra forearm and core activation from the crush grip", "The floor limits the range of motion and is easier on the shoulder", "The two-arm variant builds on the single-arm floor press"]
-    }
-  },
-  "Kettlebell Overhead Press": {
-    steps: {
-      de: ["Kettlebell in die Rack-Position bringen (z. B. durch Clean), Ellbogen nah am Körper.", "Rumpf anspannen, Rippen nicht überstrecken.", "Kettlebell gerade nach oben drücken, Handgelenk bleibt neutral.", "Oben Arm vollständig strecken, Schulter stabil, kein Einknicken zur Seite.", "Kontrolliert zurück in die Rack-Position absenken."],
-      en: ["Bring the kettlebell into the rack position (e.g. via a clean), elbow close to the body.", "Brace the core, don't overextend the ribs.", "Press the kettlebell straight up, wrist stays neutral.", "Fully extend the arm at the top, shoulder stable, no leaning sideways.", "Lower back to the rack position under control."]
-    },
-    mistakes: {
-      de: ["Oberkörper lehnt sich zur Gegenseite, um das Gewicht auszugleichen.", "Rippen werden überstreckt, unterer Rücken hohl.", "Ellbogen weicht beim Drücken vom Körper weg.", "Handgelenk knickt unter der Last ab."],
-      en: ["The torso leans to the opposite side to counterbalance the weight.", "The ribs overextend, lower back arches.", "The elbow drifts away from the body while pressing.", "The wrist bends under the load."]
-    },
-    muscles: {
-      de: ["Deltamuskel (Schulter)", "Trizeps", "Rotatorenmanschette", "Rückenstrecker", "Rumpf", "Serratus anterior"],
-      en: ["Deltoid (shoulder)", "Triceps", "Rotator cuff", "Erector spinae", "Core", "Serratus anterior"]
-    },
-    benefits: {
-      de: ["Baut Schulterkraft und -stabilität auf", "Trainiert einseitige Rumpfkontrolle (Anti-Lateralflexion)", "Grundlage für Kombi-Bewegungen wie Clean and Press", "Funktionell für Überkopf-Bewegungen im Alltag"],
-      en: ["Builds shoulder strength and stability", "Trains unilateral core control (anti-lateral-flexion)", "Foundation for combo movements like clean and press", "Functional for everyday overhead movements"]
-    }
-  },
   "Kettlebell Bent-Over Row": {
     steps: {
-      de: ["In leichter Schrittstellung nach vorne beugen, Rücken gerade, ein Arm hängt gestreckt mit der Kettlebell nach unten.", "Freie Hand kann sich zur Unterstützung abstützen (z. B. auf einer Bank oder dem Oberschenkel).", "Ellbogen nach oben ziehen, Kettlebell nah am Körper zur Hüfte führen.", "Oben kurz die Schulterblätter zusammenziehen.", "Kontrolliert zurück in die gestreckte Ausgangsposition absenken."],
-      en: ["In a slight staggered stance, bend forward with a straight back, one arm hangs holding the kettlebell.", "The free hand can support on a bench or thigh if needed.", "Pull the elbow up, guiding the kettlebell close to the body toward the hip.", "Briefly squeeze the shoulder blades together at the top.", "Lower back to the extended start position under control."]
+      de: ["Füße schulterbreit, die Kettlebell mittig zwischen die Füße stellen. Mit geradem Rücken in der Hüfte nach vorne beugen.", "Die freie Hand stützt sich auf dem Oberschenkel oder einer Bank ab, die andere Hand greift die Kettlebell.", "Den Ellbogen nah am Körper nach oben zur Hüfte ziehen.", "Oben kurz die Schulterblätter zusammenziehen.", "Kontrolliert in die Ausgangsposition absenken. Alle Wiederholungen einer Seite machen, dann wechseln."],
+      en: ["Stand with feet shoulder-width apart and the kettlebell centered between your feet. Hinge forward at the hips with a straight back.", "Your free hand rests on your thigh or a bench, the other hand grips the kettlebell.", "Pull the elbow up toward your hip, keeping it close to your body.", "Briefly squeeze the shoulder blades together at the top.", "Lower back to the start position under control. Finish all reps on one side, then switch."]
     },
     mistakes: {
       de: ["Rumpf rotiert mit der Zugbewegung mit, statt stabil zu bleiben.", "Rücken rundet sich in der Ausgangsposition.", "Kettlebell wird mit Schwung statt kontrolliert gezogen.", "Ellbogen bleibt beim Ziehen zu weit vom Körper entfernt."],
@@ -1072,60 +850,6 @@ const EXERCISE_DETAILS = {
     benefits: {
       de: ["Stärkt den oberen Rücken, gleicht viel Sitzen aus", "Trainiert Rumpfstabilität gegen Rotation", "Verbessert Haltung", "Gute Ergänzung zu den Druck-Übungen im Programm"],
       en: ["Strengthens the upper back, offsets a lot of sitting", "Trains core stability against rotation", "Improves posture", "A good counterbalance to the pressing exercises in the program"]
-    }
-  },
-  "Kettlebell Single Arm Deadlift": {
-    steps: {
-      de: ["Kettlebell mittig zwischen den Füßen platzieren.", "Hüfte nach hinten schieben, mit einer Hand greifen, Rücken bleibt gerade.", "Über die Hüftstreckung nach oben kommen, freie Hand hilft beim Gleichgewicht.", "Oben Hüfte vollständig strecken, Rumpf bleibt stabil ohne zur Seite zu kippen."],
-      en: ["Place the kettlebell centred between the feet.", "Push the hips back, grip with one hand, back stays straight.", "Stand up through hip extension, the free hand helps with balance.", "Fully extend the hips at the top, torso stays stable without tipping sideways."]
-    },
-    mistakes: {
-      de: ["Rumpf kippt zur belasteten Seite", "Rücken rundet sich beim Greifen", "Bewegung wird zur einseitigen Kniebeuge statt zum Hinge"],
-      en: ["The torso tips toward the loaded side", "The back rounds while reaching down", "The movement becomes a one-sided squat instead of a hinge"]
-    },
-    muscles: {
-      de: ["Gesäßmuskulatur", "Hintere Oberschenkel", "Rumpf (Anti-Lateralflexion)", "Rückenstrecker", "Unterarme/Griff"],
-      en: ["Glutes", "Hamstrings", "Core (anti-lateral-flexion)", "Erector spinae", "Forearms/grip"]
-    },
-    benefits: {
-      de: ["Guter Einstieg ins Hüft-Hinge-Muster", "Trainiert einseitige Rumpfkontrolle zusätzlich zur Beinkraft", "Bereitet direkt auf Swing und Clean vor"],
-      en: ["A good entry point into the hip-hinge pattern", "Trains unilateral core control alongside leg strength", "Directly prepares for the swing and clean"]
-    }
-  },
-  "Kettlebell Push Press": {
-    steps: {
-      de: ["Kettlebell in der Rack-Position halten, aufrecht stehen.", "Knie kurz und kontrolliert leicht beugen (Dip).", "Aus den Beinen heraus nach oben strecken und den Schwung nutzen, um die Kettlebell zu drücken.", "Arm oben vollständig strecken, Beine sind wieder gestreckt.", "Kontrolliert zurück in die Rack-Position absenken."],
-      en: ["Hold the kettlebell in the rack position, stand tall.", "Bend the knees briefly and in a controlled way (the dip).", "Drive up through the legs, using that momentum to press the kettlebell.", "Fully extend the arm at the top, legs are straight again.", "Lower back to the rack position under control."]
-    },
-    mistakes: {
-      de: ["Dip wird zu tief oder unkontrolliert ausgeführt", "Timing zwischen Beinstreckung und Druck passt nicht zusammen", "Rumpf gibt beim Drücken nach"],
-      en: ["The dip is too deep or uncontrolled", "The timing between leg drive and press doesn't line up", "The core loses tension while pressing"]
-    },
-    muscles: {
-      de: ["Deltamuskel", "Trizeps", "Quadrizeps", "Gesäßmuskulatur", "Rumpf", "Wadenmuskulatur"],
-      en: ["Deltoid", "Triceps", "Quadriceps", "Glutes", "Core", "Calves"]
-    },
-    benefits: {
-      de: ["Erlaubt etwas mehr Gewicht als der reine Press", "Verbindet Bein- und Schulterkraft in einer Bewegung", "Gute Option, wenn die Schultern beim reinen Press ermüden"],
-      en: ["Allows slightly more weight than a strict press", "Combines leg and shoulder power in one movement", "A good option when the shoulders fatigue on a strict press"]
-    }
-  },
-  "Kettlebell Racked Reverse Lunge": {
-    steps: {
-      de: ["Kettlebell in der Rack-Position halten, aufrecht stehen.", "Ein Bein mit großem Schritt nach hinten setzen.", "In die Lunge absenken, bis das hintere Knie sich knapp über dem Boden befindet.", "Vorderer Fuß bleibt fest am Boden, Schienbein bleibt senkrecht.", "Über die vordere Ferse zurück in den Stand drücken."],
-      en: ["Hold the kettlebell in the rack position, stand tall.", "Step one leg far back.", "Lower into the lunge until the back knee hovers just above the floor.", "Front foot stays planted, shin stays vertical.", "Push back to standing through the front heel."]
-    },
-    mistakes: {
-      de: ["Vorderes Knie wandert weit über die Zehenspitzen hinaus", "Oberkörper kippt nach vorne", "Rumpf gibt durch die einseitige Rack-Last seitlich nach"],
-      en: ["The front knee travels far past the toes", "The torso tips forward", "The core gives way sideways due to the one-sided rack load"]
-    },
-    muscles: {
-      de: ["Gesäßmuskulatur", "Quadrizeps", "Hintere Oberschenkel", "Rumpf", "Wadenmuskulatur"],
-      en: ["Glutes", "Quadriceps", "Hamstrings", "Core", "Calves"]
-    },
-    benefits: {
-      de: ["Kniefreundlicher als der Ausfallschritt nach vorne", "Trainiert einseitige Beinkraft und Balance", "Die Rack-Position fordert zusätzlich Rumpf- und Schulterstabilität"],
-      en: ["Gentler on the knees than a forward lunge", "Trains single-leg strength and balance", "The rack position adds core and shoulder stability demands"]
     }
   },
   "Kettlebell Halo": {
@@ -1164,24 +888,6 @@ const EXERCISE_DETAILS = {
       en: ["Specifically teaches the hip-hinge pattern without rushing", "Directly prepares for the deadlift and swing", "Can be used with no weight at all, purely as pattern practice", "Improves hamstring flexibility"]
     }
   },
-  "Kettlebell Curl": {
-    steps: {
-      de: ["Kettlebell mit gestrecktem Arm seitlich am Körper halten.", "Ellbogen bleibt am Oberkörper fixiert.", "Unterarm nach oben zur Schulter curlen, ohne den Ellbogen nach vorne zu schieben.", "Kontrolliert zurück in die Streckung absenken."],
-      en: ["Hold the kettlebell with a straight arm at the side.", "Elbow stays fixed against the torso.", "Curl the forearm up toward the shoulder without pushing the elbow forward.", "Lower back to full extension under control."]
-    },
-    mistakes: {
-      de: ["Schwung aus der Schulter statt reiner Unterarmbewegung", "Ellbogen wandert nach vorne", "Handgelenk knickt beim Curlen ab"],
-      en: ["Using momentum from the shoulder instead of pure forearm movement", "The elbow drifts forward", "The wrist bends while curling"]
-    },
-    muscles: {
-      de: ["Bizeps", "Unterarme/Griff"],
-      en: ["Biceps", "Forearms/grip"]
-    },
-    benefits: {
-      de: ["Gezielte Armkraft-Ergänzung zu den größeren Grundübungen", "Trainiert zusätzlich die Griffkraft"],
-      en: ["Targeted arm-strength addition alongside the bigger foundational lifts", "Also trains grip strength"]
-    }
-  },
   "Kettlebell Goblet Curl": {
     steps: {
       de: ["Kettlebell mit beiden Händen an den Hörnern greifen, Arme gestreckt nach unten.", "Ellbogen bleiben am Oberkörper.", "Kettlebell nach oben zur Brust curlen.", "Kontrolliert zurück absenken."],
@@ -1214,44 +920,26 @@ const EXERCISE_DETAILS = {
       en: ["Shoulders", "Triceps", "Core"]
     },
     benefits: {
-      de: ["Beidhändige Drückvariante, leichter zu kontrollieren als der einarmige Overhead Press", "Baut Schulterkraft und -stabilität symmetrisch auf", "Gute Einsteiger-Variante für das Überkopfdrücken"],
-      en: ["A two-handed pressing variation, easier to control than the single-arm overhead press", "Builds shoulder strength and stability symmetrically", "A good beginner variant for overhead pressing"]
+      de: ["Beidhändige Drückvariante, gut zu kontrollieren", "Baut Schulterkraft und -stabilität symmetrisch auf", "Gute Einsteiger-Variante für das Überkopfdrücken"],
+      en: ["A two-handed pressing variation that is easy to control", "Builds shoulder strength and stability symmetrically", "A good beginner variant for overhead pressing"]
     }
   },
-  "Kettlebell Shrug": {
+  "Kettlebell Close-Grip Floor Press": {
     steps: {
-      de: ["Kettlebell seitlich am Körper halten, Schultern entspannt.", "Schultern gerade nach oben Richtung Ohren ziehen.", "Kurz halten, dann kontrolliert absenken."],
-      en: ["Hold the kettlebell at the side, shoulders relaxed.", "Pull the shoulders straight up toward the ears.", "Hold briefly, then lower under control."]
+      de: ["Auf den Rücken legen, Knie gebeugt, Füße flach auf dem Boden.", "Die Kettlebell mit beiden Händen eng am Griff vor der Brust halten, Ellbogen etwa 45° vom Körper entfernt.", "Die Kettlebell nach oben drücken, bis die Arme gestreckt sind.", "Kontrolliert absenken, bis die Oberarme den Boden berühren, kurz pausieren.", "Aus der Pause wieder nach oben drücken."],
+      en: ["Lie on your back with knees bent and feet flat on the floor.", "Hold the kettlebell with both hands close together on the handle at your chest, elbows about 45° from your body.", "Press the kettlebell up until your arms are straight.", "Lower under control until your upper arms touch the floor and pause briefly.", "Press up again from the pause."]
     },
     mistakes: {
-      de: ["Schultern rollen statt gerade nach oben zu ziehen", "Nacken wird mit hochgezogen"],
-      en: ["Shoulders roll instead of moving straight up", "The neck gets pulled up along with the shoulders"]
+      de: ["Die Ellbogen zeigen im 90°-Winkel zur Seite statt schräg nach unten.", "Die Oberarme federn auf dem Boden, statt kurz zu pausieren.", "Der Rücken wölbt sich vom Boden ab.", "Die Kettlebell kippt in Richtung Gesicht."],
+      en: ["The elbows flare out to 90° instead of angling toward the body.", "The upper arms bounce off the floor instead of pausing.", "The back arches off the floor.", "The kettlebell tips toward your face."]
     },
     muscles: {
-      de: ["Trapezmuskel"],
-      en: ["Trapezius"]
+      de: ["Brustmuskel", "Trizeps", "Vordere Schulter", "Rumpf"],
+      en: ["Chest", "Triceps", "Anterior deltoid", "Core"]
     },
     benefits: {
-      de: ["Gezielte Kräftigung des oberen Trapezmuskels", "Unterstützt die Haltung"],
-      en: ["Targeted strengthening of the upper trapezius", "Supports posture"]
-    }
-  },
-  "Kettlebell Suitcase Row": {
-    steps: {
-      de: ["Kettlebell seitlich am Körper wie einen Koffer halten.", "Aus dieser Position den Ellbogen nach oben ziehen, Kettlebell zur Hüfte führen.", "Oben kurz halten, kontrolliert absenken."],
-      en: ["Hold the kettlebell at the side like a suitcase.", "From this position, pull the elbow up, guiding the kettlebell toward the hip.", "Hold briefly at the top, lower under control."]
-    },
-    mistakes: {
-      de: ["Rumpf rotiert mit der Zugbewegung", "Kettlebell wird vom Körper weg statt eng geführt"],
-      en: ["The torso rotates with the pull", "The kettlebell moves away from the body instead of staying close"]
-    },
-    muscles: {
-      de: ["Breiter Rückenmuskel", "Trapezmuskel", "Rautenmuskeln", "Bizeps", "Rumpf"],
-      en: ["Lats", "Trapezius", "Rhomboids", "Biceps", "Core"]
-    },
-    benefits: {
-      de: ["Stabile, einarmige Zugvariante ohne Rotation im Rumpf", "Gute Alternative zur gebeugten Rudervariante"],
-      en: ["A stable, single-arm pulling variant without torso rotation", "A good alternative to the bent-over row"]
+      de: ["Schulterfreundlich, weil der Boden den Bewegungsradius begrenzt", "Beidhändig und dadurch stabil für Einsteiger", "Trainiert Brust und Trizeps", "Braucht nur eine Kettlebell"],
+      en: ["Shoulder friendly because the floor limits the range of motion", "Two-handed and therefore stable for beginners", "Trains chest and triceps", "Needs only one kettlebell"]
     }
   },
   "Plank": {
@@ -1308,24 +996,6 @@ const EXERCISE_DETAILS = {
       en: ["A full-body movement with a high heart-rate response", "A good progression after the standalone goblet squat"]
     }
   },
-  "Kettlebell Single-Leg Deadlift": {
-    steps: {
-      de: ["Auf einem Bein stehen, Kettlebell in der gegenüberliegenden Hand.", "Oberkörper nach vorne kippen, während das freie Bein sich gleichzeitig nach hinten streckt.", "Hüfte bleibt möglichst gerade zum Boden ausgerichtet.", "Über die Hüftstreckung zurück in den aufrechten Stand kommen."],
-      en: ["Stand on one leg, kettlebell in the opposite hand.", "Tip the torso forward while the free leg extends back at the same time.", "Hips stay as level to the floor as possible.", "Return to upright standing through hip extension."]
-    },
-    mistakes: {
-      de: ["Hüfte kippt zur Seite statt gerade zu bleiben", "Standbein-Knie wird komplett durchgestreckt und blockiert", "Bewegung wird zu schnell für die nötige Balance ausgeführt"],
-      en: ["The hips tilt sideways instead of staying level", "The standing knee locks out completely", "The movement is done too fast for the balance it requires"]
-    },
-    muscles: {
-      de: ["Hintere Oberschenkel", "Gesäßmuskulatur", "Rumpf (Anti-Rotation)", "Wadenmuskulatur", "Rückenstrecker"],
-      en: ["Hamstrings", "Glutes", "Core (anti-rotation)", "Calves", "Erector spinae"]
-    },
-    benefits: {
-      de: ["Gleicht Kraft- und Balanceunterschiede zwischen den Körperseiten aus", "Verbindet Hüft-Hinge mit Gleichgewichtstraining", "Kräftigt die Verbindung zwischen Schulter und gegenüberliegender Hüfte"],
-      en: ["Balances out strength and balance differences between the sides of the body", "Combines the hip hinge with balance training", "Strengthens the connection between the shoulder and the opposite hip"]
-    }
-  },
   "Kettlebell Slingshot": {
     steps: {
       de: ["Kettlebell an den Hörnern vor dem Körper halten.", "Kettlebell locker um den Körper herum von einer Hand zur anderen übergeben.", "Rumpf bleibt während der ganzen Bewegung stabil und aufrecht.", "Nach der vorgesehenen Rundenzahl die Richtung wechseln."],
@@ -1342,60 +1012,6 @@ const EXERCISE_DETAILS = {
     benefits: {
       de: ["Gewöhnt Körper und Griff an die Kettlebell", "Gute aktive Erholung zwischen anspruchsvolleren Übungen", "Einfacher Einstieg für den allerersten Kontakt mit der Kettlebell"],
       en: ["Gets the body and grip used to the kettlebell", "Good active recovery between more demanding exercises", "A simple entry point for the very first contact with a kettlebell"]
-    }
-  },
-  "Kettlebell Sumo High Pull": {
-    steps: {
-      de: ["Breite Sumo-Haltung einnehmen, Kettlebell mittig zwischen den Füßen.", "Wie bei einem Swing/Deadlift aus der Hüfte heraus die Kettlebell nach oben beschleunigen.", "Ellbogen hoch und nach außen ziehen, Kettlebell bis auf Schlüsselbeinhöhe führen.", "Kontrolliert zurück in die Ausgangsposition absenken."],
-      en: ["Take a wide sumo stance, kettlebell centred between the feet.", "As in a swing/deadlift, accelerate the kettlebell up from the hips.", "Pull the elbow high and out, guiding the kettlebell up to collarbone height.", "Lower back to the start position under control."]
-    },
-    mistakes: {
-      de: ["Kettlebell wird mit dem Arm hochgezogen statt aus der Hüfte beschleunigt", "Griff zu locker im falschen Moment, Kettlebell fällt unkontrolliert", "Zu schweres Gewicht verstärkt Timing-Fehler"],
-      en: ["The kettlebell is pulled up with the arm instead of accelerated from the hips", "The grip is too loose at the wrong moment, the kettlebell drops uncontrolled", "Too heavy a weight magnifies timing errors"]
-    },
-    muscles: {
-      de: ["Gesäßmuskulatur", "Hintere Oberschenkel", "Trapezmuskel", "Deltamuskel", "Unterarme/Griff"],
-      en: ["Glutes", "Hamstrings", "Trapezius", "Deltoid", "Forearms/grip"]
-    },
-    benefits: {
-      de: ["Zügige, dynamische Übung mit hoher Herzfrequenz", "Baut eine Brücke zwischen Hüft-Hinge-Übungen und Zugbewegungen für den Oberkörper"],
-      en: ["A quick, dynamic exercise with a high heart-rate response", "Bridges hip-hinge exercises and upper-body pulling movements"]
-    }
-  },
-  "Kettlebell Racked Squat": {
-    steps: {
-      de: ["Kettlebell in die Rack-Position an einer Schulter bringen, Ellbogen nah am Körper.", "Füße schulterbreit, Zehen leicht nach außen gedreht.", "In die Kniebeuge absenken, Hüfte nach hinten schieben, Oberkörper bleibt trotz der einseitigen Last möglichst gerade.", "Über die Fersen zurück nach oben drücken, Rumpf bleibt angespannt gegen das seitliche Ziehen.", "Satz beenden und Seite wechseln."],
-      en: ["Bring the kettlebell into the rack position at one shoulder, elbow close to the body.", "Feet shoulder-width apart, toes turned out slightly.", "Lower into the squat, pushing the hips back, torso stays as level as possible despite the one-sided load.", "Push back up through the heels, core braced against the sideways pull.", "Finish the set and switch sides."]
-    },
-    mistakes: {
-      de: ["Oberkörper kippt zur beladenen Seite", "Ellbogen driftet vom Körper weg", "Knie fällt beim Hochdrücken nach innen"],
-      en: ["The torso tips toward the loaded side", "The elbow drifts away from the body", "The knee caves inward when pushing up"]
-    },
-    muscles: {
-      de: ["Vordere Oberschenkelmuskulatur", "Gesäßmuskulatur", "Rumpf (Anti-Lateralflexion)", "Schulter (haltend)"],
-      en: ["Quadriceps", "Glutes", "Core (anti-lateral-flexion)", "Shoulder (holding)"]
-    },
-    benefits: {
-      de: ["Fordert Rumpfstabilität stärker als die beidhändige Goblet-Variante", "Gute Vorbereitung auf einseitige Drück- und Kombinationsübungen"],
-      en: ["Challenges core stability more than the two-handed goblet version", "Good preparation for single-arm pressing and combination movements"]
-    }
-  },
-  "Kettlebell Bob and Weave": {
-    steps: {
-      de: ["Kettlebell in der Rack-Position an einer Schulter halten.", "Aus den Knien heraus mit einer seitlichen Ausweichbewegung wie beim Boxen zur Seite absenken.", "Kurz unten halten, dann zur Gegenseite wechseln.", "Bewegung fließend und kontrolliert fortsetzen, Rumpf bleibt angespannt."],
-      en: ["Hold the kettlebell in the rack position at one shoulder.", "Bend the knees and shift to one side with a boxing-style dodging motion.", "Hold briefly at the bottom, then switch to the other side.", "Keep the movement flowing and controlled, core stays braced."]
-    },
-    mistakes: {
-      de: ["Bewegung kommt nur aus dem Oberkörper statt aus den Knien", "Zu schnelles Tempo auf Kosten der Kontrolle", "Rack-Position wird während der Bewegung instabil"],
-      en: ["The movement comes only from the upper body instead of the knees", "Too fast a pace at the cost of control", "The rack position becomes unstable during the movement"]
-    },
-    muscles: {
-      de: ["Vordere Oberschenkelmuskulatur", "Gesäßmuskulatur", "Rumpf", "Adduktoren/Abduktoren"],
-      en: ["Quadriceps", "Glutes", "Core", "Adductors/abductors"]
-    },
-    benefits: {
-      de: ["Dynamische, seitliche Beinarbeit, ergänzt die eher lineare Kniebeuge", "Trainiert Rumpfstabilität unter seitlicher Bewegung"],
-      en: ["Dynamic, lateral leg work that complements the mostly linear squat pattern", "Trains core stability during sideways movement"]
     }
   },
   "Kettlebell Suitcase Carry": {
@@ -1453,131 +1069,21 @@ const EXERCISE_DETAILS = {
     }
   }
 };
-
-// Zusätzliche Lernhilfen pro Übung: "learn" = Schritt für Schritt lernen bzw. Vorstufen,
-// "tips" = Atmung und Merksätze. Beides erscheint nur in der Bibliothek.
-const EXERCISE_EXTRAS = {
-  "Kettlebell Swing": {
-    learn: {
-      de: ["Zuerst die Hüftbeuge ohne Gewicht: Hände an die Hüftfalten, Gesäß nach hinten schieben, Knie nur leicht gebeugt, Rücken lang. Dann aufrichten, indem du die Hüfte nach vorne schiebst.", "Danach der Deadlift mit der Kettlebell vom Boden. Er übt dieselbe Hüftbeuge, nur langsam. Er ist die Grundlage des Swings.", "Dann der Hike-Pass: Kettlebell kippen und wie bei einem Football-Snap zwischen die Beine ziehen, die Unterarme berühren die Oberschenkel. Aus dieser Position richtest du dich schnell auf, ohne mit den Armen zu ziehen.", "Zum Schluss lässt du die Kettlebell aus dem Hike-Pass bis auf Brusthöhe schwingen. Starte mit wenigen Wiederholungen pro Satz und beende den Satz, sobald die Technik nachlässt.", "Wähle zu Beginn lieber ein leichteres Gewicht. Die Hüfte soll die Kettlebell bewegen, nicht die Arme."],
-      en: ["First the hip hinge without weight: hands at your hip creases, push the hips back, knees only slightly bent, back long. Then stand up by driving the hips forward.", "Next the deadlift with the kettlebell from the floor. It trains the same hip hinge, only slow. It is the foundation of the swing.", "Then the hike pass: tilt the kettlebell and pull it between your legs like a football snap, forearms touching the thighs. From there you stand up quickly without pulling with the arms.", "Finally let the kettlebell swing from the hike pass up to chest height. Start with few reps per set and end the set as soon as your form slips.", "Rather start with a lighter weight. The hips should move the kettlebell, not the arms."]
-    },
-    tips: {
-      de: ["Atmung: Beim Zurückschwingen einatmen, beim Aufrichten kräftig ausatmen.", "Die Hüfte macht die Arbeit, die Arme sind nur Seile.", "Oben stehst du gerade wie ein Brett: Gesäß fest, Knie gestreckt, Rippen unten.", "Blick nach vorne auf einen festen Punkt, nicht auf die Kettlebell.", "Lass die Kettlebell oben nicht festhalten, sie fällt von selbst zurück.", "Nach dem letzten Swing lässt du sie auspendeln und stellst sie ab, bevor du pausierst. Bei Schmerzen im unteren Rücken brichst du ab."],
-      en: ["Breathing: breathe in as the bell swings back, breathe out forcefully as you stand up.", "The hips do the work, the arms are just ropes.", "At the top you stand tall like a plank: glutes tight, knees straight, ribs down.", "Look ahead at a fixed point, not at the kettlebell.", "Do not hold the kettlebell up at the top, it falls back on its own.", "After the last swing let it swing out and set it down before you rest. Stop if you feel pain in the lower back."]
-    }
-  },
-  "Kettlebell Deadlift": {
-    learn: {
-      de: ["Übe die Hüftbeuge zuerst ohne Gewicht: Hände an die Hüftfalten, Gesäß nach hinten schieben, Knie nur leicht gebeugt, Rücken lang.", "Kommst du nicht tief genug oder rundet sich der Rücken, stelle die Kettlebell auf einen Block oder ein paar Bücher. Dadurch wird der Weg kürzer.", "Klappt das sauber, stellst du die Kettlebell auf den Boden.", "Der Deadlift ist die Grundlage für den Swing. Wer ihn sicher beherrscht, hat die Hüftbeuge schon gelernt."],
-      en: ["Practice the hip hinge without weight first: hands at your hip creases, push the hips back, knees only slightly bent, back long.", "If you cannot get low enough or the back rounds, set the kettlebell on a block or a few books. That shortens the distance.", "Once that works cleanly, set the kettlebell on the floor.", "The deadlift is the foundation for the swing. If you master it, you have already learned the hip hinge."]
-    },
-    tips: {
-      de: ["Atmung: Vor dem Anheben einatmen und den Bauch fest anspannen, beim Aufrichten ausatmen.", "Drück den Boden weg, statt an der Kettlebell zu ziehen.", "Der Rücken bleibt lang wie ein Brett, der Blick geht schräg nach vorne auf den Boden.", "Oben stehst du aufrecht, ohne ins Hohlkreuz zu gehen.", "Beim Absetzen schiebst du zuerst die Hüfte nach hinten."],
-      en: ["Breathing: breathe in and brace the abs hard before lifting, breathe out while standing up.", "Push the floor away instead of pulling on the kettlebell.", "The back stays long like a plank, the gaze goes diagonally forward to the floor.", "At the top you stand tall without arching the lower back.", "When setting down, push the hips back first."]
-    }
-  },
-  "Kettlebell Romanian Deadlift": {
-    learn: {
-      de: ["Übe die Bewegung zuerst ohne Gewicht oder mit einem Besenstiel am Rücken. Besenstiel, Hinterkopf, oberer Rücken und Steißbein berühren dabei die ganze Zeit den Stab.", "Stell dir vor, du schließt mit dem Gesäß eine Kofferraumklappe hinter dir.", "Geh so tief, wie dein Rücken gerade bleibt. Das ist meist bis knapp unter die Knie."],
-      en: ["Practice the movement first without weight or with a broomstick along your back. The stick keeps touching the back of the head, upper back and tailbone the whole time.", "Imagine closing a car trunk behind you with your hips.", "Go only as low as your back stays straight. That is usually to just below the knees."]
-    },
-    tips: {
-      de: ["Atmung: Beim Absenken einatmen und den Bauch anspannen, beim Aufrichten ausatmen.", "Die Knie bleiben fast gleich gebeugt, nur die Hüfte bewegt sich.", "Die Kettlebell streift die Beine auf dem ganzen Weg.", "Du spürst die Dehnung hinten in den Oberschenkeln, nicht im unteren Rücken."],
-      en: ["Breathing: breathe in while lowering and brace the abs, breathe out while standing up.", "The knees stay at about the same bend, only the hips move.", "The kettlebell brushes the legs all the way.", "You feel the stretch in the back of the thighs, not in the lower back."]
-    }
-  },
-  "Kettlebell Goblet Squat": {
-    learn: {
-      de: ["Heben die Fersen ab, stelle die Füße etwas weiter auseinander und drehe die Zehen mehr nach außen. Hilft das nicht, leg die Fersen auf ein flaches Brett.", "Die Kettlebell vor der Brust dient als Gegengewicht und hilft dir, aufrecht zu bleiben.", "Geh anfangs nur so tief, wie die Technik sauber bleibt. Die Tiefe kommt mit der Zeit.", "Zum Üben halte unten eine Sekunde, so lernst du die Position zu kontrollieren."],
-      en: ["If the heels lift, set your feet a bit wider and turn the toes out more. If that does not help, put the heels on a flat board.", "The kettlebell at your chest acts as a counterweight and helps you stay upright.", "At first go only as deep as your form stays clean. Depth comes with time.", "To practice, pause for one second at the bottom, it teaches you to control the position."]
-    },
-    tips: {
-      de: ["Atmung: Beim Absenken einatmen, beim Hochkommen ausatmen.", "Setz dich zwischen die Fersen, nicht nach hinten.", "Brust hoch, Ellbogen innen zwischen den Knien.", "Die Knie folgen den Zehen und fallen nicht nach innen."],
-      en: ["Breathing: breathe in while lowering, breathe out while standing up.", "Sit down between your heels, not backward.", "Chest up, elbows inside between the knees.", "The knees follow the toes and do not cave in."]
-    }
-  },
-  "Kettlebell Goblet Press": {
-    learn: {
-      de: ["Halte die Kettlebell erst nur in der Goblet-Position und spanne Gesäß und Bauch an. Aus einer festen Basis drückt es sich leichter.", "Drücke die Kettlebell in einem leichten Bogen nah am Gesicht vorbei nach oben, nicht weit nach vorne.", "Gehst du ins Hohlkreuz, ist das Gewicht zu schwer oder der Rumpf zu locker."],
-      en: ["First just hold the kettlebell in the goblet position and brace glutes and abs. It is easier to press from a solid base.", "Press the kettlebell up in a slight arc close past your face, not far forward.", "If you arch your lower back, the weight is too heavy or the core is too loose."]
-    },
-    tips: {
-      de: ["Atmung: Vor dem Drücken einatmen und den Rumpf anspannen, beim Drücken ausatmen.", "Rippen runter, Gesäß fest.", "Oben sind die Ellbogen gestreckt und der Kopf steht zwischen den Armen."],
-      en: ["Breathing: breathe in and brace before pressing, breathe out while pressing.", "Ribs down, glutes tight.", "At the top the elbows are straight and the head sits between the arms."]
-    }
-  },
-  "Kettlebell Bent-Over Row": {
-    learn: {
-      de: ["Stütze dich mit der freien Hand am Oberschenkel oder an einer Bank ab. So bleibt der Rücken ruhig.", "Wähle ein Gewicht, bei dem du die Schulterblätter bewusst bewegen kannst.", "Mache auf beiden Seiten gleich viele Wiederholungen und beginne mit der schwächeren Seite."],
-      en: ["Support yourself with the free hand on your thigh or a bench. That keeps the back still.", "Choose a weight where you can move the shoulder blades deliberately.", "Do the same number of reps on both sides and start with the weaker side."]
-    },
-    tips: {
-      de: ["Atmung: Beim Ziehen ausatmen, beim Absenken einatmen.", "Zieh den Ellbogen zur Hosentasche, nicht zur Schulter.", "Der Rücken ist lang wie eine Tischplatte.", "Erst das Schulterblatt zurückziehen, dann den Ellbogen beugen."],
-      en: ["Breathing: breathe out while pulling, breathe in while lowering.", "Pull the elbow to your back pocket, not to the shoulder.", "The back is long like a tabletop.", "Pull the shoulder blade back first, then bend the elbow."]
-    }
-  },
-  "Push-Up": {
-    learn: {
-      de: ["Zu schwer? Stütze die Hände erhöht auf Tisch, Bank oder Sofa ab. Je höher die Hände, desto leichter.", "Alternativ auf den Knien: Der Körper bleibt eine gerade Linie vom Kopf bis zu den Knien.", "Sobald es sauber klappt, gehst du mit den Händen Stufe für Stufe tiefer, bis du am Boden bist.", "Zusätzlich hilft langsames Absenken über etwa drei Sekunden."],
-      en: ["Too hard? Place your hands on a table, bench or sofa. The higher the hands, the easier it is.", "Alternatively on your knees: the body stays a straight line from head to knees.", "Once it works cleanly, lower your hands step by step until you are on the floor.", "Slowly lowering over about three seconds helps as well."]
-    },
-    tips: {
-      de: ["Atmung: Beim Absenken einatmen, beim Hochdrücken ausatmen.", "Gesäß und Bauch fest, du bist ein Brett.", "Die Ellbogen zeigen schräg nach hinten, wie ein Pfeil und nicht wie ein T."],
-      en: ["Breathing: breathe in while lowering, breathe out while pushing up.", "Glutes and abs tight, you are a plank.", "The elbows point diagonally backward, like an arrow and not like a T."]
-    }
-  },
-  "Plank": {
-    learn: {
-      de: ["Zu schwer? Geh auf die Knie oder stütze die Unterarme auf eine erhöhte Fläche.", "Steigere die Zeit in kleinen Schritten, zum Beispiel um 5 bis 10 Sekunden.", "Wird die Haltung schlechter, beende den Satz. Mehrere saubere kurze Sätze sind besser als ein langer, der zerfällt."],
-      en: ["Too hard? Go onto your knees or rest the forearms on an elevated surface.", "Increase the time in small steps, for example by 5 to 10 seconds.", "If your position gets worse, end the set. Several clean short sets are better than one long one that falls apart."]
-    },
-    tips: {
-      de: ["Atmung: Ruhig weiteratmen und nicht die Luft anhalten.", "Ellbogen unter den Schultern, Gesäß und Bauch fest.", "Drücke die Ellbogen gedanklich Richtung Füße, das spannt den Rumpf zusätzlich an."],
-      en: ["Breathing: keep breathing calmly, do not hold your breath.", "Elbows under the shoulders, glutes and abs tight.", "Mentally pull the elbows toward the feet, it braces the core even more."]
-    }
-  },
-  "Kettlebell Suitcase Carry": {
-    learn: {
-      de: ["Wähle ein Gewicht, bei dem du aufrecht bleibst und die Schulter nicht zur Seite gezogen wird.", "Beginne mit kurzen Strecken. Du kannst das Gewicht auch erst nur halten und dann losgehen.", "Hast du wenig Platz, gehe eine kürzere Strecke hin und zurück."],
-      en: ["Choose a weight where you stay upright and the shoulder is not pulled to the side.", "Start with short distances. You can also just hold the weight first and then start walking.", "If you have little space, walk a shorter distance there and back."]
-    },
-    tips: {
-      de: ["Atmung: Ruhig weiteratmen, der Rumpf bleibt fest.", "Brustkorb hoch, Schulter nach hinten und unten.", "Stell dir vor, du stehst mit dem Rücken an einer Wand und kippst nicht zur Seite.", "Den Griff nicht verkrampfen."],
-      en: ["Breathing: keep breathing calmly, the core stays braced.", "Chest up, shoulder back and down.", "Imagine standing with your back against a wall, you do not lean to the side.", "Do not clench the grip."]
-    }
-  }
-};
 const BODY_REGION = {
   "Kettlebell Goblet Squat": "lower",
-  "Kettlebell Sumo Deadlift": "lower",
-  "Kettlebell Romanian Deadlift": "lower",
+  "Kettlebell Goblet Reverse Lunge": "lower",
+  "Kettlebell Close-Grip Floor Press": "upper",
   "Kettlebell Deadlift": "lower",
   "Kettlebell Swing": "lower",
   "Kettlebell Bent-Over Row": "upper",
-  "Kettlebell Front Raise": "upper",
-  "Kettlebell Shrug": "upper",
-  "Kettlebell Curl": "upper",
   "Kettlebell Goblet Curl": "upper",
   "Kettlebell Goblet Press": "upper",
-  "Kettlebell Push Press": "upper",
-  "Kettlebell Overhead Press": "upper",
-  "Kettlebell Floor Press": "upper",
-  "Kettlebell Crush Grip Floor Press": "upper",
   "Push-Up": "upper",
   "Plank": "core",
-  "Kettlebell Clean": "lower",
-  "Kettlebell Sumo High Pull": "lower",
-  "Kettlebell Racked Reverse Lunge": "lower",
   "Kettlebell Good Morning": "lower",
-  "Kettlebell Single-Leg Deadlift": "lower",
   "Kettlebell Slingshot": "upper",
-  "Kettlebell Single Arm Deadlift": "lower",
-  "Kettlebell Suitcase Row": "upper",
   "Kettlebell Halo": "upper",
   "Kettlebell Squat and Press": "lower",
-  "Kettlebell Racked Squat": "lower",
-  "Kettlebell Bob and Weave": "lower",
   "Kettlebell Suitcase Carry": "carry",
   "Kettlebell Sit and Press": "core",
   "Kettlebell Russian Twist": "core"
@@ -1590,105 +1096,13 @@ function slug(name) {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
 
-// Manche Übungen (Halo, Good Morning) tauchen sowohl im Aufwärmen als auch als
-// echte Trainingsübung auf.
-function interleaveByRegion(names) {
-  const lower = names.filter(n => BODY_REGION[n] === "lower");
-  const upper = names.filter(n => BODY_REGION[n] === "upper");
-  const core = names.filter(n => BODY_REGION[n] === "core");
-  const carry = names.filter(n => BODY_REGION[n] === "carry");
-  const out = [];
-  let i = 0,
-    j = 0;
-  while (i < lower.length || j < upper.length) {
-    if (i < lower.length) out.push(lower[i++]);
-    if (j < upper.length) out.push(upper[j++]);
-  }
-  return out.concat(core, carry);
-}
-function reorderByRegion(list) {
-  if (list.length < 3) return list;
-  const isObjects = typeof list[0] !== "string";
-  const names = isObjects ? list.map(item => item.name) : list;
-  const orderedNames = interleaveByRegion(names);
-  if (!isObjects) return orderedNames;
-  const byName = new Map();
-  list.forEach(item => {
-    if (!byName.has(item.name)) byName.set(item.name, []);
-    byName.get(item.name).push(item);
-  });
-  return orderedNames.map(n => byName.get(n).shift());
-}
-
 // Aufwärmen (~3 Min.).
 
 // ============================================================
 // TRAININGSPLAN-DATEN — Aufwärmen, Cool-down, Einheiten beider Module
 // ============================================================
+// Aufwärmen (~5-7 Min.): wärmt auf, ohne zu ermüden.
 const WARMUP = [{
-  id: "warmup-arm-circles",
-  n: {
-    de: "Armkreisen",
-    en: "Arm circles"
-  },
-  d: {
-    de: "10 Kreise vorwärts, dann 10 rückwärts, locker und mit vollem Bewegungsradius. Lockert die Schultern für Rudern und Drücken.",
-    en: "10 circles forward, then 10 backward, loose and through a full range of motion. Loosens the shoulders for rowing and pressing."
-  }
-}, {
-  id: "warmup-hip-circles",
-  n: {
-    de: "Hüftkreisen",
-    en: "Hip circles"
-  },
-  d: {
-    de: "Hände in die Hüften gestützt, 10 große Kreise pro Richtung. Mobilisiert die Hüfte für Kniebeuge, Deadlift und Swing.",
-    en: "Hands on your hips, 10 big circles in each direction. Mobilizes the hip for the squat, deadlift and swing."
-  }
-}, {
-  id: "warmup-bodyweight-squat",
-  n: {
-    de: "Kniebeugen ohne Gewicht",
-    en: "Bodyweight squats"
-  },
-  d: {
-    de: "8 Kniebeugen ohne Gewicht, Oberkörper aufrecht, Knie folgen den Zehen. Bereitet gezielt auf den Goblet Squat vor.",
-    en: "8 bodyweight squats, torso upright, knees track the toes. Specifically preps the goblet squat."
-  }
-}, {
-  id: "warmup-kb-good-morning",
-  n: {
-    de: "Kettlebell Good Morning",
-    en: "Kettlebell good morning"
-  },
-  d: {
-    de: "Kettlebell leicht vor der Brust halten, Hüfte nach hinten schieben, leichte Kniebeugung, Rücken bleibt gerade. Bereitet auf die Hinge-Bewegungen der Einheit vor. 10 Wdh.",
-    en: "Hold the kettlebell lightly at the chest, push the hips back, slight knee bend, back stays straight. Preps for the session's hinge movements. 10 reps."
-  }
-}, {
-  id: "warmup-kb-halo",
-  n: {
-    de: "Kettlebell Halo",
-    en: "Kettlebell halo"
-  },
-  d: {
-    de: "Kettlebell an den Hörnern nah am Kopf vorbei kreisen lassen, Rumpf bleibt stabil. Wärmt gezielt die Schultern auf. 5 Wdh. je Richtung.",
-    en: "Circle the kettlebell by the horns closely around the head, core stays stable. Specifically warms up the shoulders. 5 reps each direction."
-  }
-}, {
-  id: "warmup-kb-slingshot",
-  n: {
-    de: "Kettlebell Slingshot",
-    en: "Kettlebell slingshot"
-  },
-  d: {
-    de: "Kettlebell locker um den Körper herum von einer Hand zur anderen kreisen lassen, Rumpf bleibt stabil. Gewöhnt Körper und Griff an die Kettlebell. 8 Runden je Richtung.",
-    en: "Loosely circle the kettlebell around your body from hand to hand, core stays stable. Gets your body and grip used to the kettlebell. 8 rounds each direction."
-  }
-}];
-
-// Warm-up des Einsteiger-Moduls (~5-7 Min.): wärmt auf, ohne zu ermüden.
-const WARMUP_EINSTEIGER = [{
   id: "warmup-kb-slingshot",
   n: {
     de: "Kettlebell Slingshot",
@@ -1729,10 +1143,6 @@ const WARMUP_EINSTEIGER = [{
     en: "Bodyweight squats, torso upright, knees track the toes. Specifically preps the goblet squat. 8 reps."
   }
 }];
-const WARMUP_BY_MODULE = {
-  einsteiger: WARMUP_EINSTEIGER,
-  kurs: WARMUP
-};
 
 // Cool-down (~2-3 Min.) — bewusst leicht, alles im Stehen ausführbar.
 const COOLDOWN = [{
@@ -1767,906 +1177,421 @@ const COOLDOWN = [{
   }
 }];
 
-// Modul 1 — Einsteiger (kostenloses Probetraining, 4 Einheiten). Es zeigt, wie
-// die App funktioniert, und hilft einzuschätzen, ob Kettlebell-Training für die
-// Person das Richtige ist. Alle Übungen stammen aus den fünf Grundmustern
-// Hinge, Squat, Push, Pull und Carry. Einheit 1 kommt ganz ohne Swing aus, der
-// Swing steht in Einheit 2 am Anfang der Runde, solange man frisch ist, und
-// kehrt danach in wechselnder Reihenfolge wieder. Jede Einheit funktioniert
-// als eigenständiges Ganzkörpertraining.
-// Es gibt einen einzigen Plan. Die Stufen (leicht/mittel/schwer) ändern nur die
-// Zahlen: `t` enthält pro Übung die drei Werte (siehe STEPS).
-// Jede Einheit hat einen eigenen Block-Schlüssel für Titel und Hinweistext.
-// Das Beginner-Modul (Kurs) besteht aus eigenständigen 12-Einheiten-Plänen.
-const SESSIONS_EINSTEIGER = {
+// Beginner-Modul: 12 eigenständige Workouts mit jeweils eigenem Charakter.
+// Alle Zahlen sind Dreier-Listen [leicht, mittel, schwer]. Es gibt keinen
+// Aufbau von Einheit zu Einheit; jedes Workout steht für sich.
+// `fixed: true` blendet die Rundenwahl aus (Chipper und Challenge laufen genau einmal).
+const R = (...v) => v;
+const SESSIONS_KURS = {
   1: {
-    block: "fullBody",
+    block: "strength1",
     format: "sets",
-    sets: 3,
+    sets: R(3, 4, 4),
+    rest: 90,
     exercises: [{
       n: "Kettlebell Goblet Squat",
-      t: STEPS.reps,
+      t: R(8, 10, 12),
       u: "reps"
     }, {
       n: "Kettlebell Deadlift",
-      t: STEPS.reps,
-      u: "reps"
-    }, {
-      n: "Kettlebell Goblet Press",
-      t: STEPS.reps,
+      t: R(8, 10, 12),
       u: "reps"
     }, {
       n: "Kettlebell Bent-Over Row",
-      t: STEPS.reps,
+      t: R(8, 10, 12),
       u: "reps_side"
     }, {
+      n: "Kettlebell Goblet Press",
+      t: R(6, 8, 10),
+      u: "reps"
+    }, {
       n: "Plank",
-      t: STEPS.hold,
+      t: R(20, 30, 40),
       u: "sec"
     }]
   },
   2: {
-    block: "swingFullBody",
+    block: "swingFull",
     format: "sets",
-    sets: 3,
+    sets: R(3, 4, 4),
+    rest: 90,
     exercises: [{
       n: "Kettlebell Swing",
-      t: STEPS.reps,
+      t: R(12, 15, 20),
       u: "reps"
     }, {
       n: "Kettlebell Goblet Squat",
-      t: STEPS.reps,
+      t: R(8, 10, 12),
+      u: "reps"
+    }, {
+      n: "Kettlebell Close-Grip Floor Press",
+      t: R(8, 10, 12),
       u: "reps"
     }, {
       n: "Kettlebell Bent-Over Row",
-      t: STEPS.reps,
+      t: R(8, 10, 12),
       u: "reps_side"
     }, {
-      n: "Push-Up",
-      t: STEPS.pushUp,
-      u: "reps"
-    }, {
       n: "Kettlebell Suitcase Carry",
-      t: STEPS.carry,
+      t: R(20, 30, 40),
       u: "m_side"
     }]
   },
   3: {
-    block: "hingePress",
-    format: "sets",
-    sets: 3,
+    block: "circuit1",
+    format: "circuit",
+    rounds: R(3, 3, 4),
+    workSec: R(30, 40, 40),
+    restSec: R(30, 20, 20),
     exercises: [{
-      n: "Kettlebell Deadlift",
-      t: STEPS.reps,
-      u: "reps"
-    }, {
-      n: "Kettlebell Goblet Press",
-      t: STEPS.reps,
-      u: "reps"
-    }, {
       n: "Kettlebell Goblet Squat",
-      t: STEPS.reps,
       u: "reps"
     }, {
       n: "Kettlebell Swing",
-      t: STEPS.reps,
+      u: "reps"
+    }, {
+      n: "Push-Up",
       u: "reps"
     }, {
       n: "Kettlebell Bent-Over Row",
-      t: STEPS.reps,
+      u: "reps_side"
+    }, {
+      n: "Kettlebell Goblet Reverse Lunge",
       u: "reps_side"
     }, {
       n: "Plank",
-      t: STEPS.hold,
       u: "sec"
     }]
   },
   4: {
-    block: "fullBodyCarry",
-    format: "sets",
-    sets: 3,
+    block: "emom1",
+    format: "emom",
+    rounds: R(4, 5, 6),
     exercises: [{
-      n: "Kettlebell Goblet Squat",
-      t: STEPS.reps,
+      n: "Kettlebell Swing",
+      t: R(10, 12, 15),
       u: "reps"
     }, {
-      n: "Kettlebell Bent-Over Row",
-      t: STEPS.reps,
-      u: "reps_side"
-    }, {
-      n: "Kettlebell Swing",
-      t: STEPS.reps,
+      n: "Kettlebell Goblet Squat",
+      t: R(6, 8, 10),
       u: "reps"
     }, {
       n: "Push-Up",
-      t: STEPS.pushUp,
+      t: R(5, 8, 10),
+      u: "reps"
+    }]
+  },
+  5: {
+    block: "superset",
+    format: "sets",
+    sets: R(3, 3, 4),
+    rest: 90,
+    exercises: [{
+      n: "Kettlebell Goblet Squat",
+      t: R(8, 10, 12),
+      u: "reps"
+    }, {
+      n: "Kettlebell Bent-Over Row",
+      t: R(8, 10, 12),
+      u: "reps_side"
+    }, {
+      n: "Kettlebell Deadlift",
+      t: R(8, 10, 12),
+      u: "reps"
+    }, {
+      n: "Kettlebell Goblet Press",
+      t: R(6, 8, 10),
+      u: "reps"
+    }]
+  },
+  6: {
+    block: "conditioning",
+    format: "circuit",
+    rounds: R(3, 3, 4),
+    workSec: R(30, 40, 45),
+    restSec: R(30, 20, 15),
+    exercises: [{
+      n: "Kettlebell Swing",
+      u: "reps"
+    }, {
+      n: "Kettlebell Goblet Reverse Lunge",
+      u: "reps_side"
+    }, {
+      n: "Kettlebell Goblet Squat",
+      u: "reps"
+    }, {
+      n: "Push-Up",
       u: "reps"
     }, {
       n: "Kettlebell Suitcase Carry",
-      t: STEPS.carry,
       u: "m_side"
     }, {
-      n: "Kettlebell Goblet Press",
-      t: STEPS.reps,
+      n: "Kettlebell Russian Twist",
+      u: "reps_side"
+    }]
+  },
+  7: {
+    block: "swingFocus",
+    format: "sets",
+    sets: R(3, 4, 5),
+    rest: 75,
+    exercises: [{
+      n: "Kettlebell Swing",
+      t: R(15, 20, 25),
       u: "reps"
+    }, {
+      n: "Kettlebell Good Morning",
+      t: R(8, 10, 12),
+      u: "reps"
+    }, {
+      n: "Kettlebell Deadlift",
+      t: R(8, 10, 12),
+      u: "reps"
+    }, {
+      n: "Kettlebell Russian Twist",
+      t: R(8, 10, 12),
+      u: "reps_side"
+    }, {
+      n: "Plank",
+      t: R(20, 30, 40),
+      u: "sec"
+    }]
+  },
+  8: {
+    block: "chipper",
+    format: "sets",
+    sets: R(1, 1, 1),
+    rest: 0,
+    fixed: true,
+    exercises: [{
+      n: "Kettlebell Swing",
+      t: R(30, 40, 50),
+      u: "reps"
+    }, {
+      n: "Kettlebell Goblet Squat",
+      t: R(20, 25, 30),
+      u: "reps"
+    }, {
+      n: "Push-Up",
+      t: R(10, 15, 20),
+      u: "reps"
+    }, {
+      n: "Kettlebell Bent-Over Row",
+      t: R(8, 10, 12),
+      u: "reps_side"
+    }, {
+      n: "Kettlebell Goblet Reverse Lunge",
+      t: R(6, 8, 10),
+      u: "reps_side"
+    }, {
+      n: "Kettlebell Deadlift",
+      t: R(15, 20, 25),
+      u: "reps"
+    }, {
+      n: "Kettlebell Goblet Press",
+      t: R(10, 12, 15),
+      u: "reps"
+    }, {
+      n: "Kettlebell Suitcase Carry",
+      t: R(20, 30, 40),
+      u: "m_side"
+    }, {
+      n: "Plank",
+      t: R(30, 40, 50),
+      u: "sec"
+    }]
+  },
+  9: {
+    block: "strength2",
+    format: "sets",
+    sets: R(3, 4, 4),
+    rest: 90,
+    exercises: [{
+      n: "Kettlebell Goblet Reverse Lunge",
+      t: R(6, 8, 10),
+      u: "reps_side"
+    }, {
+      n: "Kettlebell Deadlift",
+      t: R(8, 10, 12),
+      u: "reps"
+    }, {
+      n: "Kettlebell Close-Grip Floor Press",
+      t: R(8, 10, 12),
+      u: "reps"
+    }, {
+      n: "Kettlebell Bent-Over Row",
+      t: R(8, 10, 12),
+      u: "reps_side"
+    }, {
+      n: "Kettlebell Halo",
+      t: R(6, 8, 10),
+      u: "reps"
+    }, {
+      n: "Plank",
+      t: R(20, 30, 40),
+      u: "sec"
+    }]
+  },
+  10: {
+    block: "emom2",
+    format: "emom",
+    rounds: R(4, 5, 6),
+    exercises: [{
+      n: "Kettlebell Swing",
+      t: R(10, 12, 15),
+      u: "reps"
+    }, {
+      n: "Kettlebell Squat and Press",
+      t: R(6, 8, 10),
+      u: "reps"
+    }, {
+      n: "Kettlebell Bent-Over Row",
+      t: R(4, 5, 6),
+      u: "reps_side"
+    }]
+  },
+  11: {
+    block: "circuit2",
+    format: "circuit",
+    rounds: R(3, 3, 4),
+    workSec: R(30, 40, 40),
+    restSec: R(30, 20, 20),
+    exercises: [{
+      n: "Kettlebell Deadlift",
+      u: "reps"
+    }, {
+      n: "Kettlebell Goblet Press",
+      u: "reps"
+    }, {
+      n: "Kettlebell Goblet Reverse Lunge",
+      u: "reps_side"
+    }, {
+      n: "Kettlebell Swing",
+      u: "reps"
+    }, {
+      n: "Kettlebell Bent-Over Row",
+      u: "reps_side"
+    }, {
+      n: "Kettlebell Russian Twist",
+      u: "reps_side"
+    }]
+  },
+  12: {
+    block: "challenge",
+    format: "sets",
+    sets: R(1, 1, 1),
+    rest: 0,
+    fixed: true,
+    exercises: [{
+      n: "Kettlebell Swing",
+      t: R(40, 50, 60),
+      u: "reps"
+    }, {
+      n: "Kettlebell Goblet Squat",
+      t: R(20, 25, 30),
+      u: "reps"
+    }, {
+      n: "Push-Up",
+      t: R(10, 15, 20),
+      u: "reps"
+    }, {
+      n: "Kettlebell Bent-Over Row",
+      t: R(8, 10, 12),
+      u: "reps_side"
+    }, {
+      n: "Kettlebell Goblet Reverse Lunge",
+      t: R(8, 10, 12),
+      u: "reps_side"
+    }, {
+      n: "Kettlebell Deadlift",
+      t: R(20, 25, 30),
+      u: "reps"
+    }, {
+      n: "Kettlebell Goblet Press",
+      t: R(10, 12, 15),
+      u: "reps"
+    }, {
+      n: "Kettlebell Suitcase Carry",
+      t: R(30, 40, 50),
+      u: "m_side"
+    }, {
+      n: "Plank",
+      t: R(40, 50, 60),
+      u: "sec"
     }]
   }
 };
-const SESSIONS_KURS = {
-  normal: {
-    1: {
-      block: "kursBasis",
-      format: "sets",
-      sets: 4,
-      exercises: [{
-        n: "Kettlebell Swing",
-        b: 12,
-        u: "reps"
-      }, {
-        n: "Kettlebell Clean",
-        b: 5,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Goblet Squat",
-        b: 10,
-        u: "reps"
-      }, {
-        n: "Kettlebell Bent-Over Row",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Floor Press",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Suitcase Carry",
-        b: 20,
-        u: "m",
-        r: 5
-      }]
-    },
-    2: {
-      block: "kursBasis",
-      format: "sets",
-      sets: 3,
-      exercises: [{
-        n: "Kettlebell Sumo Deadlift",
-        b: 10,
-        u: "reps"
-      }, {
-        n: "Kettlebell Romanian Deadlift",
-        b: 10,
-        u: "reps"
-      }, {
-        n: "Kettlebell Push Press",
-        b: 6,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Suitcase Row",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Plank",
-        b: 30,
-        u: "sec",
-        r: 5
-      }, {
-        n: "Kettlebell Suitcase Carry",
-        b: 25,
-        u: "m",
-        r: 5
-      }]
-    },
-    3: {
-      block: "kursBasis",
-      format: "sets",
-      sets: 4,
-      exercises: [{
-        n: "Kettlebell Swing",
-        b: 15,
-        u: "reps"
-      }, {
-        n: "Kettlebell Clean",
-        b: 5,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Racked Squat",
-        b: 6,
-        u: "reps_side"
-      }, {
-        n: "Push-Up",
-        b: 8,
-        u: "reps"
-      }, {
-        n: "Kettlebell Bent-Over Row",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Halo",
-        b: 6,
-        u: "reps_side"
-      }]
-    },
-    4: {
-      block: "kursAufbau",
-      format: "sets",
-      sets: 4,
-      exercises: [{
-        n: "Kettlebell Goblet Squat",
-        b: 12,
-        u: "reps"
-      }, {
-        n: "Kettlebell Racked Squat",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Floor Press",
-        b: 10,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Overhead Press",
-        b: 6,
-        u: "reps_side"
-      }, {
-        n: "Push-Up",
-        b: 10,
-        u: "reps"
-      }, {
-        n: "Kettlebell Suitcase Carry",
-        b: 25,
-        u: "m",
-        r: 5
-      }]
-    },
-    5: {
-      block: "kursAufbau",
-      format: "sets",
-      sets: 4,
-      exercises: [{
-        n: "Kettlebell Swing",
-        b: 15,
-        u: "reps"
-      }, {
-        n: "Kettlebell Sumo Deadlift",
-        b: 10,
-        u: "reps"
-      }, {
-        n: "Kettlebell Single Arm Deadlift",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Bent-Over Row",
-        b: 10,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Shrug",
-        b: 12,
-        u: "reps"
-      }, {
-        n: "Plank",
-        b: 30,
-        u: "sec",
-        r: 5
-      }]
-    },
-    6: {
-      block: "kursAufbau",
-      format: "sets",
-      sets: 5,
-      exercises: [{
-        n: "Kettlebell Clean",
-        b: 3,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Racked Squat",
-        b: 5,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Push Press",
-        b: 5,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Swing",
-        b: 10,
-        u: "reps"
-      }, {
-        n: "Kettlebell Suitcase Carry",
-        b: 20,
-        u: "m",
-        r: 5
-      }, {
-        n: "Kettlebell Halo",
-        b: 8,
-        u: "reps_side"
-      }]
-    },
-    7: {
-      block: "kursVerdichtung",
-      format: "circuit",
-      rounds: 3,
-      workSec: 40,
-      restSec: 20,
-      exercises: [{
-        n: "Kettlebell Goblet Squat"
-      }, {
-        n: "Kettlebell Swing"
-      }, {
-        n: "Kettlebell Bent-Over Row"
-      }, {
-        n: "Push-Up"
-      }, {
-        n: "Kettlebell Suitcase Carry"
-      }, {
-        n: "Plank"
-      }]
-    },
-    8: {
-      block: "kursVerdichtung",
-      format: "sets",
-      sets: 4,
-      exercises: [{
-        n: "Kettlebell Swing",
-        b: 15,
-        u: "reps"
-      }, {
-        n: "Kettlebell Romanian Deadlift",
-        b: 10,
-        u: "reps"
-      }, {
-        n: "Kettlebell Single Arm Deadlift",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Suitcase Row",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Good Morning",
-        b: 10,
-        u: "reps"
-      }, {
-        n: "Kettlebell Suitcase Carry",
-        b: 25,
-        u: "m",
-        r: 5
-      }]
-    },
-    9: {
-      block: "kursVerdichtung",
-      format: "emom",
-      rounds: 6,
-      exercises: [{
-        n: "Kettlebell Swing",
-        b: 12,
-        u: "reps"
-      }, {
-        n: "Kettlebell Clean",
-        b: 5,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Squat and Press",
-        b: 8,
-        u: "reps"
-      }]
-    },
-    10: {
-      block: "kursIntegration",
-      format: "sets",
-      sets: 4,
-      exercises: [{
-        n: "Kettlebell Racked Reverse Lunge",
-        b: 6,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Single Arm Deadlift",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Overhead Press",
-        b: 6,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Suitcase Row",
-        b: 10,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Bob and Weave",
-        b: 6,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Suitcase Carry",
-        b: 30,
-        u: "m",
-        r: 5
-      }]
-    },
-    11: {
-      block: "kursIntegration",
-      format: "sets",
-      sets: 4,
-      exercises: [{
-        n: "Kettlebell Swing",
-        b: 15,
-        u: "reps"
-      }, {
-        n: "Kettlebell Clean",
-        b: 5,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Racked Squat",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Floor Press",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Sumo High Pull",
-        b: 8,
-        u: "reps"
-      }, {
-        n: "Kettlebell Russian Twist",
-        b: 10,
-        u: "reps_side"
-      }]
-    },
-    12: {
-      block: "kursIntegration",
-      format: "sets",
-      sets: 3,
-      exercises: [{
-        n: "Kettlebell Swing",
-        b: 15,
-        u: "reps"
-      }, {
-        n: "Kettlebell Goblet Squat",
-        b: 10,
-        u: "reps"
-      }, {
-        n: "Kettlebell Clean",
-        b: 5,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Racked Reverse Lunge",
-        b: 6,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Bent-Over Row",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Floor Press",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Squat and Press",
-        b: 8,
-        u: "reps"
-      }, {
-        n: "Kettlebell Suitcase Carry",
-        b: 30,
-        u: "m",
-        r: 5
-      }, {
-        n: "Plank",
-        b: 30,
-        u: "sec",
-        r: 5
-      }]
-    }
-  },
-  schwer: {
-    1: {
-      block: "kursBasis",
-      format: "sets",
-      sets: 5,
-      exercises: [{
-        n: "Kettlebell Swing",
-        b: 12,
-        u: "reps"
-      }, {
-        n: "Kettlebell Clean",
-        b: 5,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Goblet Squat",
-        b: 10,
-        u: "reps"
-      }, {
-        n: "Kettlebell Bent-Over Row",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Floor Press",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Suitcase Carry",
-        b: 20,
-        u: "m",
-        r: 5
-      }]
-    },
-    2: {
-      block: "kursBasis",
-      format: "sets",
-      sets: 4,
-      exercises: [{
-        n: "Kettlebell Sumo Deadlift",
-        b: 10,
-        u: "reps"
-      }, {
-        n: "Kettlebell Romanian Deadlift",
-        b: 10,
-        u: "reps"
-      }, {
-        n: "Kettlebell Push Press",
-        b: 6,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Suitcase Row",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Plank",
-        b: 30,
-        u: "sec",
-        r: 5
-      }, {
-        n: "Kettlebell Suitcase Carry",
-        b: 25,
-        u: "m",
-        r: 5
-      }]
-    },
-    3: {
-      block: "kursBasis",
-      format: "sets",
-      sets: 5,
-      exercises: [{
-        n: "Kettlebell Swing",
-        b: 15,
-        u: "reps"
-      }, {
-        n: "Kettlebell Clean",
-        b: 5,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Racked Squat",
-        b: 6,
-        u: "reps_side"
-      }, {
-        n: "Push-Up",
-        b: 8,
-        u: "reps"
-      }, {
-        n: "Kettlebell Bent-Over Row",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Halo",
-        b: 6,
-        u: "reps_side"
-      }]
-    },
-    4: {
-      block: "kursAufbau",
-      format: "sets",
-      sets: 4,
-      exercises: [{
-        n: "Kettlebell Goblet Squat",
-        b: 17,
-        u: "reps"
-      }, {
-        n: "Kettlebell Racked Squat",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Floor Press",
-        b: 10,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Overhead Press",
-        b: 6,
-        u: "reps_side"
-      }, {
-        n: "Push-Up",
-        b: 10,
-        u: "reps"
-      }, {
-        n: "Kettlebell Suitcase Carry",
-        b: 25,
-        u: "m",
-        r: 5
-      }]
-    },
-    5: {
-      block: "kursAufbau",
-      format: "sets",
-      sets: 5,
-      exercises: [{
-        n: "Kettlebell Swing",
-        b: 15,
-        u: "reps"
-      }, {
-        n: "Kettlebell Sumo Deadlift",
-        b: 10,
-        u: "reps"
-      }, {
-        n: "Kettlebell Single Arm Deadlift",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Bent-Over Row",
-        b: 10,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Shrug",
-        b: 12,
-        u: "reps"
-      }, {
-        n: "Plank",
-        b: 30,
-        u: "sec",
-        r: 5
-      }]
-    },
-    6: {
-      block: "kursAufbau",
-      format: "sets",
-      sets: 6,
-      exercises: [{
-        n: "Kettlebell Clean",
-        b: 3,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Racked Squat",
-        b: 5,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Push Press",
-        b: 5,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Swing",
-        b: 10,
-        u: "reps"
-      }, {
-        n: "Kettlebell Suitcase Carry",
-        b: 20,
-        u: "m",
-        r: 5
-      }, {
-        n: "Kettlebell Halo",
-        b: 8,
-        u: "reps_side"
-      }]
-    },
-    7: {
-      block: "kursVerdichtung",
-      format: "circuit",
-      rounds: 4,
-      workSec: 40,
-      restSec: 20,
-      exercises: [{
-        n: "Kettlebell Goblet Squat"
-      }, {
-        n: "Kettlebell Swing"
-      }, {
-        n: "Kettlebell Bent-Over Row"
-      }, {
-        n: "Push-Up"
-      }, {
-        n: "Kettlebell Suitcase Carry"
-      }, {
-        n: "Plank"
-      }]
-    },
-    8: {
-      block: "kursVerdichtung",
-      format: "sets",
-      sets: 5,
-      exercises: [{
-        n: "Kettlebell Swing",
-        b: 15,
-        u: "reps"
-      }, {
-        n: "Kettlebell Romanian Deadlift",
-        b: 10,
-        u: "reps"
-      }, {
-        n: "Kettlebell Single Arm Deadlift",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Suitcase Row",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Good Morning",
-        b: 10,
-        u: "reps"
-      }, {
-        n: "Kettlebell Suitcase Carry",
-        b: 25,
-        u: "m",
-        r: 5
-      }]
-    },
-    9: {
-      block: "kursVerdichtung",
-      format: "emom",
-      rounds: 7,
-      exercises: [{
-        n: "Kettlebell Swing",
-        b: 15,
-        u: "reps"
-      }, {
-        n: "Kettlebell Clean",
-        b: 6,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Squat and Press",
-        b: 8,
-        u: "reps"
-      }]
-    },
-    10: {
-      block: "kursIntegration",
-      format: "sets",
-      sets: 5,
-      exercises: [{
-        n: "Kettlebell Racked Reverse Lunge",
-        b: 6,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Single Arm Deadlift",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Overhead Press",
-        b: 6,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Suitcase Row",
-        b: 10,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Bob and Weave",
-        b: 6,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Suitcase Carry",
-        b: 30,
-        u: "m",
-        r: 5
-      }]
-    },
-    11: {
-      block: "kursIntegration",
-      format: "sets",
-      sets: 5,
-      exercises: [{
-        n: "Kettlebell Swing",
-        b: 15,
-        u: "reps"
-      }, {
-        n: "Kettlebell Clean",
-        b: 5,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Racked Squat",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Floor Press",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Sumo High Pull",
-        b: 8,
-        u: "reps"
-      }, {
-        n: "Kettlebell Russian Twist",
-        b: 10,
-        u: "reps_side"
-      }]
-    },
-    12: {
-      block: "kursIntegration",
-      format: "sets",
-      sets: 3,
-      exercises: [{
-        n: "Kettlebell Swing",
-        b: 25,
-        u: "reps"
-      }, {
-        n: "Kettlebell Goblet Squat",
-        b: 15,
-        u: "reps"
-      }, {
-        n: "Kettlebell Clean",
-        b: 5,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Racked Reverse Lunge",
-        b: 6,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Bent-Over Row",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Floor Press",
-        b: 8,
-        u: "reps_side"
-      }, {
-        n: "Kettlebell Squat and Press",
-        b: 8,
-        u: "reps"
-      }, {
-        n: "Kettlebell Suitcase Carry",
-        b: 40,
-        u: "m",
-        r: 5
-      }, {
-        n: "Plank",
-        b: 30,
-        u: "sec",
-        r: 5
-      }]
-    }
-  }
-};
-const BLOCK_INFO_EINSTEIGER = {
-  fullBody: {
-    note: {
-      de: "Eine einfache Ganzkörpereinheit mit den grundlegenden Bewegungsmustern: Kniebeuge, Hip Hinge, Drücken, Ziehen und Rumpfstabilität. Sie funktioniert vollständig ohne Swing und eignet sich dadurch auch für einen ersten Kontakt mit dem Kettlebell-Training. Vorab: Bei Beschwerden an Rücken, Schulter oder Knie lass das bitte zuerst ärztlich abklären.",
-      en: "A simple full-body session with the foundational movement patterns: squat, hip hinge, pressing, pulling and core stability. It works entirely without the swing and is therefore also suited for a first contact with kettlebell training. Beforehand: if you have back, shoulder or knee problems, please have them checked by a doctor first."
-    }
-  },
-  swingFullBody: {
-    note: {
-      de: "Der Swing steht im Mittelpunkt und wird mit Kniebeuge, Ziehen, Drücken und Tragen kombiniert. Die Einheit verbindet eine dynamische Hüftbewegung mit einfachen Ganzkörperübungen. Technik vor Tempo: Wird die Technik schlechter, beende den Satz.",
-      en: "The swing is at the center and is combined with squat, pulling, pressing and carrying. The session pairs a dynamic hip movement with simple full-body exercises. Technique over pace: if your form gets worse, end the set."
-    }
-  },
-  hingePress: {
-    note: {
-      de: "Diese Einheit legt den Schwerpunkt auf die Hüftbewegung und das Drücken. Deadlift und Swing werden durch Squat, Press, Row und Plank zu einem vollständigen Ganzkörpertraining ergänzt.",
-      en: "This session focuses on the hip movement and pressing. Deadlift and swing are rounded out by squat, press, row and plank into a complete full-body workout."
-    }
-  },
-  fullBodyCarry: {
-    note: {
-      de: "Eine vollständige Ganzkörpereinheit mit besonderem Fokus auf Bewegung unter fortlaufender Belastung. Squat, Pull, Swing, Push und Carry werden miteinander verbunden. Danach der Rückblick: Hat es dir Spaß gemacht? Hat sich die Technik sicher angefühlt? Gab es Beschwerden? Hast du Lust auf mehr?",
-      en: "A complete full-body session with a special focus on movement under continuous load. Squat, pull, swing, push and carry are tied together. Then look back: did you enjoy it? Did your technique feel secure? Were there any problems? Do you want more?"
-    }
-  }
-};
 const BLOCK_INFO_KURS = {
-  kursBasis: {
+  strength1: {
     note: {
-      de: "Swing und Clean werden von Einheit 1 an trainiert. Technik und Basisvolumen stehen im Vordergrund.",
-      en: "Swing and clean are trained from session 1. The focus is on technique and a basic training volume."
+      de: "Ein klassisches Ganzkörper-Krafttraining: Kniebeuge, Hüftbeuge, Ziehen und Drücken mit ordentlichen Pausen. Qualität vor Tempo.",
+      en: "A classic full-body strength session: squat, hinge, pull and press with proper rest. Quality over speed."
     }
   },
-  kursAufbau: {
+  swingFull: {
     note: {
-      de: "Mehr Wiederholungen und die ersten anspruchsvolleren Kombinationen.",
-      en: "More reps and the first more demanding combinations."
+      de: "Der Swing steht am Anfang, solange du frisch bist, danach folgen Kniebeuge, Drücken, Ziehen und Tragen.",
+      en: "The swing comes first while you are fresh, followed by squat, press, pull and carry."
     }
   },
-  kursVerdichtung: {
+  circuit1: {
     note: {
-      de: "Jetzt wird nicht einfach mehr Gewicht verwendet — die gleiche Arbeit wird mit weniger Erholungszeit erledigt. Zirkelformat und EMOM erhöhen die Trainingsdichte.",
-      en: "This isn't about using more weight — the same work gets done with less recovery time. Circuit format and EMOM raise the training density."
+      de: "Ein Zirkel aus sechs Stationen mit fester Arbeits- und Pausenzeit. Die Zeit läuft, du bestimmst nur die Qualität der Wiederholungen.",
+      en: "A circuit of six stations with fixed work and rest times. The clock runs; you control the quality of the reps."
     }
   },
-  kursIntegration: {
+  emom1: {
     note: {
-      de: "Die gelernten Bewegungen werden zu anspruchsvolleren Ganzkörper-Einheiten verbunden, bis zur abschließenden Firdaws Challenge.",
-      en: "The movements you've learned are combined into more demanding full-body sessions, ending with the Firdaws Challenge."
+      de: "EMOM heißt: jede Minute eine Übung. Du machst die Wiederholungen, den Rest der Minute ruhst du dich aus. Wer schneller fertig ist, hat mehr Pause.",
+      en: "EMOM means every minute on the minute: do the reps, rest for what is left of the minute. The faster you finish, the more you rest."
+    }
+  },
+  superset: {
+    note: {
+      de: "Zwei Übungspaare, die direkt hintereinander laufen. Die Pause kommt erst nach der kompletten Runde.",
+      en: "Two exercise pairs performed back to back. Rest comes only after the whole round."
+    }
+  },
+  conditioning: {
+    note: {
+      de: "Ein Zirkel für Ausdauer und Herzfrequenz: dynamische Übungen, kurze Pausen. Wenn die Technik nachlässt, nimm Tempo raus.",
+      en: "A circuit for endurance and heart rate: dynamic moves, short rests. If your form slips, slow down."
+    }
+  },
+  swingFocus: {
+    note: {
+      de: "Der Swing ist die Hauptübung. Die anderen Übungen unterstützen Hüfte, Rücken und Rumpf.",
+      en: "The swing is the main exercise. The other moves support hips, back and core."
+    }
+  },
+  chipper: {
+    note: {
+      de: "Ein Durchgang durch alle Übungen, jede nur einmal, mit hoher Wiederholungszahl. Stoppe deine Zeit und arbeite dich Stück für Stück durch.",
+      en: "One pass through all exercises, each only once, with high reps. Time yourself and chip away piece by piece."
+    }
+  },
+  strength2: {
+    note: {
+      de: "Kraft mit Fokus auf Beine, Rücken und Brust. Einbeinige und einseitige Übungen verlangen saubere Kontrolle.",
+      en: "Strength focused on legs, back and chest. Single-leg and single-side moves demand clean control."
+    }
+  },
+  emom2: {
+    note: {
+      de: "Wieder EMOM, diesmal mit Kniebeuge-Press und Rudern. Halte die Dichte hoch: wenig Pause, saubere Wiederholungen.",
+      en: "EMOM again, now with squat-and-press and rows. Keep the density high: little rest, clean reps."
+    }
+  },
+  circuit2: {
+    note: {
+      de: "Ein zweiter Zirkel mit Hüfte, Drücken, Beinen und Rumpf. Du kennst die Stationen schon, achte jetzt auf Ökonomie und Atmung.",
+      en: "A second circuit with hips, pressing, legs and core. You know the stations now, so focus on economy and breathing."
+    }
+  },
+  challenge: {
+    note: {
+      de: "Die Firdaws Challenge: alle Übungen einmal, mit der höchsten Wiederholungszahl. Stoppe deine Zeit und vergleiche sie mit dem nächsten Versuch.",
+      en: "The Firdaws Challenge: every exercise once, with the highest rep counts. Time yourself and compare with your next attempt."
     }
   }
 };
@@ -2812,26 +1737,43 @@ function applyDurationChoice(sessionData, count, t) {
 // ============================================================
 function getSessionData(module, sessionNum, intensityKey, lang, mode = "reps") {
   const t = UI[lang];
-  const isEinsteiger = module === "einsteiger";
   const tierKey = intensityKey;
-  const session = isEinsteiger ? SESSIONS_EINSTEIGER[sessionNum] : (SESSIONS_KURS[tierKey] || SESSIONS_KURS.normal)[sessionNum];
+  const idx = TIER_INDEX[tierKey] ?? 0;
+  const pick = v => Array.isArray(v) ? v[idx] : v;
+  const session = SESSIONS_KURS[sessionNum];
+  const buildEx = e => {
+    const value = e.t ? e.t[idx] : null;
+    const isSide = e.u.endsWith("_side");
+    const ex = {
+      name: e.n,
+      key: slug(e.n),
+      cue: CUES[e.n][lang],
+      sideNote: isSide ? t.sideNote : null,
+      isSide,
+      unit: e.u
+    };
+    if (value != null) {
+      ex.repsValue = value;
+      ex.reps = formatReps(value, e.u, lang);
+    }
+    return ex;
+  };
 
-  // Einsteiger, Zeit-Variante: dieselben Übungen in der Plan-Reihenfolge als
-  // Zirkel mit fester Arbeits-/Pausenzeit pro Station.
-  if (isEinsteiger && mode === "time") {
-    const ratio = EINSTEIGER_TIME_RATIO[tierKey] || EINSTEIGER_TIME_RATIO.leicht;
+  // Zeit-Variante für Sätze-Einheiten: dieselben Übungen als Zirkel mit fester
+  // Arbeits-/Pausenzeit pro Station (nicht bei Chipper/Challenge).
+  if (mode === "time" && session.format === "sets" && !session.fixed) {
+    const ratio = TIME_RATIO[tierKey] || TIME_RATIO.leicht;
     const exercises = session.exercises.map(e => {
       const switchSide = e.u.endsWith("_side");
       return {
         name: e.n,
         key: slug(e.n),
         cue: CUES[e.n][lang],
-        homeNote: HOME_NOTE_EXERCISES[e.n] ? t[HOME_NOTE_EXERCISES[e.n]] : null,
         sideNote: switchSide ? t.sideSwitchNote : null,
         switchSide
       };
     });
-    const rounds = session.sets;
+    const rounds = pick(session.sets);
     const totalMinutes = Math.round(rounds * exercises.length * (ratio.work + ratio.rest) / 60);
     return {
       session,
@@ -2845,46 +1787,34 @@ function getSessionData(module, sessionNum, intensityKey, lang, mode = "reps") {
     };
   }
   if (session.format === "sets") {
-    let exercises = session.exercises.map(e => {
-      const roundTo = e.r || 1;
-      const value = isEinsteiger ? e.t[TIER_INDEX[tierKey] ?? 0] : Math.max(roundTo, Math.round(e.b / roundTo) * roundTo);
-      const homeKey = HOME_NOTE_EXERCISES[e.n];
-      return {
-        name: e.n,
-        key: slug(e.n),
-        cue: CUES[e.n][lang],
-        homeNote: homeKey ? t[homeKey] : null,
-        sideNote: e.u.endsWith("_side") ? t.sideNote : null,
-        isSide: e.u.endsWith("_side"),
-        repsValue: value,
-        unit: e.u,
-        reps: formatReps(value, e.u, lang)
-      };
-    });
-    const restBetween = isEinsteiger ? EINSTEIGER_REST_SEC : SETS_REST_BY_TIER[tierKey] || SETS_REST_BY_TIER.normal;
+    const exercises = session.exercises.map(buildEx);
+    const restBetween = session.rest;
+    const sets = pick(session.sets);
     return {
       session,
       block: session.block,
       format: "sets",
-      sets: session.sets,
+      sets,
       restBetween,
       restLabel: t.restBetween(restBetween),
-      exercises
+      exercises,
+      fixed: !!session.fixed
     };
   }
   if (session.format === "circuit") {
-    const rawNames = session.exercises.map(e => e.n);
-    const names = reorderByRegion(rawNames);
-    const exercises = names.map(n => ({
-      name: n,
-      key: slug(n),
-      cue: CUES[n][lang],
-      homeNote: HOME_NOTE_EXERCISES[n] ? t[HOME_NOTE_EXERCISES[n]] : null
-    }));
-    const rounds = session.rounds;
-    const ratio = CIRCUIT_RATIO[tierKey] || CIRCUIT_RATIO.normal;
-    const workSec = session.workSec || ratio.work;
-    const restSec = session.restSec || ratio.rest;
+    const exercises = session.exercises.map(e => {
+      const switchSide = e.u.endsWith("_side");
+      return {
+        name: e.n,
+        key: slug(e.n),
+        cue: CUES[e.n][lang],
+        sideNote: switchSide ? t.sideSwitchNote : null,
+        switchSide
+      };
+    });
+    const rounds = pick(session.rounds);
+    const workSec = pick(session.workSec);
+    const restSec = pick(session.restSec);
     const totalMinutes = Math.round(rounds * exercises.length * (workSec + restSec) / 60);
     return {
       session,
@@ -2898,23 +1828,8 @@ function getSessionData(module, sessionNum, intensityKey, lang, mode = "reps") {
     };
   }
   if (session.format === "emom") {
-    let exercises = session.exercises.map(e => {
-      const roundTo = e.r || 1;
-      const value = Math.max(roundTo, Math.round(e.b / roundTo) * roundTo);
-      return {
-        name: e.n,
-        key: slug(e.n),
-        cue: CUES[e.n][lang],
-        homeNote: HOME_NOTE_EXERCISES[e.n] ? t[HOME_NOTE_EXERCISES[e.n]] : null,
-        sideNote: e.u.endsWith("_side") ? t.sideNote : null,
-        isSide: e.u.endsWith("_side"),
-        repsValue: value,
-        unit: e.u,
-        reps: formatReps(value, e.u, lang)
-      };
-    });
-    exercises = reorderByRegion(exercises);
-    const rounds = session.rounds;
+    const exercises = session.exercises.map(buildEx);
+    const rounds = pick(session.rounds);
     return {
       session,
       block: session.block,
@@ -2935,21 +1850,113 @@ function getSessionData(module, sessionNum, intensityKey, lang, mode = "reps") {
 function sessionMinutes(sessionData) {
   return sessionData.format === "sets" ? Math.round(sessionData.exercises.length * sessionData.sets) : sessionData.totalMinutes;
 }
+
+// Einordnung pro Übung: [Niveau, Bewegungsmuster, Bereich] — Schlüssel verweisen auf t.metaLevels/-Patterns/-Scopes.
+const EXERCISE_META = {
+  "Kettlebell Goblet Squat": ["e", "knee", "lower"],
+  "Kettlebell Goblet Reverse Lunge": ["e", "lunge", "lower"],
+  "Kettlebell Close-Grip Floor Press": ["e", "press", "upper"],
+  "Kettlebell Deadlift": ["e", "hip", "lower"],
+  "Kettlebell Swing": ["m", "hip", "full"],
+  "Kettlebell Bent-Over Row": ["e", "pull", "upper"],
+  "Kettlebell Goblet Curl": ["e", "pull", "upper"],
+  "Kettlebell Goblet Press": ["e", "press", "upper"],
+  "Push-Up": ["e", "press", "upper"],
+  "Plank": ["e", "core", "core"],
+  "Kettlebell Good Morning": ["m", "hip", "lower"],
+  "Kettlebell Slingshot": ["m", "core", "core"],
+  "Kettlebell Halo": ["e", "shoulder", "upper"],
+  "Kettlebell Squat and Press": ["m", "knee", "full"],
+  "Kettlebell Suitcase Carry": ["e", "carry", "full"],
+  "Kettlebell Sit and Press": ["f", "press", "upper"],
+  "Kettlebell Russian Twist": ["e", "core", "core"]
+};
+
+// Ein kurzer Coach-Tipp pro Übung (Kasten im Detail der Bibliothek).
+const COACH_TIPS = {
+  "Kettlebell Goblet Squat": {
+    de: "Stell dir vor, du setzt dich zwischen deine Fersen. Die Kettlebell vor der Brust hilft dir, aufrecht zu bleiben.",
+    en: "Imagine sitting down between your heels. The kettlebell at your chest helps you stay upright."
+  },
+  "Kettlebell Goblet Reverse Lunge": {
+    de: "Mach den Schritt weit genug, dass das vordere Schienbein fast senkrecht bleibt. Drück dich über die vordere Ferse nach oben.",
+    en: "Step back far enough that the front shin stays almost vertical. Drive up through the front heel."
+  },
+  "Kettlebell Close-Grip Floor Press": {
+    de: "Zieh die Schulterblätter leicht zusammen und halt sie am Boden. Die Oberarme setzen sanft auf, ohne zu federn.",
+    en: "Pull your shoulder blades together slightly and keep them on the floor. Your upper arms land softly without bouncing."
+  },
+  "Kettlebell Deadlift": {
+    de: "Spann vor dem Anheben die Schultern leicht nach hinten unten an. Dann drück die Füße in den Boden, statt mit dem Rücken zu ziehen.",
+    en: "Set your shoulders slightly back and down before lifting. Then push the floor away with your feet instead of pulling with your back."
+  },
+  "Kettlebell Swing": {
+    de: "Die Hüfte macht die Arbeit, die Arme hängen nur dran. Oben stehst du gerade wie ein Brett, mit festem Gesäß.",
+    en: "The hips do the work, the arms just hang on. At the top, stand tall like a plank with tight glutes."
+  },
+  "Kettlebell Bent-Over Row": {
+    de: "Zieh den Ellbogen zur Hüfte, nicht zur Schulter. Der Oberkörper bleibt ruhig, nur der Arm bewegt sich.",
+    en: "Pull the elbow toward your hip, not your shoulder. The torso stays still, only the arm moves."
+  },
+  "Kettlebell Goblet Curl": {
+    de: "Die Ellbogen bleiben eng am Körper, nur die Unterarme bewegen sich. Senk das Gewicht langsam ab.",
+    en: "Keep the elbows close to your body, only the forearms move. Lower the weight slowly."
+  },
+  "Kettlebell Goblet Press": {
+    de: "Spann Gesäß und Bauch an, bevor du drückst. So bleibt der Rücken ruhig und fällt nicht ins Hohlkreuz.",
+    en: "Tighten glutes and abs before you press. That keeps your back steady instead of arching."
+  },
+  "Push-Up": {
+    de: "Der Körper bleibt eine Linie von Kopf bis Ferse. Die Ellbogen zeigen schräg nach hinten, nicht zur Seite.",
+    en: "Keep your body in one line from head to heel. Elbows point diagonally back, not out to the sides."
+  },
+  "Plank": {
+    de: "Zieh die Rippen zum Becken und spann das Gesäß an. Der Rücken hängt nicht durch.",
+    en: "Pull your ribs toward your pelvis and squeeze your glutes. Don't let your back sag."
+  },
+  "Kettlebell Good Morning": {
+    de: "Schieb das Gesäß nach hinten, die Knie bleiben leicht gebeugt. Geh nur so tief, wie der Rücken lang bleibt.",
+    en: "Push your hips back with softly bent knees. Go only as low as your back stays long."
+  },
+  "Kettlebell Slingshot": {
+    de: "Gib die Kettlebell mit lockerer Hand um den Körper weiter und halt den Rumpf dabei ruhig.",
+    en: "Pass the kettlebell around your body with a loose hand and keep your torso still."
+  },
+  "Kettlebell Halo": {
+    de: "Halt die Kettlebell nah am Kopf und bewege nur die Arme. Rippen und Gesäß bleiben fest.",
+    en: "Keep the kettlebell close to your head and move only your arms. Ribs and glutes stay tight."
+  },
+  "Kettlebell Squat and Press": {
+    de: "Komm aus der Kniebeuge kräftig hoch und nutz den Schwung für den Press. Atme oben aus.",
+    en: "Drive up out of the squat and use that momentum for the press. Breathe out at the top."
+  },
+  "Kettlebell Suitcase Carry": {
+    de: "Geh aufrecht und lass dich nicht zur Seite ziehen. Schulter, Hüfte und Kopf bleiben in einer Linie.",
+    en: "Walk tall and don't let the weight pull you sideways. Shoulder, hip and head stay in one line."
+  },
+  "Kettlebell Sit and Press": {
+    de: "Spann den Rumpf an, bevor du aus dem Sitz drückst. Der Blick bleibt nach vorn gerichtet.",
+    en: "Brace your core before pressing from the seated position. Keep your eyes forward."
+  },
+  "Kettlebell Russian Twist": {
+    de: "Dreh den Oberkörper aus den Rippen, nicht nur die Arme. Die Brust bleibt offen, der Rücken lang.",
+    en: "Rotate from the ribcage, not just the arms. Keep your chest open and your back long."
+  }
+};
 function getLibraryExercises(lang) {
   return Object.keys(CUES).map(n => ({
     name: n,
     key: slug(n),
     cue: CUES[n][lang],
     region: BODY_REGION[n] || "upper",
-    homeNote: HOME_NOTE_EXERCISES[n] ? UI[lang][HOME_NOTE_EXERCISES[n]] : null,
     details: EXERCISE_DETAILS[n] ? {
       steps: EXERCISE_DETAILS[n].steps[lang],
       mistakes: EXERCISE_DETAILS[n].mistakes[lang],
       muscles: EXERCISE_DETAILS[n].muscles[lang],
-      benefits: EXERCISE_DETAILS[n].benefits[lang],
-      learn: EXERCISE_EXTRAS[n] ? EXERCISE_EXTRAS[n].learn[lang] : null,
-      tips: EXERCISE_EXTRAS[n] ? EXERCISE_EXTRAS[n].tips[lang] : null
-    } : null
+      benefits: EXERCISE_DETAILS[n].benefits[lang]
+    } : null,
+    meta: EXERCISE_META[n] || null,
+    coachTip: COACH_TIPS[n] ? COACH_TIPS[n][lang] : null
   }));
 }
 
@@ -2987,21 +1994,16 @@ function makeEmptySessions(count) {
 function emptyState() {
   return {
     modules: {
-      einsteiger: {
-        sessions: makeEmptySessions(MODULE_TOTAL_SESSIONS.einsteiger),
+      kurs: {
+        v: 2,
+        sessions: makeEmptySessions(MODULE_TOTAL_SESSIONS.kurs),
         cycle: 1,
         intensity: "leicht",
         mode: "reps",
         custom: {}
-      },
-      kurs: {
-        sessions: makeEmptySessions(MODULE_TOTAL_SESSIONS.kurs),
-        cycle: 1,
-        intensity: "normal",
-        custom: {}
       }
     },
-    activeModule: "einsteiger"
+    activeModule: "kurs"
   };
 }
 // Ergänzt einen geladenen Modul-Zustand um fehlende Einheiten, falls ein Modul
@@ -3418,7 +2420,7 @@ function SetsTimer({
       fontSize: 14,
       color: C.textMuted
     }
-  }, t.timerSetLabel(current.setNumber, current.totalSets), current.reps ? ` · ${current.reps}` : "")), /*#__PURE__*/React.createElement("div", {
+  }, current.totalSets > 1 ? t.timerSetLabel(current.setNumber, current.totalSets) : "", current.totalSets > 1 && current.reps ? " · " : "", current.reps || "")), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       justifyContent: "center",
@@ -3439,7 +2441,8 @@ function SetsTimer({
     C: C
   })), /*#__PURE__*/React.createElement("div", {
     style: {
-      marginBottom: 10
+      marginBottom: 10,
+      display: current.totalSets > 1 ? "block" : "none"
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
@@ -3525,7 +2528,7 @@ function SetsTimer({
       fontWeight: 700,
       cursor: "pointer"
     }
-  }, "✓ ", current.exerciseIndex === current.totalExercises ? t.timerDoneStartRest : t.timerDoneNextExercise) : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
+  }, "✓ ", stepIndex === steps.length - 1 ? t.timerFinish : current.exerciseIndex === current.totalExercises ? t.timerDoneStartRest : t.timerDoneNextExercise) : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
     onClick: () => setRunning(r => !r),
     style: {
       borderRadius: 999,
@@ -3604,7 +2607,6 @@ function DashboardView({
   BLOCK_INFO,
   C,
   activeModule,
-  isEinsteigerModule,
   lang,
   minutesTrained,
   moduleState,
@@ -3676,29 +2678,15 @@ function DashboardView({
       lineHeight: 1.6,
       marginBottom: 12
     }
-  }, t.cycleDoneText(totalSessions, activeModule)), activeModule === "einsteiger" && /*#__PURE__*/React.createElement("button", {
-    onClick: () => setActiveModule("kurs"),
-    style: {
-      borderRadius: 24,
-      width: "100%",
-      padding: "10px 14px",
-      background: C.brass,
-      border: "none",
-      color: C.onBrass,
-      fontSize: 13,
-      fontWeight: 600,
-      cursor: "pointer",
-      marginBottom: 8
-    }
-  }, t.continueToKurs), /*#__PURE__*/React.createElement("button", {
+  }, t.cycleDoneText(totalSessions)), /*#__PURE__*/React.createElement("button", {
     onClick: startNewCycle,
     style: {
       borderRadius: 24,
       width: "100%",
       padding: "10px 14px",
-      background: activeModule === "kurs" ? C.brass : C.panelAlt,
-      border: `1px solid ${activeModule === "kurs" ? C.brass : C.border}`,
-      color: activeModule === "kurs" ? C.onBrass : C.text,
+      background: C.brass,
+      border: `1px solid ${C.brass}`,
+      color: C.onBrass,
       fontSize: 13,
       fontWeight: 600,
       cursor: "pointer"
@@ -4090,7 +3078,7 @@ function ModulesView({
         background: active ? "#D4FA3D" : C.panelAlt
       }
     }, /*#__PURE__*/React.createElement(Icon, {
-      name: m === "einsteiger" ? "flame" : "dumbbell",
+      name: "dumbbell",
       size: 18,
       color: active ? "#0A0A0A" : C.textSecondary
     })), /*#__PURE__*/React.createElement("div", {
@@ -4273,7 +3261,7 @@ function PlanListView({
         cursor: "pointer"
       }
     }, t.intensityLabels[key]);
-  }))), activeModule === "einsteiger" && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+  }))), /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 13,
       color: C.textSecondary,
@@ -4572,7 +3560,7 @@ function SessionDetailView({
       fontWeight: 600,
       color: C.text
     }
-  }, t.intensityLabels[moduleState.intensity]))), displaySessionData.format === "sets" && /*#__PURE__*/React.createElement("div", {
+  }, t.intensityLabels[moduleState.intensity]))), displaySessionData.format === "sets" && !displaySessionData.fixed && /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 12.5,
       color: C.textMuted,
@@ -4581,7 +3569,7 @@ function SessionDetailView({
       flexWrap: "wrap",
       marginTop: 12
     }
-  }, /*#__PURE__*/React.createElement("span", null, displaySessionData.sets, " ", t.setsRounds), displaySessionData.sets > 1 && /*#__PURE__*/React.createElement("span", null, displaySessionData.restLabel)), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("span", null, displaySessionData.sets, " ", t.setsRounds), displaySessionData.sets > 1 && /*#__PURE__*/React.createElement("span", null, displaySessionData.restLabel)), !displaySessionData.fixed && /*#__PURE__*/React.createElement("div", {
     style: {
       marginTop: 14,
       paddingTop: 14,
@@ -4593,7 +3581,7 @@ function SessionDetailView({
       color: C.textMuted,
       marginBottom: 8
     }
-  }, activeModule === "einsteiger" ? t.roundsLabel : t.durationLabel), /*#__PURE__*/React.createElement("div", {
+  }, t.roundsLabel), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       gap: 8,
@@ -4616,7 +3604,7 @@ function SessionDetailView({
         background: isActive ? C.brass : "transparent",
         color: isActive ? C.onBrass : C.textSecondary
       }
-    }, activeModule === "einsteiger" ? t.roundsChoice(count, minutes) : t.durationMin(minutes), isStandard ? ` · ${t.durationStandard}` : "");
+    }, t.roundsChoice(count, minutes), isStandard ? ` · ${t.durationStandard}` : "");
   })))), /*#__PURE__*/React.createElement("div", {
     style: {
       borderRadius: 24,
@@ -4661,7 +3649,7 @@ function SessionDetailView({
       fontSize: 14,
       color: C.brass
     }
-  }, activeModule === "einsteiger" ? t.warmupTitleEinsteiger : t.warmupTitle), /*#__PURE__*/React.createElement("span", {
+  }, t.warmupTitle), /*#__PURE__*/React.createElement("span", {
     style: {
       fontSize: 13,
       color: C.textMuted
@@ -4673,7 +3661,7 @@ function SessionDetailView({
       gap: 8,
       marginTop: 8
     }
-  }, WARMUP_BY_MODULE[activeModule].map(w => /*#__PURE__*/React.createElement("div", {
+  }, WARMUP.map(w => /*#__PURE__*/React.createElement("div", {
     key: w.id,
     style: cardStyle(C, {
       padding: "10px 12px"
@@ -4782,7 +3770,7 @@ function SessionDetailView({
     }
   }, displaySessionData.exercises.map((ex, i) => {
     const isOpen = expandedExercise === ex.key;
-    const compactStat = ex.reps ? displaySessionData.format === "sets" ? t.setsTimes(displaySessionData.sets, `${ex.repsValue}${UNIT_LABELS[lang][ex.unit.replace("_side", "")] || ""}${ex.isSide ? ` ${t.perSideShort}` : ""}`) : ex.reps : null;
+    const compactStat = ex.reps ? displaySessionData.format === "sets" && displaySessionData.sets > 1 ? t.setsTimes(displaySessionData.sets, `${ex.repsValue}${UNIT_LABELS[lang][ex.unit.replace("_side", "")] || ""}${ex.isSide ? ` ${t.perSideShort}` : ""}`) : ex.reps : null;
     return /*#__PURE__*/React.createElement("div", {
       key: ex.key,
       style: cardStyle(C, {
@@ -4950,14 +3938,7 @@ function SessionDetailView({
         color: C.brass,
         marginTop: 8
       }
-    }, "↔ ", ex.sideNote), ex.homeNote && /*#__PURE__*/React.createElement("div", {
-      style: {
-        fontSize: 12,
-        color: C.textMuted,
-        marginTop: 4,
-        fontStyle: "italic"
-      }
-    }, ex.homeNote)));
+    }, "↔ ", ex.sideNote)));
   })), /*#__PURE__*/React.createElement("div", {
     style: {
       borderRadius: 24,
@@ -5198,253 +4179,287 @@ function LibraryDetailView({
   libraryDetailExercise,
   t
 }) {
-  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
+  const ex = libraryDetailExercise;
+  const d = ex.details;
+  const chips = [];
+  if (ex.meta) {
+    chips.push({
+      label: t.metaLevels[ex.meta[0]],
+      dark: true
+    });
+    chips.push({
+      label: t.metaPatterns[ex.meta[1]]
+    });
+    if (ex.meta[2] !== ex.meta[1]) chips.push({
+      label: t.metaScopes[ex.meta[2]]
+    });
+  }
+  const sectionTitle = {
+    fontWeight: 600,
+    fontSize: 17,
+    color: C.text
+  };
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 20
+    }
+  }, /*#__PURE__*/React.createElement("button", {
     onClick: () => window.history.back(),
     style: {
+      alignSelf: "flex-start",
       background: "transparent",
       border: "none",
-      color: C.textSecondary,
-      fontSize: 13,
+      color: C.text,
+      fontSize: 14,
+      fontWeight: 500,
       cursor: "pointer",
       padding: 0,
-      marginBottom: 16,
       display: "flex",
       alignItems: "center",
-      gap: 6
+      gap: 10
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      width: 34,
+      height: 34,
+      borderRadius: 999,
+      background: C.panel,
+      border: `1px solid ${C.border}`,
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center"
     }
   }, /*#__PURE__*/React.createElement(Icon, {
     name: "arrowLeft",
-    size: 14
-  }), " ", fromSession ? t.backToSession : t.backToLibrary), /*#__PURE__*/React.createElement("div", {
-    style: eyebrowStyle(C.brass, {
-      marginBottom: 6
+    size: 16
+  })), fromSession ? t.backToSession : t.libraryTitle), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: eyebrowStyle(C.textMuted, {
+      marginBottom: 6,
+      fontWeight: 600
     })
-  }, libraryDetailExercise.region === "lower" ? t.filterLower : libraryDetailExercise.region === "upper" ? t.filterUpper : libraryDetailExercise.region === "core" ? t.filterCore : t.filterCarry), /*#__PURE__*/React.createElement("h1", {
+  }, t.techGuide), /*#__PURE__*/React.createElement("h1", {
     style: headingStyle({
-      fontSize: 24,
-      margin: "0 0 16px"
+      fontSize: 30,
+      margin: 0,
+      lineHeight: 1.15,
+      color: C.text
     })
-  }, libraryDetailExercise.name), /*#__PURE__*/React.createElement("div", {
+  }, ex.name)), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
     style: {
-      borderRadius: 24,
-      height: 140,
-      background: `linear-gradient(145deg, ${C.panelAlt}, ${C.bg})`,
-      boxShadow: C.shadow,
-      border: `1px solid ${C.border}`,
+      borderRadius: 28,
+      height: 220,
+      background: "#F7F1E6",
       display: "flex",
       alignItems: "center",
-      justifyContent: "center",
-      marginBottom: 16
+      justifyContent: "center"
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
-      width: 68,
-      height: 68,
-      borderRadius: 20,
-      background: C.panel,
-      border: `1px solid ${C.border}`,
+      width: 88,
+      height: 88,
+      borderRadius: 28,
+      background: "#161814",
       display: "flex",
       alignItems: "center",
       justifyContent: "center"
     }
   }, /*#__PURE__*/React.createElement(Icon, {
-    name: REGION_ICON[libraryDetailExercise.region] || "dumbbell",
-    size: 30,
-    color: C.brass
+    name: REGION_ICON[ex.region] || "dumbbell",
+    size: 38,
+    color: "#D4FA3D"
   }))), /*#__PURE__*/React.createElement("div", {
-    style: cardStyle(C, {
-      padding: "16px 18px",
-      marginBottom: 16
-    })
-  }, /*#__PURE__*/React.createElement("div", {
     style: {
-      fontSize: 14,
-      color: C.textSecondary,
-      lineHeight: 1.7
+      display: "flex",
+      flexWrap: "wrap",
+      gap: 8,
+      marginTop: 14
     }
-  }, libraryDetailExercise.cue), libraryDetailExercise.homeNote && /*#__PURE__*/React.createElement("div", {
+  }, chips.map((c, i) => /*#__PURE__*/React.createElement("span", {
+    key: i,
     style: {
-      fontSize: 12.5,
-      color: C.textMuted,
-      marginTop: 10,
-      fontStyle: "italic"
-    }
-  }, libraryDetailExercise.homeNote)), libraryDetailExercise.details && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
-    style: cardStyle(C, {
-      padding: "16px 18px",
-      marginBottom: 16
-    })
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
+      borderRadius: 999,
+      padding: "8px 14px",
+      fontSize: 13,
       fontWeight: 600,
-      fontSize: 14,
-      color: C.brass,
-      marginBottom: 10
+      background: c.dark ? C.text : C.panelAlt,
+      color: c.dark ? C.bg : C.textSecondary
     }
+  }, c.label)))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 15,
+      color: C.textSecondary,
+      lineHeight: 1.65
+    }
+  }, ex.cue)), d && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "baseline",
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: sectionTitle
   }, t.detailStepsTitle), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 12,
+      color: C.textMuted
+    }
+  }, d.steps.length, " ", t.stepsWord)), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       flexDirection: "column",
       gap: 10
     }
-  }, libraryDetailExercise.details.steps.map((s, i) => /*#__PURE__*/React.createElement("div", {
+  }, d.steps.map((st, i) => /*#__PURE__*/React.createElement("div", {
     key: i,
-    style: {
+    style: cardStyle(C, {
+      padding: "14px 16px",
+      borderRadius: 20,
+      boxShadow: "none",
       display: "flex",
-      gap: 10
-    }
+      alignItems: "center",
+      gap: 14
+    })
   }, /*#__PURE__*/React.createElement("div", {
     style: {
       flex: "0 0 auto",
-      width: 22,
-      height: 22,
+      width: 28,
+      height: 28,
       borderRadius: 999,
-      background: C.panelAlt,
-      color: C.brass,
-      fontSize: 11,
-      fontWeight: 700,
+      background: "#D4FA3D",
+      color: "#0A0A0A",
+      fontFamily: "'Oswald', sans-serif",
+      fontSize: 13,
+      fontWeight: 600,
       display: "flex",
       alignItems: "center",
       justifyContent: "center"
     }
   }, i + 1), /*#__PURE__*/React.createElement("div", {
     style: {
-      fontSize: 13,
-      color: C.textSecondary,
+      fontSize: 14,
+      color: C.text,
       lineHeight: 1.5
     }
-  }, s))))), libraryDetailExercise.details.learn && /*#__PURE__*/React.createElement("div", {
-    style: cardStyle(C, {
-      padding: "16px 18px",
-      marginBottom: 16
-    })
+  }, st))))), ex.coachTip && /*#__PURE__*/React.createElement("div", {
+    style: {
+      borderRadius: 20,
+      background: C.successBg,
+      border: `1px solid ${C.success}55`,
+      padding: "14px 16px"
+    }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
-      fontWeight: 600,
-      fontSize: 14,
-      color: C.brass,
-      marginBottom: 10
+      display: "flex",
+      alignItems: "center",
+      gap: 8,
+      marginBottom: 8
     }
-  }, t.detailLearnTitle), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement(Icon, {
+    name: "lightbulb",
+    size: 16,
+    color: C.success
+  }), /*#__PURE__*/React.createElement("span", {
+    style: eyebrowStyle(C.success, {
+      fontWeight: 700
+    })
+  }, t.coachTip)), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 14,
+      color: C.text,
+      lineHeight: 1.55
+    }
+  }, ex.coachTip)), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
-      flexDirection: "column",
-      gap: 8
+      gap: 14
     }
-  }, libraryDetailExercise.details.learn.map((m, i) => /*#__PURE__*/React.createElement("div", {
-    key: i,
+  }, /*#__PURE__*/React.createElement("div", {
     style: {
-      fontSize: 13,
+      flex: "0 0 auto",
+      marginTop: 2
+    }
+  }, /*#__PURE__*/React.createElement(Icon, {
+    name: "pulse",
+    size: 18,
+    color: C.textSecondary
+  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 600,
+      fontSize: 14.5,
+      color: C.text,
+      marginBottom: 4
+    }
+  }, t.detailMusclesTitle), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13.5,
       color: C.textSecondary,
-      lineHeight: 1.5,
-      display: "flex",
-      gap: 8
+      lineHeight: 1.6
     }
-  }, /*#__PURE__*/React.createElement("span", null, "→"), /*#__PURE__*/React.createElement("span", null, m))))), /*#__PURE__*/React.createElement("div", {
-    style: cardStyle(C, {
-      padding: "16px 18px",
-      marginBottom: 16
-    })
+  }, d.muscles.join(" · ")))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 14
+    }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
+      flex: "0 0 auto",
+      marginTop: 2
+    }
+  }, /*#__PURE__*/React.createElement(Icon, {
+    name: "warning",
+    size: 18,
+    color: C.textSecondary
+  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
       fontWeight: 600,
-      fontSize: 14,
-      color: C.brass,
-      marginBottom: 10
+      fontSize: 14.5,
+      color: C.text,
+      marginBottom: 4
     }
   }, t.detailMistakesTitle), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       flexDirection: "column",
-      gap: 8
+      gap: 6
     }
-  }, libraryDetailExercise.details.mistakes.map((m, i) => /*#__PURE__*/React.createElement("div", {
+  }, d.mistakes.map((m, i) => /*#__PURE__*/React.createElement("div", {
     key: i,
     style: {
-      fontSize: 13,
-      color: C.textSecondary,
-      lineHeight: 1.5,
-      display: "flex",
-      gap: 8
-    }
-  }, /*#__PURE__*/React.createElement("span", null, "⚠"), /*#__PURE__*/React.createElement("span", null, m))))), libraryDetailExercise.details.tips && /*#__PURE__*/React.createElement("div", {
-    style: cardStyle(C, {
-      padding: "16px 18px",
-      marginBottom: 16
-    })
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontWeight: 600,
-      fontSize: 14,
-      color: C.brass,
-      marginBottom: 10
-    }
-  }, t.detailTipsTitle), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      flexDirection: "column",
-      gap: 8
-    }
-  }, libraryDetailExercise.details.tips.map((m, i) => /*#__PURE__*/React.createElement("div", {
-    key: i,
-    style: {
-      fontSize: 13,
-      color: C.textSecondary,
-      lineHeight: 1.5,
-      display: "flex",
-      gap: 8
-    }
-  }, /*#__PURE__*/React.createElement("span", null, "✓"), /*#__PURE__*/React.createElement("span", null, m))))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      gap: 10,
-      marginBottom: 16
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      flex: 1,
-      borderRadius: 24,
-      background: C.panel,
-      boxShadow: C.shadow,
-      border: `1px solid ${C.border}`,
-      padding: "14px 16px"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontWeight: 600,
-      fontSize: 13,
-      color: C.brass,
-      marginBottom: 8
-    }
-  }, t.detailMusclesTitle), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 12,
+      fontSize: 13.5,
       color: C.textSecondary,
       lineHeight: 1.6
     }
-  }, libraryDetailExercise.details.muscles.join(" · "))), /*#__PURE__*/React.createElement("div", {
+  }, m))))), /*#__PURE__*/React.createElement("div", {
     style: {
-      flex: 1,
-      borderRadius: 24,
-      background: C.panel,
-      boxShadow: C.shadow,
-      border: `1px solid ${C.border}`,
-      padding: "14px 16px"
+      display: "flex",
+      gap: 14
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
+      flex: "0 0 auto",
+      marginTop: 2
+    }
+  }, /*#__PURE__*/React.createElement(Icon, {
+    name: "check",
+    size: 18,
+    color: C.textSecondary
+  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
       fontWeight: 600,
-      fontSize: 13,
-      color: C.brass,
-      marginBottom: 8
+      fontSize: 14.5,
+      color: C.text,
+      marginBottom: 4
     }
   }, t.detailBenefitsTitle), /*#__PURE__*/React.createElement("div", {
     style: {
-      fontSize: 12,
+      fontSize: 13.5,
       color: C.textSecondary,
       lineHeight: 1.6
     }
-  }, libraryDetailExercise.details.benefits.join(" · "))))));
+  }, d.benefits.join(" · "))))));
 }
 
 // Untere Navigationsleiste (Heute / Plan / Bibliothek).
@@ -5594,32 +4609,14 @@ function KettlebellTracker() {
           ...emptyState(),
           ...parsed
         };
-        // Migration: alte Speicherstände hatten nur ein einzelnes "beginner"-Modul.
-        // Ohne die neuen "einsteiger"/"kurs"-Module fangen wir für diesen Nutzer
-        // einfach mit einem frischen Modul-Zustand an (kein Fortschritt zu retten).
-        if (!parsed.modules || !parsed.modules.einsteiger || !parsed.modules.kurs) {
-          merged.modules = emptyState().modules;
-          merged.activeModule = "einsteiger";
-        } else {
-          merged.modules = {
-            ...emptyState().modules,
-            ...parsed.modules
-          };
-          // Migration: falls ein Modul inzwischen mehr Einheiten hat als der
-          // gespeicherte Stand (z. B. Beginner-Modul 12 -> 16), fehlende Einheiten ergänzen.
-          // Der Einsteiger-Kurs wurde auf 4 Einheiten verkürzt (neuer Inhalt). Ein
-          // alter Stand mit mehr Einheiten passt nicht mehr zu den neuen Einheiten
-          // und wird daher zurückgesetzt, sonst würden alte "erledigt"-Haken auf
-          // neue Einheiten fallen.
-          if (Object.keys(merged.modules.einsteiger.sessions || {}).length > MODULE_TOTAL_SESSIONS.einsteiger) {
-            merged.modules.einsteiger = emptyState().modules.einsteiger;
-          }
-          merged.modules.einsteiger = fillMissingSessions(merged.modules.einsteiger, MODULE_TOTAL_SESSIONS.einsteiger);
-          merged.modules.kurs = fillMissingSessions(merged.modules.kurs, MODULE_TOTAL_SESSIONS.kurs);
-        }
-        // Migration: das frühere Einführungs-Modul existiert nicht mehr. Alte
-        // Speicherstände, die noch darauf zeigen, landen im Beginner-Modul.
-        if (merged.activeModule === "einfuehrung") merged.activeModule = "kurs";
+        // Der frühere Einsteiger-Kurs (Probetraining) existiert nicht mehr, ebenso
+        // der alte Beginner-Plan. Fortschritt im alten Beginner-Plan (ohne `v: 2`)
+        // passt nicht zu den neuen Workouts und wird zurückgesetzt.
+        const savedKurs = parsed.modules && parsed.modules.kurs && parsed.modules.kurs.v === 2 ? parsed.modules.kurs : emptyState().modules.kurs;
+        merged.modules = {
+          kurs: fillMissingSessions(savedKurs, MODULE_TOTAL_SESSIONS.kurs)
+        };
+        merged.activeModule = "kurs";
         setState(merged);
       }
     } catch (e) {
@@ -5718,8 +4715,7 @@ function KettlebellTracker() {
   const activeModule = state.activeModule;
   const moduleState = state.modules[activeModule];
   const totalSessions = MODULE_TOTAL_SESSIONS[activeModule];
-  const isEinsteigerModule = activeModule === "einsteiger";
-  const BLOCK_INFO = isEinsteigerModule ? BLOCK_INFO_EINSTEIGER : BLOCK_INFO_KURS;
+  const BLOCK_INFO = BLOCK_INFO_KURS;
   const sessionData = useMemo(() => getSessionData(activeModule, activeSession, moduleState.intensity, lang, moduleState.mode), [activeModule, activeSession, moduleState.intensity, moduleState.mode, lang]);
   const sessionState = moduleState.sessions[activeSession];
   const libraryExercises = useMemo(() => getLibraryExercises(lang), [lang]);
@@ -5855,7 +4851,6 @@ function KettlebellTracker() {
     BLOCK_INFO: BLOCK_INFO,
     C: C,
     activeModule: activeModule,
-    isEinsteigerModule: isEinsteigerModule,
     lang: lang,
     minutesTrained: minutesTrained,
     moduleState: moduleState,
