@@ -518,7 +518,7 @@ const UI = {
     blockNames: {
       strength1: "Full Body Strength",
       swingFull: "Swing & Full Body",
-      circuit1: "Full Body Circuit",
+      circuit1: "Full Body Circuit + Superset",
       emom1: "EMOM Full Body",
       ladder: "Swing + Push-Up Ladder",
       conditioning: "Full Body Conditioning",
@@ -678,7 +678,7 @@ const UI = {
     blockNames: {
       strength1: "Full Body Strength",
       swingFull: "Swing & Full Body",
-      circuit1: "Full Body Circuit",
+      circuit1: "Full Body Circuit + Superset",
       emom1: "EMOM Full Body",
       ladder: "Swing + Push-Up Ladder",
       conditioning: "Full Body Conditioning",
@@ -761,10 +761,6 @@ const CUES = {
   "Kettlebell Suitcase Carry": {
     de: "Ein Kettlebell seitlich am Körper tragen wie einen Koffer, Oberkörper bleibt aufrecht ohne zur Seite zu kippen, kurze kontrollierte Schritte. Auf halber Strecke die Seite wechseln. Einseitige Belastung, kräftigt Griff und seitliche Rumpfstabilität im Gehen.",
     en: "Carry one kettlebell at your side like a suitcase, torso stays upright without leaning to the side, short controlled steps. Switch sides halfway through the distance. A one-sided load that builds grip and lateral core stability while walking."
-  },
-  "Kettlebell Sit and Press": {
-    de: "Aus der Rückenlage mit der Kettlebell vor der Brust hochkommen und dabei gleichzeitig über den Kopf drücken. Verbindet Bauchmuskelarbeit mit Schulterdrücken.",
-    en: "From lying on your back with the kettlebell at the chest, sit up while pressing it overhead at the same time. Combines core work with an overhead press."
   },
   "Kettlebell Russian Twist": {
     de: "Sitzend, Oberkörper leicht zurückgelehnt, Kettlebell mit beiden Händen vor dem Körper halten und kontrolliert von Seite zu Seite rotieren. Das Zusatzgewicht fordert die schrägen Bauchmuskeln stärker als die reine Körpergewichtsvariante.",
@@ -1064,24 +1060,6 @@ const EXERCISE_DETAILS = {
       en: ["Trains grip strength and lateral core stability under load while walking", "A one-sided load challenges the core to resist tipping sideways — a good counterpart to the even loading of other exercises"]
     }
   },
-  "Kettlebell Sit and Press": {
-    steps: {
-      de: ["Rückenlage, Beine ausgestreckt, Zehen Richtung Schienbein ziehen.", "Kettlebell mit beiden Händen vor der Brust halten.", "Aus der Bauchmuskulatur heraus hochkommen und dabei gleichzeitig die Kettlebell über den Kopf drücken.", "Kontrolliert zurück in die Ausgangsposition absenken, Fersen bleiben am Boden."],
-      en: ["Lie on your back, legs extended, toes pulled toward the shins.", "Hold the kettlebell with both hands at chest height.", "Sit up using the abs while pressing the kettlebell overhead at the same time.", "Lower back down under control, heels stay on the floor."]
-    },
-    mistakes: {
-      de: ["Absenken wird überhastet statt kontrolliert ausgeführt", "Kettlebell driftet beim Drücken nach vorne", "Unterer Rücken hohlt sich übermäßig durch"],
-      en: ["The lowering phase is rushed instead of controlled", "The kettlebell drifts forward during the press", "The lower back arches excessively"]
-    },
-    muscles: {
-      de: ["Gerade und schräge Bauchmuskulatur", "Hüftbeuger", "Deltamuskel", "Rotatorenmanschette"],
-      en: ["Rectus abdominis and obliques", "Hip flexors", "Deltoid", "Rotator cuff"]
-    },
-    benefits: {
-      de: ["Verbindet Rumpfarbeit mit Schulterdrücken in einer Bewegung", "Guter Abschluss- oder Mobility-Reiz für Schulter und Rumpf gemeinsam"],
-      en: ["Combines core work with an overhead press in one movement", "A good finisher or mobility-integrated drill for the shoulder and core together"]
-    }
-  },
   "Kettlebell Russian Twist": {
     steps: {
       de: ["Sitzend, Oberkörper leicht zurückgelehnt, Füße angehoben oder am Boden.", "Kettlebell mit beiden Händen vor dem Körper halten.", "Oberkörper kontrolliert von Seite zu Seite rotieren, Kettlebell begleitet die Bewegung.", "Rumpf bleibt während der gesamten Bewegung angespannt."],
@@ -1118,7 +1096,6 @@ const BODY_REGION = {
   "Kettlebell Halo": "upper",
   "Kettlebell Squat and Press": "lower",
   "Kettlebell Suitcase Carry": "carry",
-  "Kettlebell Sit and Press": "core",
   "Kettlebell Russian Twist": "core"
 };
 
@@ -1223,7 +1200,7 @@ const SESSIONS_KURS = {
     block: "strength1",
     format: "sets",
     sets: 3,
-    rest: 75,
+    rest: 90,
     exercises: [{
       n: "Kettlebell Goblet Squat",
       t: R(8, 10, 12),
@@ -1250,7 +1227,7 @@ const SESSIONS_KURS = {
     block: "swingFull",
     format: "sets",
     sets: 3,
-    rest: 75,
+    rest: 90,
     exercises: [{
       n: "Kettlebell Swing",
       t: R(10, 15, 20),
@@ -1272,18 +1249,18 @@ const SESSIONS_KURS = {
       t: R(6, 8, 10),
       u: "reps_side"
     }, {
-      n: "Kettlebell Goblet Curl",
-      t: R(8, 10, 12),
-      u: "reps"
+      n: "Kettlebell Suitcase Carry",
+      t: R(20, 30, 40),
+      u: "m_side"
     }]
   },
   3: {
     block: "circuit1",
     format: "sets",
     sets: 3,
-    rest: 75,
+    rest: 90,
     exercises: [{
-      n: "Kettlebell Goblet Squat",
+      n: "Kettlebell Goblet Press",
       t: R(8, 10, 12),
       u: "reps"
     }, {
@@ -1292,7 +1269,7 @@ const SESSIONS_KURS = {
       u: "reps"
     }, {
       n: "Push-Up",
-      t: R(5, 8, 10),
+      t: R(6, 8, 10),
       u: "reps"
     }, {
       n: "Kettlebell Bent-Over Row",
@@ -1303,10 +1280,23 @@ const SESSIONS_KURS = {
       t: R(6, 8, 10),
       u: "reps_side"
     }, {
-      n: "Plank",
-      t: R(20, 30, 40),
-      u: "sec"
-    }]
+      n: "Kettlebell Russian Twist",
+      t: R(8, 10, 12),
+      u: "reps_side"
+    }],
+    finisher: {
+      sets: 2,
+      rest: 60,
+      exercises: [{
+        n: "Kettlebell Close-Grip Floor Press",
+        t: R(8, 10, 12),
+        u: "reps"
+      }, {
+        n: "Kettlebell Goblet Curl",
+        t: R(8, 10, 12),
+        u: "reps"
+      }]
+    }
   },
   4: {
     block: "emom1",
@@ -1314,11 +1304,11 @@ const SESSIONS_KURS = {
     rounds: 4,
     exercises: [{
       n: "Kettlebell Swing",
-      t: R(10, 12, 15),
+      t: R(10, 15, 20),
       u: "reps"
     }, {
       n: "Kettlebell Goblet Squat",
-      t: R(6, 8, 10),
+      t: R(8, 10, 12),
       u: "reps"
     }, {
       n: "Push-Up",
@@ -1334,7 +1324,7 @@ const SESSIONS_KURS = {
     block: "ladder",
     format: "ladder",
     pushFrom: 10,
-    rest: R(45, 30, 30),
+    rest: R(0, 0, 0),
     swing: {
       n: "Kettlebell Swing",
       t: R(10, 15, 20),
@@ -1348,7 +1338,7 @@ const SESSIONS_KURS = {
     block: "conditioning",
     format: "sets",
     sets: 3,
-    rest: 75,
+    rest: 90,
     exercises: [{
       n: "Kettlebell Swing",
       t: R(10, 15, 20),
@@ -1358,28 +1348,28 @@ const SESSIONS_KURS = {
       t: R(8, 10, 12),
       u: "reps"
     }, {
-      n: "Push-Up",
-      t: R(5, 8, 10),
+      n: "Kettlebell Close-Grip Floor Press",
+      t: R(8, 10, 12),
       u: "reps"
     }, {
-      n: "Kettlebell Single Arm Deadlift",
-      t: R(6, 8, 10),
-      u: "reps_side"
+      n: "Kettlebell Deadlift",
+      t: R(8, 10, 12),
+      u: "reps"
     }, {
       n: "Kettlebell Suitcase Carry",
       t: R(20, 30, 40),
       u: "m_side"
     }, {
-      n: "Kettlebell Russian Twist",
-      t: R(8, 10, 12),
-      u: "reps_side"
+      n: "Plank",
+      t: R(20, 30, 40),
+      u: "sec"
     }]
   },
   7: {
     block: "swingFocus",
     format: "sets",
     sets: 3,
-    rest: 75,
+    rest: 90,
     exercises: [{
       n: "Kettlebell Swing",
       t: R(15, 20, 25),
@@ -1422,7 +1412,7 @@ const SESSIONS_KURS = {
       u: "reps"
     }, {
       n: "Kettlebell Single Arm Deadlift",
-      t: R(6, 8, 10),
+      t: R(8, 10, 12),
       u: "reps_side"
     }, {
       n: "Kettlebell Bent-Over Row",
@@ -1446,7 +1436,7 @@ const SESSIONS_KURS = {
     block: "superset",
     format: "sets",
     sets: 3,
-    rest: 75,
+    rest: 90,
     exercises: [{
       n: "Kettlebell Goblet Squat",
       t: R(8, 10, 12),
@@ -1456,9 +1446,9 @@ const SESSIONS_KURS = {
       t: R(8, 10, 12),
       u: "reps"
     }, {
-      n: "Kettlebell Single Arm Deadlift",
-      t: R(6, 8, 10),
-      u: "reps_side"
+      n: "Kettlebell Deadlift",
+      t: R(8, 10, 12),
+      u: "reps"
     }, {
       n: "Kettlebell Bent-Over Row",
       t: R(8, 10, 12),
@@ -1470,10 +1460,10 @@ const SESSIONS_KURS = {
     }],
     finisher: {
       sets: 2,
-      rest: 75,
+      rest: 60,
       exercises: [{
         n: "Push-Up",
-        t: R(5, 8, 10),
+        t: R(6, 8, 10),
         u: "reps"
       }, {
         n: "Kettlebell Goblet Curl",
@@ -1499,27 +1489,27 @@ const SESSIONS_KURS = {
       t: R(4, 5, 6),
       u: "reps_side"
     }, {
-      n: "Plank",
-      t: R(20, 30, 40),
-      u: "sec"
+      n: "Kettlebell Russian Twist",
+      t: R(8, 10, 12),
+      u: "reps_side"
     }]
   },
   11: {
     block: "circuit2",
     format: "sets",
     sets: 3,
-    rest: 75,
+    rest: 90,
     exercises: [{
-      n: "Kettlebell Single Arm Deadlift",
-      t: R(6, 8, 10),
-      u: "reps_side"
+      n: "Kettlebell Deadlift",
+      t: R(8, 10, 12),
+      u: "reps"
     }, {
       n: "Kettlebell Goblet Squat",
       t: R(8, 10, 12),
       u: "reps"
     }, {
-      n: "Push-Up",
-      t: R(5, 8, 10),
+      n: "Kettlebell Close-Grip Floor Press",
+      t: R(8, 10, 12),
       u: "reps"
     }, {
       n: "Kettlebell Bent-Over Row",
@@ -1530,9 +1520,9 @@ const SESSIONS_KURS = {
       t: R(10, 15, 20),
       u: "reps"
     }, {
-      n: "Kettlebell Goblet Curl",
-      t: R(8, 10, 12),
-      u: "reps"
+      n: "Plank",
+      t: R(20, 30, 40),
+      u: "sec"
     }]
   },
   12: {
@@ -1577,20 +1567,7 @@ const SESSIONS_KURS = {
       n: "Plank",
       t: R(40, 50, 60),
       u: "sec"
-    }],
-    finisher: {
-      sets: 2,
-      rest: 75,
-      exercises: [{
-        n: "Kettlebell Close-Grip Floor Press",
-        t: R(8, 10, 12),
-        u: "reps"
-      }, {
-        n: "Kettlebell Goblet Curl",
-        t: R(8, 10, 12),
-        u: "reps"
-      }]
-    }
+    }]
   }
 };
 const BLOCK_INFO_KURS = {
@@ -1608,8 +1585,8 @@ const BLOCK_INFO_KURS = {
   },
   circuit1: {
     note: {
-      de: "Ein einfacher, ausgewogener Ganzkörper-Zirkel. Eine Runde geht einmal durch alle Übungen, die Pause kommt danach.",
-      en: "A simple, balanced full-body circuit. One round goes through every exercise once, rest comes afterwards."
+      de: "Ein einfacher, ausgewogener Ganzkörper-Zirkel. Eine Runde geht einmal durch alle Übungen, die Pause kommt danach. Am Ende kannst du einen kurzen Supersatz dazunehmen: Close-Grip Floor Press und Curl direkt hintereinander, Pause erst danach.",
+      en: "A simple, balanced full-body circuit. One round goes through every exercise once, rest comes afterwards. At the end you can add a short superset: close-grip floor press and curl back to back, rest only afterwards."
     }
   },
   emom1: {
@@ -1626,8 +1603,8 @@ const BLOCK_INFO_KURS = {
   },
   conditioning: {
     note: {
-      de: "Kondition, Rumpfstabilität und einseitige Belastung in einem Zirkel. Wenn die Technik nachlässt, nimm Tempo raus.",
-      en: "Conditioning, core stability and single-sided loading in one circuit. If your form slips, slow down."
+      de: "Kondition und Rumpfstabilität in einem Zirkel mit Swing, Carry und Plank. Wenn die Technik nachlässt, nimm Tempo raus.",
+      en: "Conditioning and core stability in one circuit with swings, carries and plank. If your form slips, slow down."
     }
   },
   swingFocus: {
@@ -1650,20 +1627,20 @@ const BLOCK_INFO_KURS = {
   },
   emom2: {
     note: {
-      de: "Wieder ein Vier-Minuten-EMOM, diesmal mit Squat and Press, Rudern und Plank. Saubere Wiederholungen bei wenig Pause.",
-      en: "Another four-minute EMOM, now with squat and press, rows and plank. Clean reps with little rest."
+      de: "Wieder ein Vier-Minuten-EMOM, diesmal mit Squat and Press, Rudern und Russian Twist. Saubere Wiederholungen bei wenig Pause.",
+      en: "Another four-minute EMOM, now with squat and press, rows and Russian twist. Clean reps with little rest."
     }
   },
   circuit2: {
     note: {
-      de: "Ein zweiter Ganzkörper-Zirkel mit einseitigem Hinge und Swing. Du kennst die Stationen schon, achte jetzt auf Ökonomie und Atmung.",
-      en: "A second full-body circuit with a single-sided hinge and swing. You know the stations now, so focus on economy and breathing."
+      de: "Ein zweiter Ganzkörper-Zirkel mit Deadlift und Swing. Du kennst die Stationen schon, achte jetzt auf Ökonomie und Atmung.",
+      en: "A second full-body circuit with deadlift and swing. You know the stations now, so focus on economy and breathing."
     }
   },
   challenge: {
     note: {
-      de: "Die Final Challenge: die Grundbewegungen in einem Durchgang mit höherem Gesamtvolumen. Stoppe deine Zeit und vergleiche sie mit dem nächsten Versuch. Optional folgt ein Finisher.",
-      en: "The Final Challenge: the basic movement patterns in one pass with higher total volume. Time yourself and compare with your next attempt. An optional finisher follows."
+      de: "Die Final Challenge: die Grundbewegungen in einem Durchgang mit höherem Gesamtvolumen. Stoppe deine Zeit und vergleiche sie mit dem nächsten Versuch.",
+      en: "The Final Challenge: the basic movement patterns in one pass with higher total volume. Time yourself and compare with your next attempt."
     }
   }
 };
@@ -2066,7 +2043,6 @@ const EXERCISE_META = {
   "Kettlebell Halo": ["e", "shoulder", "upper"],
   "Kettlebell Squat and Press": ["m", "knee", "full"],
   "Kettlebell Suitcase Carry": ["e", "carry", "full"],
-  "Kettlebell Sit and Press": ["f", "press", "upper"],
   "Kettlebell Russian Twist": ["e", "core", "core"]
 };
 
@@ -2135,10 +2111,6 @@ const COACH_TIPS = {
   "Kettlebell Suitcase Carry": {
     de: "Geh aufrecht und lass dich nicht zur Seite ziehen. Schulter, Hüfte und Kopf bleiben in einer Linie.",
     en: "Walk tall and don't let the weight pull you sideways. Shoulder, hip and head stay in one line."
-  },
-  "Kettlebell Sit and Press": {
-    de: "Spann den Rumpf an, bevor du aus dem Sitz drückst. Der Blick bleibt nach vorn gerichtet.",
-    en: "Brace your core before pressing from the seated position. Keep your eyes forward."
   },
   "Kettlebell Russian Twist": {
     de: "Dreh den Oberkörper aus den Rippen, nicht nur die Arme. Die Brust bleibt offen, der Rücken lang.",
