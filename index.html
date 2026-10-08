@@ -384,6 +384,7 @@ const UI = {
       normal: "Normal",
       schwer: "Schwer"
     },
+    intensityNote: "Die Stufen steigern die Wiederholungen. Schaffst du eine Stufe in allen Runden mit sauberer Technik, geh zur nächsten. Fühlt sich Schwer leicht an, nimm beim nächsten Durchlauf eine schwerere Kettlebell.",
     modeLabel: "Trainingsart",
     modeLabels: {
       reps: "Wiederholungen",
@@ -544,6 +545,7 @@ const UI = {
       normal: "Normal",
       schwer: "Hard"
     },
+    intensityNote: "The levels raise the reps. Once you can finish a level in every round with clean technique, move up to the next. If Hard feels easy, use a heavier kettlebell on your next pass.",
     modeLabel: "Training mode",
     modeLabels: {
       reps: "Reps",
@@ -1246,7 +1248,7 @@ const SESSIONS_KURS = {
       u: "reps"
     }, {
       n: "Push-Up",
-      t: R(10, 15, 20),
+      t: R(8, 10, 12),
       u: "reps"
     }, {
       n: "Kettlebell Bent-Over Row",
@@ -1538,7 +1540,7 @@ const SESSIONS_KURS = {
       u: "reps"
     }, {
       n: "Kettlebell Deadlift",
-      t: R(20, 25, 30),
+      t: R(15, 20, 25),
       u: "reps"
     }, {
       n: "Plank",
@@ -3412,7 +3414,15 @@ function PlanListView({
         cursor: "pointer"
       }
     }, t.intensityLabels[key]);
-  }))), /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 12.5,
+      color: C.textMuted,
+      lineHeight: 1.45,
+      marginTop: -6,
+      marginBottom: 16
+    }
+  }, t.intensityNote)), /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 13,
       color: C.textSecondary,
