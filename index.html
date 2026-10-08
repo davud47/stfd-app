@@ -714,6 +714,10 @@ const CUES = {
     de: "Kettlebell mittig zwischen den Füßen, Hüfte nach hinten schieben, mit einer Hand greifen und über die Hüftstreckung aufstehen, nicht mit dem Arm ziehen. Einarmige Grundversion des Kreuzhebens, guter Einstieg ins Hüft-Hinge-Muster.",
     en: "Kettlebell centered between your feet, push the hips back, grip with one hand and stand up by extending the hips, not pulling with the arm. A single-arm base version of the deadlift, a good entry into the hip-hinge pattern."
   },
+  "Kettlebell High Pull": {
+    de: "Hüftstreckung und Zug greifen ineinander: Die Hüfte schiebt die Kettlebell nach oben, die Ellbogen führen hoch und nach außen bis auf Brusthöhe. Verbindet Swing-Hüfte mit Rückenzug.",
+    en: "Hip drive and pull work together: the hips send the kettlebell up while the elbows lead high and out to chest height. Combines the swing hip with a back pull."
+  },
   "Kettlebell Swing": {
     de: "Hüftstreckung erzeugt den Schwung, kein Anheben mit den Armen — die Kettlebell schwebt nur bis Brusthöhe, nicht höher. Die definierende Kettlebell-Übung — explosive Hüftstreckung für Gesäß und hintere Oberschenkel.",
     en: "Hip extension powers the swing, don't lift with your arms — the kettlebell floats only up to chest height, not higher. The defining kettlebell movement — an explosive hip hinge for glutes and hamstrings."
@@ -721,10 +725,6 @@ const CUES = {
   "Kettlebell Bent-Over Row": {
     de: "Rücken flach, Ellbogen eng am Körper führen. Isoliert Rücken und Bizeps mit vollem Bewegungsradius.",
     en: "Flat back, keep the elbow close to your body. Isolates the back and biceps through a full range of motion."
-  },
-  "Kettlebell Goblet Curl": {
-    de: "Beide Hände am Griff, gleichzeitig beidarmig curlen. Beidarmiges Bizepstraining mit nur einer Kettlebell.",
-    en: "Both hands on the handle, curl both arms at once. Two-armed bicep work using a single kettlebell."
   },
   "Kettlebell Goblet Press": {
     de: "Kettlebell beidhändig an den Hörnern aus der Brusthöhe über den Kopf drücken, Rippen bleiben unten, kein Hohlkreuz. Beidhändige Drückvariante, gut zu kontrollieren.",
@@ -761,10 +761,6 @@ const CUES = {
   "Kettlebell Suitcase Carry": {
     de: "Ein Kettlebell seitlich am Körper tragen wie einen Koffer, Oberkörper bleibt aufrecht ohne zur Seite zu kippen, kurze kontrollierte Schritte. Auf halber Strecke die Seite wechseln. Einseitige Belastung, kräftigt Griff und seitliche Rumpfstabilität im Gehen.",
     en: "Carry one kettlebell at your side like a suitcase, torso stays upright without leaning to the side, short controlled steps. Switch sides halfway through the distance. A one-sided load that builds grip and lateral core stability while walking."
-  },
-  "Kettlebell Russian Twist": {
-    de: "Sitzend, Oberkörper leicht zurückgelehnt, Kettlebell mit beiden Händen vor dem Körper halten und kontrolliert von Seite zu Seite rotieren. Das Zusatzgewicht fordert die schrägen Bauchmuskeln stärker als die reine Körpergewichtsvariante.",
-    en: "Seated, torso leaned back slightly, hold the kettlebell with both hands in front of the body and rotate side to side with control. The added weight challenges the obliques more than the bodyweight-only version."
   }
 };
 
@@ -772,6 +768,24 @@ const CUES = {
 // formuliert auf Basis von Recherche bei kettlebellsworkouts.com (Greg Brookes),
 // nicht wortwörtlich übernommen. Wird schrittweise für weitere Übungen ergänzt.
 const EXERCISE_DETAILS = {
+  "Kettlebell High Pull": {
+    steps: {
+      de: ["Füße schulterbreit, Kettlebell vor den Füßen am Horn mit beiden Händen greifen, Hüfte nach hinten schieben, Rücken gerade.", "Die Hüfte explosiv nach vorne strecken, die Kettlebell kommt dadurch nach oben.", "Die Ellbogen ziehen hoch und nach außen, die Kettlebell steigt bis auf Brust- oder Kinnhöhe.", "Oben steht der Körper gerade, das Gesäß ist fest, die Schultern bleiben tief.", "Kettlebell kontrolliert absenken und mit der Hüfte wieder in die Ausgangsposition gehen."],
+      en: ["Stand shoulder-width apart, grip the kettlebell by the horn with both hands in front of the feet, push the hips back, back straight.", "Drive the hips forward explosively so the kettlebell travels upward.", "The elbows pull high and out while the kettlebell rises to chest or chin height.", "At the top you stand tall with tight glutes and relaxed shoulders.", "Lower the kettlebell under control and hinge back into the start position."]
+    },
+    mistakes: {
+      de: ["Die Kettlebell wird nur mit den Armen hochgezogen, die Hüfte arbeitet nicht mit", "Schultern wandern zu den Ohren", "Ellbogen bleiben unten und die Kettlebell pendelt nach vorne", "Rücken rundet sich in der Ausgangsposition"],
+      en: ["The kettlebell is pulled up with the arms only and the hips do not help", "The shoulders creep up toward the ears", "The elbows stay low and the kettlebell swings forward", "The back rounds in the start position"]
+    },
+    muscles: {
+      de: ["Gesäßmuskulatur", "Hintere Oberschenkel", "Trapezmuskel", "Rautenmuskeln", "Hintere Schulter", "Rumpf"],
+      en: ["Glutes", "Hamstrings", "Trapezius", "Rhomboids", "Posterior deltoid", "Core"]
+    },
+    benefits: {
+      de: ["Verbindet Hüftkraft mit Rückenzug in einer Bewegung", "Gute Brücke vom Swing zu komplexeren Kettlebell-Übungen", "Stärkt den oberen Rücken und die hintere Schulter"],
+      en: ["Combines hip power with a back pull in one movement", "A good bridge from the swing to more complex kettlebell movements", "Strengthens the upper back and rear shoulder"]
+    }
+  },
   "Kettlebell Swing": {
     steps: {
       de: ["Kettlebell etwa 15–30 cm vor den Füßen aufstellen, Arme und Kettlebell bilden ein Dreieck.", "In die Hüfte hinein beugen, Kettlebell wie einen Hike-Pass nach hinten zwischen die Beine ziehen.", "Hüfte explosiv nach vorne strecken — der Schwung entsteht aus dieser Streckung, nicht aus den Armen.", "Kettlebell schwebt bis auf Brusthöhe, Schultern bleiben entspannt statt hochgezogen.", "Kettlebell zurückfallen lassen, erst danach wieder in die Hüfte hinein beugen.", "Als durchgehenden Rhythmus wiederholen — nicht als zwei getrennte Bewegungen."],
@@ -916,24 +930,6 @@ const EXERCISE_DETAILS = {
       en: ["Specifically teaches the hip-hinge pattern without rushing", "Directly prepares for the deadlift and swing", "Can be used with no weight at all, purely as pattern practice", "Improves hamstring flexibility"]
     }
   },
-  "Kettlebell Goblet Curl": {
-    steps: {
-      de: ["Kettlebell mit beiden Händen an den Hörnern greifen, Arme gestreckt nach unten.", "Ellbogen bleiben am Oberkörper.", "Kettlebell nach oben zur Brust curlen.", "Kontrolliert zurück absenken."],
-      en: ["Grip the kettlebell by the horns with both hands, arms extended down.", "Elbows stay against the torso.", "Curl the kettlebell up to the chest.", "Lower back down under control."]
-    },
-    mistakes: {
-      de: ["Rücken hohlt sich, um Schwung zu holen", "Ellbogen wandern beim Hochziehen nach vorne"],
-      en: ["The back arches to build momentum", "The elbows drift forward while curling"]
-    },
-    muscles: {
-      de: ["Bizeps", "Unterarme/Griff", "Rumpf"],
-      en: ["Biceps", "Forearms/grip", "Core"]
-    },
-    benefits: {
-      de: ["Beidhändige, stabile Variante des Curls", "Gute Einsteiger-Variante, da beide Arme gleichzeitig arbeiten"],
-      en: ["A stable, two-handed variation of the curl", "A good beginner variant since both arms work together"]
-    }
-  },
   "Kettlebell Goblet Press": {
     steps: {
       de: ["Kettlebell beidhändig an den Hörnern vor der Brust halten, Ellbogen unter dem Griff.", "Beide Arme gleichzeitig nach oben drücken, bis sie gestreckt sind.", "Rippen unten lassen, kein Hohlkreuz während des Drückens.", "Kontrolliert zurück zur Brust absenken."],
@@ -1059,24 +1055,6 @@ const EXERCISE_DETAILS = {
       de: ["Trainiert Griffkraft und seitliche Rumpfstabilität unter Belastung im Gehen", "Einseitige Last fordert den Rumpf, der einer Seitneigung entgegenwirken muss — gutes Gegenstück zur beidseitigen Belastung anderer Übungen"],
       en: ["Trains grip strength and lateral core stability under load while walking", "A one-sided load challenges the core to resist tipping sideways — a good counterpart to the even loading of other exercises"]
     }
-  },
-  "Kettlebell Russian Twist": {
-    steps: {
-      de: ["Sitzend, Oberkörper leicht zurückgelehnt, Füße angehoben oder am Boden.", "Kettlebell mit beiden Händen vor dem Körper halten.", "Oberkörper kontrolliert von Seite zu Seite rotieren, Kettlebell begleitet die Bewegung.", "Rumpf bleibt während der gesamten Bewegung angespannt."],
-      en: ["Seated, torso leaned back slightly, feet lifted or on the floor.", "Hold the kettlebell with both hands in front of the body.", "Rotate the torso side to side with control, the kettlebell follows the movement.", "Core stays braced throughout the movement."]
-    },
-    mistakes: {
-      de: ["Bewegung wird zu schnell/mit Schwung ausgeführt", "Unterer Rücken rundet sich", "Zu schweres Gewicht führt zu unsauberer Rotation"],
-      en: ["The movement is rushed/uses momentum", "The lower back rounds", "Too heavy a weight leads to a sloppy rotation"]
-    },
-    muscles: {
-      de: ["Schräge Bauchmuskeln", "Gerade Bauchmuskulatur", "Unterarme/Griff"],
-      en: ["Obliques", "Rectus abdominis", "Forearms/grip"]
-    },
-    benefits: {
-      de: ["Trainiert Rotationskontrolle im Rumpf mit zusätzlichem Widerstand", "Fordert die schrägen Bauchmuskeln stärker als die reine Körpergewichtsvariante"],
-      en: ["Trains rotational core control with added resistance", "Challenges the obliques more than the bodyweight-only version"]
-    }
   }
 };
 const BODY_REGION = {
@@ -1086,8 +1064,8 @@ const BODY_REGION = {
   "Kettlebell Deadlift": "lower",
   "Kettlebell Single Arm Deadlift": "lower",
   "Kettlebell Swing": "lower",
+  "Kettlebell High Pull": "upper",
   "Kettlebell Bent-Over Row": "upper",
-  "Kettlebell Goblet Curl": "upper",
   "Kettlebell Goblet Press": "upper",
   "Push-Up": "upper",
   "Plank": "core",
@@ -1095,8 +1073,7 @@ const BODY_REGION = {
   "Kettlebell Slingshot": "upper",
   "Kettlebell Halo": "upper",
   "Kettlebell Squat and Press": "lower",
-  "Kettlebell Suitcase Carry": "carry",
-  "Kettlebell Russian Twist": "core"
+  "Kettlebell Suitcase Carry": "carry"
 };
 
 // ============================================================
@@ -1260,8 +1237,8 @@ const SESSIONS_KURS = {
     sets: 3,
     rest: 90,
     exercises: [{
-      n: "Kettlebell Goblet Press",
-      t: R(8, 10, 12),
+      n: "Kettlebell Squat and Press",
+      t: R(6, 8, 10),
       u: "reps"
     }, {
       n: "Kettlebell Swing",
@@ -1269,7 +1246,7 @@ const SESSIONS_KURS = {
       u: "reps"
     }, {
       n: "Push-Up",
-      t: R(6, 8, 10),
+      t: R(10, 15, 20),
       u: "reps"
     }, {
       n: "Kettlebell Bent-Over Row",
@@ -1280,9 +1257,9 @@ const SESSIONS_KURS = {
       t: R(6, 8, 10),
       u: "reps_side"
     }, {
-      n: "Kettlebell Russian Twist",
-      t: R(8, 10, 12),
-      u: "reps_side"
+      n: "Plank",
+      t: R(20, 30, 40),
+      u: "sec"
     }],
     finisher: {
       sets: 2,
@@ -1292,7 +1269,7 @@ const SESSIONS_KURS = {
         t: R(8, 10, 12),
         u: "reps"
       }, {
-        n: "Kettlebell Goblet Curl",
+        n: "Kettlebell High Pull",
         t: R(8, 10, 12),
         u: "reps"
       }]
@@ -1312,10 +1289,10 @@ const SESSIONS_KURS = {
       u: "reps"
     }, {
       n: "Push-Up",
-      t: R(5, 8, 10),
+      t: R(8, 10, 12),
       u: "reps"
     }, {
-      n: "Kettlebell Goblet Curl",
+      n: "Kettlebell High Pull",
       t: R(8, 10, 12),
       u: "reps"
     }]
@@ -1387,9 +1364,9 @@ const SESSIONS_KURS = {
       t: R(8, 10, 12),
       u: "reps"
     }, {
-      n: "Kettlebell Russian Twist",
+      n: "Kettlebell High Pull",
       t: R(8, 10, 12),
-      u: "reps_side"
+      u: "reps"
     }]
   },
   8: {
@@ -1408,7 +1385,7 @@ const SESSIONS_KURS = {
       u: "reps"
     }, {
       n: "Push-Up",
-      t: R(8, 12, 15),
+      t: R(10, 15, 20),
       u: "reps"
     }, {
       n: "Kettlebell Single Arm Deadlift",
@@ -1463,11 +1440,11 @@ const SESSIONS_KURS = {
       rest: 60,
       exercises: [{
         n: "Push-Up",
-        t: R(6, 8, 10),
+        t: R(8, 10, 12),
         u: "reps"
       }, {
-        n: "Kettlebell Goblet Curl",
-        t: R(8, 10, 12),
+        n: "Kettlebell High Pull",
+        t: R(6, 8, 10),
         u: "reps"
       }]
     }
@@ -1489,9 +1466,9 @@ const SESSIONS_KURS = {
       t: R(4, 5, 6),
       u: "reps_side"
     }, {
-      n: "Kettlebell Russian Twist",
+      n: "Kettlebell Close-Grip Floor Press",
       t: R(8, 10, 12),
-      u: "reps_side"
+      u: "reps"
     }]
   },
   11: {
@@ -1541,7 +1518,7 @@ const SESSIONS_KURS = {
       u: "reps"
     }, {
       n: "Push-Up",
-      t: R(10, 15, 20),
+      t: R(15, 20, 25),
       u: "reps"
     }, {
       n: "Kettlebell Single Arm Deadlift",
@@ -1585,8 +1562,8 @@ const BLOCK_INFO_KURS = {
   },
   circuit1: {
     note: {
-      de: "Ein einfacher, ausgewogener Ganzkörper-Zirkel. Eine Runde geht einmal durch alle Übungen, die Pause kommt danach. Am Ende kannst du einen kurzen Supersatz dazunehmen: Close-Grip Floor Press und Curl direkt hintereinander, Pause erst danach.",
-      en: "A simple, balanced full-body circuit. One round goes through every exercise once, rest comes afterwards. At the end you can add a short superset: close-grip floor press and curl back to back, rest only afterwards."
+      de: "Ein einfacher, ausgewogener Ganzkörper-Zirkel. Eine Runde geht einmal durch alle Übungen, die Pause kommt danach. Am Ende kannst du einen kurzen Supersatz dazunehmen: Close-Grip Floor Press und High Pull direkt hintereinander, Pause erst danach.",
+      en: "A simple, balanced full-body circuit. One round goes through every exercise once, rest comes afterwards. At the end you can add a short superset: close-grip floor press and high pull back to back, rest only afterwards."
     }
   },
   emom1: {
@@ -1609,8 +1586,8 @@ const BLOCK_INFO_KURS = {
   },
   swingFocus: {
     note: {
-      de: "Der Swing ist die Hauptübung, unterstützt von Deadlift, Ausfallschritt, Drücken und Rotation.",
-      en: "The swing is the main exercise, supported by the deadlift, lunge, press and rotation."
+      de: "Der Swing ist die Hauptübung, unterstützt von Deadlift, Ausfallschritt, Drücken und High Pull.",
+      en: "The swing is the main exercise, supported by the deadlift, lunge, press and high pull."
     }
   },
   chipper: {
@@ -1621,14 +1598,14 @@ const BLOCK_INFO_KURS = {
   },
   superset: {
     note: {
-      de: "Kraftarbeit im Ganzkörper-Zirkel. Am Ende kannst du einen kurzen Supersatz dazunehmen: Push-Up und Curl direkt hintereinander, Pause erst danach.",
-      en: "Strength work in a full-body circuit. At the end you can add a short superset: push-up and curl back to back, rest only afterwards."
+      de: "Kraftarbeit im Ganzkörper-Zirkel. Am Ende kannst du einen kurzen Supersatz dazunehmen: Push-Up und High Pull direkt hintereinander, Pause erst danach.",
+      en: "Strength work in a full-body circuit. At the end you can add a short superset: push-up and high pull back to back, rest only afterwards."
     }
   },
   emom2: {
     note: {
-      de: "Wieder ein Vier-Minuten-EMOM, diesmal mit Squat and Press, Rudern und Russian Twist. Saubere Wiederholungen bei wenig Pause.",
-      en: "Another four-minute EMOM, now with squat and press, rows and Russian twist. Clean reps with little rest."
+      de: "Wieder ein Vier-Minuten-EMOM, diesmal mit Squat and Press, Rudern und Floor Press. Saubere Wiederholungen bei wenig Pause.",
+      en: "Another four-minute EMOM, now with squat and press, rows and floor press. Clean reps with little rest."
     }
   },
   circuit2: {
@@ -2033,8 +2010,8 @@ const EXERCISE_META = {
   "Kettlebell Deadlift": ["e", "hip", "lower"],
   "Kettlebell Single Arm Deadlift": ["m", "hip", "lower"],
   "Kettlebell Swing": ["m", "hip", "full"],
+  "Kettlebell High Pull": ["m", "pull", "full"],
   "Kettlebell Bent-Over Row": ["e", "pull", "upper"],
-  "Kettlebell Goblet Curl": ["e", "pull", "upper"],
   "Kettlebell Goblet Press": ["e", "press", "upper"],
   "Push-Up": ["e", "press", "upper"],
   "Plank": ["e", "core", "core"],
@@ -2042,8 +2019,7 @@ const EXERCISE_META = {
   "Kettlebell Slingshot": ["m", "core", "core"],
   "Kettlebell Halo": ["e", "shoulder", "upper"],
   "Kettlebell Squat and Press": ["m", "knee", "full"],
-  "Kettlebell Suitcase Carry": ["e", "carry", "full"],
-  "Kettlebell Russian Twist": ["e", "core", "core"]
+  "Kettlebell Suitcase Carry": ["e", "carry", "full"]
 };
 
 // Ein kurzer Coach-Tipp pro Übung (Kasten im Detail der Bibliothek).
@@ -2068,6 +2044,10 @@ const COACH_TIPS = {
     de: "Wirk dem Zug zur Seite entgegen: Schultern und Hüfte bleiben waagrecht, auch wenn das Gewicht nur an einer Seite hängt.",
     en: "Resist the pull to one side: shoulders and hips stay level even though the weight hangs on one side."
   },
+  "Kettlebell High Pull": {
+    de: "Die Hüfte bringt die Kettlebell hoch, die Ellbogen führen nach oben und außen. Die Schultern bleiben tief, nicht hochziehen.",
+    en: "The hips send the kettlebell up, the elbows lead up and out. Keep the shoulders down, do not shrug."
+  },
   "Kettlebell Swing": {
     de: "Die Hüfte macht die Arbeit, die Arme hängen nur dran. Oben stehst du gerade wie ein Brett, mit festem Gesäß.",
     en: "The hips do the work, the arms just hang on. At the top, stand tall like a plank with tight glutes."
@@ -2075,10 +2055,6 @@ const COACH_TIPS = {
   "Kettlebell Bent-Over Row": {
     de: "Zieh den Ellbogen zur Hüfte, nicht zur Schulter. Der Oberkörper bleibt ruhig, nur der Arm bewegt sich.",
     en: "Pull the elbow toward your hip, not your shoulder. The torso stays still, only the arm moves."
-  },
-  "Kettlebell Goblet Curl": {
-    de: "Die Ellbogen bleiben eng am Körper, nur die Unterarme bewegen sich. Senk das Gewicht langsam ab.",
-    en: "Keep the elbows close to your body, only the forearms move. Lower the weight slowly."
   },
   "Kettlebell Goblet Press": {
     de: "Spann Gesäß und Bauch an, bevor du drückst. So bleibt der Rücken ruhig und fällt nicht ins Hohlkreuz.",
@@ -2111,10 +2087,6 @@ const COACH_TIPS = {
   "Kettlebell Suitcase Carry": {
     de: "Geh aufrecht und lass dich nicht zur Seite ziehen. Schulter, Hüfte und Kopf bleiben in einer Linie.",
     en: "Walk tall and don't let the weight pull you sideways. Shoulder, hip and head stay in one line."
-  },
-  "Kettlebell Russian Twist": {
-    de: "Dreh den Oberkörper aus den Rippen, nicht nur die Arme. Die Brust bleibt offen, der Rücken lang.",
-    en: "Rotate from the ribcage, not just the arms. Keep your chest open and your back long."
   }
 };
 function getLibraryExercises(lang) {
