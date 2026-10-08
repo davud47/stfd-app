@@ -391,7 +391,7 @@ const UI = {
       time: "Zeit"
     },
     sideSwitchNote: "Zur Hälfte der Zeit die Seite wechseln (Signalton).",
-    warmupTitle: "Aufwärmen (~5-7 Min.)",
+    warmupTitle: "Aufwärmen (~4 Min.)",
     moduleLabels: {
       kurs: "Beginner-Modul"
     },
@@ -435,7 +435,7 @@ const UI = {
     circuitFormat: (work, rest, rounds, min) => `${work} Sek. Arbeit / ${rest} Sek. Pause, ${rounds} Runden (${min} Min. gesamt)`,
     loading: "Lade Programm …",
     sideNote: "Schwache Seite zuerst, dann dieselbe Anzahl mit der starken Seite — nie mehr auf der starken Seite.",
-    cooldownTitle: "Cool-down (~2-3 Min.)",
+    cooldownTitle: "Cool-down (~3 Min.)",
     circuitTitle: "Zirkel-Format",
     emomTitle: "EMOM-Format",
     timerSegment: (i, n) => `Übung ${i} von ${n}`,
@@ -552,7 +552,7 @@ const UI = {
       time: "Time"
     },
     sideSwitchNote: "Switch sides at half time (signal tone).",
-    warmupTitle: "Warm-up (~5-7 min)",
+    warmupTitle: "Warm-up (~4 min)",
     moduleLabels: {
       kurs: "Beginner Module"
     },
@@ -596,7 +596,7 @@ const UI = {
     circuitFormat: (work, rest, rounds, min) => `${work} sec work / ${rest} sec rest, ${rounds} rounds (${min} min total)`,
     loading: "Loading program …",
     sideNote: "Weaker side first, then match the same number on the stronger side — never more reps on the stronger side.",
-    cooldownTitle: "Cool-down (~2-3 min)",
+    cooldownTitle: "Cool-down (~3 min)",
     circuitTitle: "Circuit format",
     emomTitle: "EMOM format",
     timerSegment: (i, n) => `Exercise ${i} of ${n}`,
@@ -1090,16 +1090,36 @@ function slug(name) {
 // ============================================================
 // TRAININGSPLAN-DATEN — Aufwärmen, Cool-down, Einheiten beider Module
 // ============================================================
-// Aufwärmen (~5-7 Min.): wärmt auf, ohne zu ermüden.
+// Aufwärmen (~4 Min.): vom Boden zum Stehen, erst ohne, dann mit Kettlebell.
 const WARMUP = [{
-  id: "warmup-kb-slingshot",
+  id: "warmup-glute-bridge",
   n: {
-    de: "Kettlebell Slingshot",
-    en: "Kettlebell slingshot"
+    de: "Hüftbrücke",
+    en: "Glute bridge"
   },
   d: {
-    de: "Kettlebell locker um den Körper herum von einer Hand zur anderen kreisen lassen, Rumpf bleibt stabil. Gewöhnt Körper und Griff an die Kettlebell. 8 Wdh. pro Richtung.",
-    en: "Loosely circle the kettlebell around your body from hand to hand, core stays stable. Gets your body and grip used to the kettlebell. 8 reps each direction."
+    de: "Rückenlage, Füße aufgestellt. Hüfte anheben und oben das Gesäß anspannen. Weckt das Gesäß für Swing und Deadlift. 10 Wdh.",
+    en: "Lie on your back, feet flat. Lift the hips and squeeze the glutes at the top. Wakes up the glutes for swings and deadlifts. 10 reps."
+  }
+}, {
+  id: "warmup-kb-good-morning",
+  n: {
+    de: "Good Morning",
+    en: "Good morning"
+  },
+  d: {
+    de: "Hände an den Hinterkopf, Hüfte nach hinten schieben, leichte Kniebeugung, Rücken bleibt gerade. Bereitet auf die Hinge-Bewegungen vor. 8 Wdh.",
+    en: "Hands behind the head, push the hips back, slight knee bend, back stays straight. Preps the hinge movements. 8 reps."
+  }
+}, {
+  id: "warmup-bodyweight-squat",
+  n: {
+    de: "Kniebeugen",
+    en: "Squats"
+  },
+  d: {
+    de: "Kniebeugen ohne Gewicht, Oberkörper aufrecht, Knie folgen den Zehen. Bereitet gezielt auf den Goblet Squat vor. 8 Wdh.",
+    en: "Bodyweight squats, torso upright, knees track the toes. Specifically preps the goblet squat. 8 reps."
   }
 }, {
   id: "warmup-kb-halo",
@@ -1112,28 +1132,18 @@ const WARMUP = [{
     en: "Circle the kettlebell by the horns closely around the head, core stays stable. Specifically warms up the shoulders. 8 reps each direction."
   }
 }, {
-  id: "warmup-kb-good-morning",
+  id: "warmup-kb-slingshot",
   n: {
-    de: "Good Morning",
-    en: "Good morning"
+    de: "Kettlebell Slingshot",
+    en: "Kettlebell slingshot"
   },
   d: {
-    de: "Hände an den Hinterkopf oder die Kettlebell vor der Brust, Hüfte nach hinten schieben, leichte Kniebeugung, Rücken bleibt gerade. Bereitet auf die Hinge-Bewegungen vor. 8 Wdh.",
-    en: "Hands behind the head or the kettlebell at the chest, push the hips back, slight knee bend, back stays straight. Preps the hinge movements. 8 reps."
-  }
-}, {
-  id: "warmup-bodyweight-squat",
-  n: {
-    de: "Kniebeugen",
-    en: "Squats"
-  },
-  d: {
-    de: "Kniebeugen ohne Gewicht, Oberkörper aufrecht, Knie folgen den Zehen. Bereitet gezielt auf den Goblet Squat vor. 8 Wdh.",
-    en: "Bodyweight squats, torso upright, knees track the toes. Specifically preps the goblet squat. 8 reps."
+    de: "Kettlebell locker um den Körper herum von einer Hand zur anderen kreisen lassen, Rumpf bleibt stabil. Gewöhnt Körper und Griff an die Kettlebell. 8 Wdh. pro Richtung.",
+    en: "Loosely circle the kettlebell around your body from hand to hand, core stays stable. Gets your body and grip used to the kettlebell. 8 reps each direction."
   }
 }];
 
-// Cool-down (~2-3 Min.) — bewusst leicht, alles im Stehen ausführbar.
+// Cool-down (~3 Min.) — bewusst leicht, nur die letzte Dehnung geht aufs Knie.
 const COOLDOWN = [{
   id: "cooldown-calf-stretch",
   n: {
@@ -1141,8 +1151,18 @@ const COOLDOWN = [{
     en: "Calf stretch"
   },
   d: {
-    de: "Hände an einer Wand abstützen, ein Bein großen Schritt zurück, Ferse bleibt am Boden, Knie gestreckt. 30 Sek. pro Seite — spürbar in der Wade, nicht im Knie.",
-    en: "Hands against a wall, one leg steps far back, heel stays on the floor, knee straight. 30 sec per side — felt in the calf, not the knee."
+    de: "Hände an einer Wand abstützen, ein Bein großen Schritt zurück, Ferse bleibt am Boden, Knie gestreckt. 20 Sek. pro Seite.",
+    en: "Hands against a wall, one leg steps far back, heel stays on the floor, knee straight. 20 sec per side."
+  }
+}, {
+  id: "cooldown-chest-stretch",
+  n: {
+    de: "Brustdehnung",
+    en: "Chest stretch"
+  },
+  d: {
+    de: "Unterarm an einem Türrahmen oder einer Wand abstützen, Oberkörper leicht wegdrehen. 20 Sek. pro Seite — Dehnung vorne in Brust und Schulter.",
+    en: "Rest a forearm on a door frame or wall and turn the torso slightly away. 20 sec per side — a stretch across the chest and front of the shoulder."
   }
 }, {
   id: "cooldown-shoulder-stretch",
@@ -1151,18 +1171,18 @@ const COOLDOWN = [{
     en: "Overhead shoulder stretch"
   },
   d: {
-    de: "Einen Arm über den Kopf beugen, Hand berührt den oberen Rücken. Mit der anderen Hand sanft am Ellbogen nach hinten drücken. 30 Sek. pro Seite — leichtes Ziehen in Schulter und Trizeps, kein Schmerz.",
-    en: "Bend one arm overhead so your hand touches your upper back. With the other hand, gently press the elbow further back. 30 sec per side — a light pull in the shoulder and triceps, no pain."
+    de: "Einen Arm über den Kopf beugen, Hand berührt den oberen Rücken. Mit der anderen Hand sanft am Ellbogen nach hinten drücken. 20 Sek. pro Seite, kein Schmerz.",
+    en: "Bend one arm overhead so your hand touches your upper back. With the other hand, gently press the elbow further back. 20 sec per side, no pain."
   }
 }, {
-  id: "cooldown-side-stretch",
+  id: "cooldown-hip-flexor-stretch",
   n: {
-    de: "Seitliche Rumpfdehnung",
-    en: "Standing side stretch"
+    de: "Hüftbeuger-Dehnung",
+    en: "Hip flexor stretch"
   },
   d: {
-    de: "Aufrecht stehen, einen Arm locker über den Kopf strecken und sanft zur Gegenseite neigen. 30 Sek. pro Seite — leichte Dehnung entlang der Seite.",
-    en: "Stand tall, reach one arm loosely overhead and lean gently to the other side. 30 sec per side — a light stretch along your side."
+    de: "Ausfallschritt mit dem hinteren Knie am Boden, Oberkörper aufrecht, Hüfte sanft nach vorne schieben. 20 Sek. pro Seite — Dehnung vorne in der Hüfte.",
+    en: "Lunge position with the back knee on the floor, torso upright, gently push the hips forward. 20 sec per side — a stretch at the front of the hip."
   }
 }];
 
